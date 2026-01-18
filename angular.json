@@ -24,9 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -68,6 +66,14 @@
           "builder": "@angular/build:unit-test"
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "changeDetection": "OnPush",
+      "displayBlock": true,
+      "inlineTemplate": true,
+      "inlineStyle": true
     }
   }
 }

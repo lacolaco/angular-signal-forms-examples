@@ -1,12 +1,45 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+
+/**
+ * ナビゲーション項目の定義
+ * 新しいユースケースを追加する際はここに追加する
+ */
+const navItems = [
+  { path: '/simple-signup', label: 'Simple Signup' },
+] as const;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  template: `
+    <div class="flex min-h-screen">
+      <!-- サイドナビゲーション -->
+      <nav class="w-64 bg-gray-800 text-white p-4 shrink-0">
+        <h1 class="text-xl font-bold mb-6">Signal Forms Examples</h1>
+        <ul class="space-y-2">
+          @for (item of navItems; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="bg-gray-700"
+                class="block px-3 py-2 rounded-md hover:bg-gray-700 transition-colors"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <!-- メインコンテンツ -->
+      <main class="flex-1">
+        <router-outlet />
+      </main>
+    </div>
+  `,
 })
 export class App {
-  protected readonly title = signal('signal-forms-examples');
+  readonly navItems = navItems;
 }
