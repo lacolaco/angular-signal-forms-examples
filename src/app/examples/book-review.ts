@@ -153,7 +153,8 @@ export class StarRating implements FormValueControl<number> {
   template: `
     <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Book Review</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">Book Review</h1>
+        <p class="text-sm text-blue-600 mb-2">Custom Control</p>
         <p class="text-gray-600 mb-6">「Signal Forms 入門」の評価をお願いします</p>
 
         <form novalidate (submit)="onSubmit($event)">
