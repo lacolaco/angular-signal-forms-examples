@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { form, FormField, required, email, validate, submit } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
+import { AppSourceLink } from '../lib/ui/source-link';
 import { fieldErrors } from '../lib/field-errors';
 
 /**
@@ -20,7 +21,7 @@ import { fieldErrors } from '../lib/field-errors';
 @Component({
   selector: 'app-simple-signup',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton],
+  imports: [FormField, AppFormField, AppButton, AppSourceLink],
   template: `
     <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
@@ -87,6 +88,8 @@ import { fieldErrors } from '../lib/field-errors';
         @if (submitted()) {
           <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">Sign up successful!</div>
         }
+
+        <app-source-link class="mt-6" path="examples/simple-signup.ts" />
       </div>
     </div>
   `,
