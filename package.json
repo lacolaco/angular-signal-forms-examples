@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,css}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,css}\""
+    "format:check": "prettier --check \"src/**/*.{ts,html,css}\"",
+    "prepare": "husky"
   },
   "prettier": {
     "printWidth": 100,
@@ -22,6 +23,14 @@
         }
       }
     ]
+  },
+  "lint-staged": {
+    "src/**/*.{ts,html}": [
+      "eslint --fix",
+      "prettier --write",
+      "ng test --include"
+    ],
+    "src/**/*.css": "prettier --write"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
@@ -51,7 +60,9 @@
     "@types/node": "^20.17.19",
     "angular-eslint": "21.1.0",
     "eslint": "^9.39.1",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
+    "lint-staged": "^16.2.7",
     "msw": "^2.12.7",
     "postcss": "^8.5.3",
     "prettier": "^3.8.0",
