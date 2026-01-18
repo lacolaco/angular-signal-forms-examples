@@ -6,8 +6,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
  * 新しいユースケースを追加する際はここに追加する
  */
 const navItems = [
-  { path: '/simple-signup', label: 'Simple Signup' },
-  { path: '/book-review', label: 'Book Review' },
+  { path: '/simple-signup', label: 'Simple Signup', topic: 'Basic Form' },
+  { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
+  { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
 ] as const;
 
 @Component({
@@ -27,7 +28,8 @@ const navItems = [
                 routerLinkActive="bg-gray-700"
                 class="block px-3 py-2 rounded-md hover:bg-gray-700 transition-colors"
               >
-                {{ item.label }}
+                <span class="block font-medium">{{ item.label }}</span>
+                <span class="block text-xs text-gray-400">{{ item.topic }}</span>
               </a>
             </li>
           }

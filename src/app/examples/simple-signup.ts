@@ -25,7 +25,8 @@ import { fieldErrors } from '../lib/field-errors';
   template: `
     <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Sign Up</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">Simple Signup</h1>
+        <p class="text-sm text-blue-600 mb-6">Basic Form</p>
 
         <!--
           novalidate: ブラウザのネイティブバリデーションを無効化し、
