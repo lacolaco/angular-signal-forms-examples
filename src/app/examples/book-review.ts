@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, model, signal, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, model, signal } from '@angular/core';
 import {
   form,
   FormField,
@@ -12,6 +12,11 @@ import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
 import { AppSourceLink } from '../lib/ui/source-link';
 import { fieldErrors } from '../lib/field-errors';
+
+interface ReviewData {
+  rating: number;
+  comment: string;
+}
 
 /**
  * StarRating Component
@@ -32,7 +37,8 @@ import { fieldErrors } from '../lib/field-errors';
   host: {
     class: 'inline-flex items-center gap-1',
     role: 'radiogroup',
-    '[attr.aria-label]': 'ariaLabel()',
+    'aria-label': 'Rating',
+    '(mouseleave)': 'hoveredStar.set(0)',
   },
   template: `
     @for (star of stars; track star) {
@@ -43,8 +49,9 @@ import { fieldErrors } from '../lib/field-errors';
         [attr.aria-label]="star + ' star'"
         [class]="
           'text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded transition-colors ' +
-          (value() >= star ? 'text-yellow-400' : 'text-gray-300 hover:text-yellow-200')
+          starClassList()[star]
         "
+        (mouseenter)="hoveredStar.set(star)"
         (click)="selectStar(star)"
         (keydown)="onKeydown($event)"
       >
@@ -57,11 +64,30 @@ export class StarRating implements FormValueControl<number> {
   /** フォームにバインドされる値（0-5の整数） */
   readonly value = model(0);
 
-  /** アクセシビリティ用ラベル */
-  readonly ariaLabel = input<string>('Star rating');
+  /** ホバー中の星（0はホバーなし） */
+  protected readonly hoveredStar = signal(0);
 
   /** 5つの星を表す配列 */
   protected readonly stars = [1, 2, 3, 4, 5];
+
+  /**
+   * 各星のCSSクラスを計算
+   * hover中は1からhover位置まで、それ以外は選択済みの星まで黄色にする
+   */
+  protected readonly starClassList = computed(() => {
+    const hovered = this.hoveredStar();
+    const selected = this.value();
+    const classes: Record<number, string> = {};
+
+    for (const star of this.stars) {
+      if (hovered > 0) {
+        classes[star] = star <= hovered ? 'text-yellow-300' : 'text-gray-300';
+      } else {
+        classes[star] = star <= selected ? 'text-yellow-400' : 'text-gray-300';
+      }
+    }
+    return classes;
+  });
 
   /**
    * 星をクリックして評価を選択
@@ -139,7 +165,7 @@ export class StarRating implements FormValueControl<number> {
               StarRating は FormValueControl<number> を実装しているため、
               [formField] ディレクティブで直接バインド可能
             -->
-            <app-star-rating [formField]="reviewForm.rating" ariaLabel="Book rating" />
+            <app-star-rating [formField]="reviewForm.rating" />
             @if (ratingErrors().length > 0) {
               <ul class="mt-1 text-sm text-red-600">
                 @for (message of ratingErrors(); track message) {
@@ -174,9 +200,9 @@ export class StarRating implements FormValueControl<number> {
           <app-button type="submit"> Submit Review </app-button>
         </form>
 
-        @if (submitted()) {
+        @if (submittedValue(); as submitted) {
           <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
-            Thank you for your review! (Rating: {{ reviewModel().rating }} stars)
+            Thank you for your review! (Rating: {{ submitted.rating }} stars)
           </div>
         }
 
@@ -186,7 +212,8 @@ export class StarRating implements FormValueControl<number> {
   `,
 })
 export class BookReview {
-  readonly submitted = signal(false);
+  /** 送信時点の値（nullなら未送信） */
+  readonly submittedValue = signal<ReviewData | null>(null);
 
   /**
    * フォームモデル
@@ -194,7 +221,7 @@ export class BookReview {
    * rating: 0-5 の整数（0は未選択）
    * comment: 自由入力テキスト
    */
-  readonly reviewModel = signal({
+  readonly reviewModel = signal<ReviewData>({
     rating: 0,
     comment: '',
   });
@@ -227,7 +254,7 @@ export class BookReview {
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.reviewForm, async () => {
-      this.submitted.set(true);
+      this.submittedValue.set({ ...this.reviewModel() });
     });
 
     // invalid なフィールドにフォーカス
