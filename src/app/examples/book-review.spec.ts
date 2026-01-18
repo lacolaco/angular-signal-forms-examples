@@ -1,34 +1,20 @@
 import '@testing-library/jest-dom/vitest';
 import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { signal, Component, ChangeDetectionStrategy } from '@angular/core';
+import { signal, twoWayBinding } from '@angular/core';
 import { StarRating, BookReview } from './book-review';
-
-@Component({
-  selector: 'app-star-rating-harness',
-  imports: [StarRating],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <app-star-rating [(value)]="rating" />
-    <span data-testid="rating-value">{{ rating() }}</span>
-  `,
-})
-class StarRatingHarness {
-  rating = signal(0);
-}
 
 describe('StarRating', () => {
   it('should render 5 star buttons', async () => {
-    await render(StarRatingHarness);
+    await render(StarRating);
     const buttons = screen.getAllByRole('radio');
     expect(buttons).toHaveLength(5);
   });
 
-  it('should reflect initial value from model', async () => {
-    await render(StarRatingHarness, {
-      componentProperties: {
-        rating: signal(3),
-      },
+  it('should reflect initial value from binding', async () => {
+    const rating = signal(3);
+    await render(StarRating, {
+      bindings: [twoWayBinding('value', rating)],
     });
 
     const buttons = screen.getAllByRole('radio');
@@ -39,22 +25,20 @@ describe('StarRating', () => {
     expect(buttons[4]).toHaveAttribute('aria-checked', 'false');
   });
 
-  it('should sync value bidirectionally via model', async () => {
+  it('should sync value bidirectionally', async () => {
     const rating = signal(0);
-    const { fixture } = await render(StarRatingHarness, {
-      componentProperties: { rating },
+    const { fixture } = await render(StarRating, {
+      bindings: [twoWayBinding('value', rating)],
     });
     const buttons = screen.getAllByRole('radio');
 
     // UI -> Model
     await userEvent.click(buttons[2]); // 3rd star
-    expect(screen.getByTestId('rating-value')).toHaveTextContent('3');
     expect(rating()).toBe(3);
 
     // Model -> UI
     rating.set(5);
     fixture.detectChanges();
-    expect(screen.getByTestId('rating-value')).toHaveTextContent('5');
     expect(buttons[4]).toHaveAttribute('aria-checked', 'true');
   });
 
