@@ -6,6 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/simple-signup').then((m) => m.SimpleSignup),
   },
   {
+    path: 'book-review',
+    loadComponent: () => import('./examples/book-review').then((m) => m.BookReview),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
