@@ -3,7 +3,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 ## Git Workflow
 
-**MUST use worktree + PR-driven development:**
+**CRITICAL: Create worktree BEFORE writing any code. Working on main is absolutely forbidden. If violated, immediately stash and migrate to worktree.**
 
 1. **NEVER commit directly to main** - Always create a feature branch
 2. Use `git wt <branch-name>` to create worktree for new features
@@ -16,6 +16,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use strict type checking
 - Prefer type inference when the type is obvious
 - Avoid the `any` type; use `unknown` when type is uncertain
+- Define shared structures as `interface` and reuse them. Never duplicate type definitions.
 
 ## Angular Best Practices
 
@@ -64,3 +65,19 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+## Testing
+
+- Use Angular Testing Library for component tests
+- To test `model()` two-way binding, use `twoWayBinding` from `@angular/core` with `bindings` option:
+  ```typescript
+  import { signal, twoWayBinding } from '@angular/core';
+  const value = signal(0);
+  await render(Component, { bindings: [twoWayBinding('value', value)] });
+  ```
+- Do NOT use harness components, `componentInstance`, or `componentProperties` for model testing
+
+## Form Patterns
+
+- For submitted data display, store a snapshot at submit time using a signal (not the live model value)
+- Use `submittedValue` signal with `null` for unsubmitted state; non-null means submitted
