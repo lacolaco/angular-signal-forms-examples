@@ -114,9 +114,7 @@ interface ProfileData {
               [class.border-red-500]="profileForm.bio().touched() && profileForm.bio().invalid()"
               placeholder="Tell us about yourself..."
             ></textarea>
-            <p class="mt-1 text-xs text-gray-500">
-              {{ profileForm.bio().value().length }} / 200
-            </p>
+            <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio().value().length }} / 200</p>
           </app-form-field>
 
           <app-button type="submit" [loading]="profileForm().pending()"> Save Profile </app-button>
