@@ -5,9 +5,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
  * ナビゲーション項目の定義
  * 新しいユースケースを追加する際はここに追加する
  */
-const navItems = [
-  { path: '/simple-signup', label: 'Simple Signup' },
-] as const;
+const navItems = [{ path: '/simple-signup', label: 'Simple Signup' }] as const;
 
 @Component({
   selector: 'app-root',

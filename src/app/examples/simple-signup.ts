@@ -32,12 +32,7 @@ import { fieldErrors } from '../lib/field-errors';
           Signal Forms のバリデーションを使用する
         -->
         <form novalidate (submit)="onSubmit($event)">
-          <app-form-field
-            class="mb-4"
-            id="email"
-            label="Email"
-            [errorMessages]="emailErrors()"
-          >
+          <app-form-field class="mb-4" id="email" label="Email" [errorMessages]="emailErrors()">
             <!--
               [formField]: Signal Forms の FormField ディレクティブ。
               input要素とフィールドツリーを双方向バインドする。
@@ -63,7 +58,9 @@ import { fieldErrors } from '../lib/field-errors';
               type="password"
               [formField]="signupForm.password"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="signupForm.password().touched() && signupForm.password().invalid()"
+              [class.border-red-500]="
+                signupForm.password().touched() && signupForm.password().invalid()
+              "
             />
           </app-form-field>
 
@@ -78,7 +75,9 @@ import { fieldErrors } from '../lib/field-errors';
               type="password"
               [formField]="signupForm.confirmPassword"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()"
+              [class.border-red-500]="
+                signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()
+              "
             />
           </app-form-field>
 
