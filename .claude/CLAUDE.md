@@ -11,6 +11,19 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 4. Commit, push, and create PR from the worktree
 5. Delete worktree after PR is merged (`git wt -d <branch>`)
 
+### Commit Rules
+
+- **Split by logical units**: Separate commits for dependency additions, config changes, UI changes, and feature additions
+- **No bulk commits**: Do not use `git add -A && git commit` to commit all changes at once
+
+### Pre-PR Self-Review Checklist (Required)
+
+Before creating a PR, verify:
+- [ ] Comments and JSDoc are in Japanese (project language)
+- [ ] Auto-generated files (e.g., mockServiceWorker.js) are added to .gitignore
+- [ ] Commits are split into logical units
+- [ ] No debug code remains
+
 ## TypeScript Best Practices
 
 - Use strict type checking
