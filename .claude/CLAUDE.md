@@ -1,6 +1,16 @@
 
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
+## Git Workflow
+
+**MUST use worktree + PR-driven development:**
+
+1. **NEVER commit directly to main** - Always create a feature branch
+2. Use `git wt <branch-name>` to create worktree for new features
+3. Work in the worktree directory (`/tmp/{repo}-wt/{branch}`)
+4. Commit, push, and create PR from the worktree
+5. Delete worktree after PR is merged (`git wt -d <branch>`)
+
 ## TypeScript Best Practices
 
 - Use strict type checking
