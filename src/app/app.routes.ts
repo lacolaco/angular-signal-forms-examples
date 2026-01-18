@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/book-review').then((m) => m.BookReview),
   },
   {
+    path: 'profile-edit',
+    loadComponent: () => import('./examples/profile-edit').then((m) => m.ProfileEdit),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
