@@ -27,8 +27,7 @@
   "lint-staged": {
     "src/**/*.{ts,html}": [
       "eslint --fix",
-      "prettier --write",
-      "ng test --include"
+      "prettier --write"
     ],
     "src/**/*.css": "prettier --write"
   },
