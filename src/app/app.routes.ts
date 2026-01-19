@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/pizza-order').then((m) => m.PizzaOrder),
   },
   {
+    path: 'event-registration',
+    loadComponent: () => import('./examples/event-registration').then((m) => m.EventRegistration),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
