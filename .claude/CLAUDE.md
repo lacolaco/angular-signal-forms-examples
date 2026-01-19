@@ -1,3 +1,4 @@
+**CRITICAL: This file MUST be written in English only. All additions and modifications must be in English.**
 
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
@@ -94,3 +95,22 @@ Before creating a PR, verify:
 
 - For submitted data display, store a snapshot at submit time using a signal (not the live model value)
 - Use `submittedValue` signal with `null` for unsubmitted state; non-null means submitted
+
+## Signal Forms Constraints
+
+- `[disabled]` cannot be used with `[formField]` directive
+- Restrict options via conditional rendering (`@if`) on option elements
+- Remove unavailable options from UI instead of showing validation errors
+- Keep select element even with single option; avoid disabled/readonly complexity
+
+## Sample Implementation Principles
+
+- Include only fields related to the learning point
+- For conditional form samples, only include fields involved in the conditional logic
+- Exclude unrelated noise (e.g., pizza menu selection unrelated to conditional branching)
+
+## Dev Server Verification
+
+- After `ng serve`, always verify via browser screenshot before reporting success
+- If port is occupied, suspect a server from a different worktree
+- Use `lsof -i :4200` to check process; kill and restart if needed
