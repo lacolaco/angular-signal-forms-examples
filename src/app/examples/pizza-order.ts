@@ -32,26 +32,20 @@ interface OrderData {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppSourceLink],
   template: `
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-1">Pizza Order</h1>
-        <p class="text-sm text-blue-600 mb-2">Conditional Form</p>
-        <p class="text-gray-600 mb-6">注文内容を入力してください</p>
+    <div class="page-container">
+      <div class="form-card">
+        <h1 class="form-heading">Pizza Order</h1>
+        <p class="form-topic">Conditional Form</p>
+        <p class="form-description">注文内容を入力してください</p>
 
         <form novalidate (submit)="onSubmit($event)">
           <!-- Customer Name -->
-          <app-form-field
-            class="mb-4"
-            id="customerName"
-            label="Customer Name"
-            [errorMessages]="customerNameErrors()"
-          >
+          <app-form-field class="mb-4" label="Customer Name" [errorMessages]="customerNameErrors()">
             <input
-              id="customerName"
               type="text"
               [formField]="orderForm.customerName"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="
+              class="form-input"
+              [class.invalid]="
                 orderForm.customerName().touched() && orderForm.customerName().invalid()
               "
               placeholder="お名前"
@@ -59,13 +53,8 @@ interface OrderData {
           </app-form-field>
 
           <!-- Order Type -->
-          <app-form-field class="mb-4" id="orderType" label="Order Type">
-            <select
-              id="orderType"
-              data-testid="orderType"
-              [formField]="orderForm.orderType"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
+          <app-form-field class="mb-4" label="Order Type">
+            <select data-testid="orderType" [formField]="orderForm.orderType" class="form-select">
               <option value="togo">To go</option>
               <option value="delivery">Delivery</option>
             </select>
@@ -75,16 +64,14 @@ interface OrderData {
           @if (!orderForm.deliveryAddress().hidden()) {
             <app-form-field
               class="mb-4"
-              id="deliveryAddress"
               label="Delivery Address"
               [errorMessages]="deliveryAddressErrors()"
             >
               <input
-                id="deliveryAddress"
                 type="text"
                 [formField]="orderForm.deliveryAddress"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                [class.border-red-500]="
+                class="form-input"
+                [class.invalid]="
                   orderForm.deliveryAddress().touched() && orderForm.deliveryAddress().invalid()
                 "
                 placeholder="配達先住所"
@@ -95,16 +82,14 @@ interface OrderData {
           <!-- Payment Method -->
           <app-form-field
             class="mb-6"
-            id="paymentMethod"
             label="Payment Method"
             [errorMessages]="paymentMethodErrors()"
           >
             <select
-              id="paymentMethod"
               data-testid="paymentMethod"
               [formField]="orderForm.paymentMethod"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="
+              class="form-select"
+              [class.invalid]="
                 orderForm.paymentMethod().touched() && orderForm.paymentMethod().invalid()
               "
             >
@@ -120,7 +105,7 @@ interface OrderData {
         </form>
 
         @if (submittedValue(); as submitted) {
-          <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
+          <div class="form-success">
             Thank you for your order!
             <br />
             {{ submitted.customerName }} -
