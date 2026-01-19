@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@a
 import { form, FormField, required, applyWhen, hidden, submit } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
-import { AppSourceLink } from '../lib/ui/source-link';
+import { AppExampleCard } from '../lib/ui/example-card';
 import { fieldErrors } from '../lib/field-errors';
 
 type OrderType = 'togo' | 'delivery';
@@ -30,92 +30,81 @@ interface OrderData {
 @Component({
   selector: 'app-pizza-order',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppSourceLink],
+  imports: [FormField, AppFormField, AppButton, AppExampleCard],
   template: `
-    <div class="page-container">
-      <div class="form-card">
-        <h1 class="form-heading">Pizza Order</h1>
-        <p class="form-topic">Conditional Form</p>
-        <p class="form-description">注文内容を入力してください</p>
+    <app-example-card
+      title="Pizza Order"
+      topic="Conditional Form"
+      description="注文内容を入力してください"
+      sourcePath="examples/pizza-order.ts"
+    >
+      <form novalidate (submit)="onSubmit($event)">
+        <app-form-field class="mb-4" label="Customer Name" [errorMessages]="customerNameErrors()">
+          <input
+            type="text"
+            [formField]="orderForm.customerName"
+            class="form-input"
+            [class.invalid]="
+              orderForm.customerName().touched() && orderForm.customerName().invalid()
+            "
+            placeholder="お名前"
+          />
+        </app-form-field>
 
-        <form novalidate (submit)="onSubmit($event)">
-          <!-- Customer Name -->
-          <app-form-field class="mb-4" label="Customer Name" [errorMessages]="customerNameErrors()">
+        <app-form-field class="mb-4" label="Order Type">
+          <select data-testid="orderType" [formField]="orderForm.orderType" class="form-select">
+            <option value="togo">To go</option>
+            <option value="delivery">Delivery</option>
+          </select>
+        </app-form-field>
+
+        @if (!orderForm.deliveryAddress().hidden()) {
+          <app-form-field
+            class="mb-4"
+            label="Delivery Address"
+            [errorMessages]="deliveryAddressErrors()"
+          >
             <input
               type="text"
-              [formField]="orderForm.customerName"
+              [formField]="orderForm.deliveryAddress"
               class="form-input"
               [class.invalid]="
-                orderForm.customerName().touched() && orderForm.customerName().invalid()
+                orderForm.deliveryAddress().touched() && orderForm.deliveryAddress().invalid()
               "
-              placeholder="お名前"
+              placeholder="配達先住所"
             />
           </app-form-field>
-
-          <!-- Order Type -->
-          <app-form-field class="mb-4" label="Order Type">
-            <select data-testid="orderType" [formField]="orderForm.orderType" class="form-select">
-              <option value="togo">To go</option>
-              <option value="delivery">Delivery</option>
-            </select>
-          </app-form-field>
-
-          <!-- Delivery Address (conditional) -->
-          @if (!orderForm.deliveryAddress().hidden()) {
-            <app-form-field
-              class="mb-4"
-              label="Delivery Address"
-              [errorMessages]="deliveryAddressErrors()"
-            >
-              <input
-                type="text"
-                [formField]="orderForm.deliveryAddress"
-                class="form-input"
-                [class.invalid]="
-                  orderForm.deliveryAddress().touched() && orderForm.deliveryAddress().invalid()
-                "
-                placeholder="配達先住所"
-              />
-            </app-form-field>
-          }
-
-          <!-- Payment Method -->
-          <app-form-field
-            class="mb-6"
-            label="Payment Method"
-            [errorMessages]="paymentMethodErrors()"
-          >
-            <select
-              data-testid="paymentMethod"
-              [formField]="orderForm.paymentMethod"
-              class="form-select"
-              [class.invalid]="
-                orderForm.paymentMethod().touched() && orderForm.paymentMethod().invalid()
-              "
-            >
-              @if (orderModel().orderType === 'togo') {
-                <option value="">選択してください</option>
-                <option value="cash">Cash</option>
-              }
-              <option value="card">Card</option>
-            </select>
-          </app-form-field>
-
-          <app-button type="submit"> Order </app-button>
-        </form>
-
-        @if (submittedValue(); as submitted) {
-          <div class="form-success">
-            Thank you for your order!
-            <br />
-            {{ submitted.customerName }} -
-            {{ submitted.orderType === 'delivery' ? 'Delivery' : 'To go' }}
-          </div>
         }
 
-        <app-source-link class="mt-6" path="examples/pizza-order.ts" />
-      </div>
-    </div>
+        <app-form-field class="mb-6" label="Payment Method" [errorMessages]="paymentMethodErrors()">
+          <select
+            data-testid="paymentMethod"
+            [formField]="orderForm.paymentMethod"
+            class="form-select"
+            [class.invalid]="
+              orderForm.paymentMethod().touched() && orderForm.paymentMethod().invalid()
+            "
+          >
+            @if (orderModel().orderType === 'togo') {
+              <option value="">選択してください</option>
+              <option value="cash">Cash</option>
+            }
+            <option value="card">Card</option>
+          </select>
+        </app-form-field>
+
+        <app-button type="submit"> Order </app-button>
+      </form>
+
+      @if (submittedValue(); as submitted) {
+        <div class="form-success">
+          Thank you for your order!
+          <br />
+          {{ submitted.customerName }} -
+          {{ submitted.orderType === 'delivery' ? 'Delivery' : 'To go' }}
+        </div>
+      }
+    </app-example-card>
   `,
 })
 export class PizzaOrder {

@@ -10,7 +10,7 @@ import {
 } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
-import { AppSourceLink } from '../lib/ui/source-link';
+import { AppExampleCard } from '../lib/ui/example-card';
 import { fieldErrors } from '../lib/field-errors';
 
 interface ReviewData {
@@ -149,59 +149,54 @@ export class StarRating implements FormValueControl<number> {
 @Component({
   selector: 'app-book-review',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppSourceLink, StarRating],
+  imports: [FormField, AppFormField, AppButton, AppExampleCard, StarRating],
   template: `
-    <div class="page-container">
-      <div class="form-card">
-        <h1 class="form-heading">Book Review</h1>
-        <p class="form-topic">Custom Control</p>
-        <p class="form-description">「Signal Forms 入門」の評価をお願いします</p>
+    <app-example-card
+      title="Book Review"
+      topic="Custom Control"
+      description="「Signal Forms 入門」の評価をお願いします"
+      sourcePath="examples/book-review.ts"
+    >
+      <form novalidate (submit)="onSubmit($event)">
+        <!-- 星評価 -->
+        <div class="mb-4">
+          <span class="block text-sm font-medium text-gray-700 mb-1"> Rating </span>
+          <!--
+            カスタムコントロールとの連携:
+            StarRating は FormValueControl<number> を実装しているため、
+            [formField] ディレクティブで直接バインド可能
+          -->
+          <app-star-rating [formField]="reviewForm.rating" />
+          @if (ratingErrors().length > 0) {
+            <ul class="mt-1 text-sm text-red-600">
+              @for (message of ratingErrors(); track message) {
+                <li>{{ message }}</li>
+              }
+            </ul>
+          }
+        </div>
 
-        <form novalidate (submit)="onSubmit($event)">
-          <!-- 星評価 -->
-          <div class="mb-4">
-            <span class="block text-sm font-medium text-gray-700 mb-1"> Rating </span>
-            <!--
-              カスタムコントロールとの連携:
-              StarRating は FormValueControl<number> を実装しているため、
-              [formField] ディレクティブで直接バインド可能
-            -->
-            <app-star-rating [formField]="reviewForm.rating" />
-            @if (ratingErrors().length > 0) {
-              <ul class="mt-1 text-sm text-red-600">
-                @for (message of ratingErrors(); track message) {
-                  <li>{{ message }}</li>
-                }
-              </ul>
-            }
-          </div>
+        <!-- コメント -->
+        <app-form-field class="mb-6" label="Comment" [errorMessages]="commentErrors()">
+          <textarea
+            [formField]="reviewForm.comment"
+            rows="4"
+            class="form-textarea"
+            [class.invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
+            placeholder="この本についてのコメントを入力してください"
+          ></textarea>
+          <p class="mt-1 text-xs text-gray-500">{{ reviewForm.comment().value().length }} / 500</p>
+        </app-form-field>
 
-          <!-- コメント -->
-          <app-form-field class="mb-6" label="Comment" [errorMessages]="commentErrors()">
-            <textarea
-              [formField]="reviewForm.comment"
-              rows="4"
-              class="form-textarea"
-              [class.invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
-              placeholder="この本についてのコメントを入力してください"
-            ></textarea>
-            <p class="mt-1 text-xs text-gray-500">
-              {{ reviewForm.comment().value().length }} / 500
-            </p>
-          </app-form-field>
+        <app-button type="submit"> Submit Review </app-button>
+      </form>
 
-          <app-button type="submit"> Submit Review </app-button>
-        </form>
-
-        @if (submittedValue(); as submitted) {
-          <div class="form-success">
-            Thank you for your review! (Rating: {{ submitted.rating }} stars)
-          </div>
-        }
-
-        <app-source-link class="mt-6" path="examples/book-review.ts" />
-      </div>
-    </div>
+      @if (submittedValue(); as submitted) {
+        <div class="form-success">
+          Thank you for your review! (Rating: {{ submitted.rating }} stars)
+        </div>
+      }
+    </app-example-card>
   `,
 })
 export class BookReview {

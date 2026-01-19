@@ -11,7 +11,7 @@ import {
 } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
-import { AppSourceLink } from '../lib/ui/source-link';
+import { AppExampleCard } from '../lib/ui/example-card';
 import { fieldErrors } from '../lib/field-errors';
 
 interface ProfileData {
@@ -35,85 +35,78 @@ interface ProfileData {
 @Component({
   selector: 'app-profile-edit',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppSourceLink],
+  imports: [FormField, AppFormField, AppButton, AppExampleCard],
   template: `
-    <div class="page-container">
-      <div class="form-card">
-        <h1 class="form-heading">Profile Edit</h1>
-        <p class="form-topic">Async Validation</p>
-        <p class="text-gray-600 mb-4">Update your profile information</p>
-        <p class="text-xs text-gray-500 mb-6">
-          Demo: Usernames <code class="bg-gray-100 px-1 rounded">admin</code>,
-          <code class="bg-gray-100 px-1 rounded">user</code>,
-          <code class="bg-gray-100 px-1 rounded">test</code>,
-          <code class="bg-gray-100 px-1 rounded">john</code>,
-          <code class="bg-gray-100 px-1 rounded">jane</code> are already taken.
-        </p>
+    <app-example-card
+      title="Profile Edit"
+      topic="Async Validation"
+      description="Update your profile information"
+      sourcePath="examples/profile-edit.ts"
+    >
+      <p class="text-xs text-gray-500 mb-6">
+        Demo: Usernames <code class="bg-gray-100 px-1 rounded">admin</code>,
+        <code class="bg-gray-100 px-1 rounded">user</code>,
+        <code class="bg-gray-100 px-1 rounded">test</code>,
+        <code class="bg-gray-100 px-1 rounded">john</code>,
+        <code class="bg-gray-100 px-1 rounded">jane</code> are already taken.
+      </p>
 
-        <form novalidate (submit)="onSubmit($event)">
-          <!-- Username -->
-          <app-form-field class="mb-4" label="Username" [errorMessages]="usernameErrors()">
-            <div class="relative">
-              <input
-                type="text"
-                [formField]="profileForm.username"
-                class="form-input"
-                [class.invalid]="
-                  profileForm.username().touched() && profileForm.username().invalid()
-                "
-                placeholder="e.g., john_doe123"
-              />
-              @if (profileForm.username().pending()) {
-                <span
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"
-                  aria-live="polite"
-                >
-                  Checking...
-                </span>
-              }
-            </div>
-            @if (usernameAvailable()) {
-              <p class="mt-1 text-sm text-green-600">
-                {{ profileForm.username().value() }} is available
-              </p>
-            }
-          </app-form-field>
-
-          <!-- Display Name -->
-          <app-form-field class="mb-4" label="Display Name" [errorMessages]="displayNameErrors()">
+      <form novalidate (submit)="onSubmit($event)">
+        <app-form-field class="mb-4" label="Username" [errorMessages]="usernameErrors()">
+          <div class="relative">
             <input
               type="text"
-              [formField]="profileForm.displayName"
+              [formField]="profileForm.username"
               class="form-input"
-              [class.invalid]="
-                profileForm.displayName().touched() && profileForm.displayName().invalid()
-              "
-              placeholder="e.g., John Doe"
+              [class.invalid]="profileForm.username().touched() && profileForm.username().invalid()"
+              placeholder="e.g., john_doe123"
             />
-          </app-form-field>
+            @if (profileForm.username().pending()) {
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"
+                aria-live="polite"
+              >
+                Checking...
+              </span>
+            }
+          </div>
+          @if (usernameAvailable()) {
+            <p class="mt-1 text-sm text-green-600">
+              {{ profileForm.username().value() }} is available
+            </p>
+          }
+        </app-form-field>
 
-          <!-- Bio -->
-          <app-form-field class="mb-6" label="Bio" [errorMessages]="bioErrors()">
-            <textarea
-              [formField]="profileForm.bio"
-              rows="4"
-              class="form-textarea"
-              [class.invalid]="profileForm.bio().touched() && profileForm.bio().invalid()"
-              placeholder="Tell us about yourself..."
-            ></textarea>
-            <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio().value().length }} / 200</p>
-          </app-form-field>
+        <app-form-field class="mb-4" label="Display Name" [errorMessages]="displayNameErrors()">
+          <input
+            type="text"
+            [formField]="profileForm.displayName"
+            class="form-input"
+            [class.invalid]="
+              profileForm.displayName().touched() && profileForm.displayName().invalid()
+            "
+            placeholder="e.g., John Doe"
+          />
+        </app-form-field>
 
-          <app-button type="submit" [loading]="profileForm().pending()"> Save Profile </app-button>
-        </form>
+        <app-form-field class="mb-6" label="Bio" [errorMessages]="bioErrors()">
+          <textarea
+            [formField]="profileForm.bio"
+            rows="4"
+            class="form-textarea"
+            [class.invalid]="profileForm.bio().touched() && profileForm.bio().invalid()"
+            placeholder="Tell us about yourself..."
+          ></textarea>
+          <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio().value().length }} / 200</p>
+        </app-form-field>
 
-        @if (submittedValue(); as submitted) {
-          <div class="form-success">Profile saved! Welcome, {{ submitted.displayName }}!</div>
-        }
+        <app-button type="submit" [loading]="profileForm().pending()"> Save Profile </app-button>
+      </form>
 
-        <app-source-link class="mt-6" path="examples/profile-edit.ts" />
-      </div>
-    </div>
+      @if (submittedValue(); as submitted) {
+        <div class="form-success">Profile saved! Welcome, {{ submitted.displayName }}!</div>
+      }
+    </app-example-card>
   `,
 })
 export class ProfileEdit {
