@@ -10,6 +10,7 @@ const navItems = [
   { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
   { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
   { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
+  { path: '/event-registration', label: 'Event Registration', topic: 'Array Form' },
 ] as const;
 
 @Component({
