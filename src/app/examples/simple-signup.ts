@@ -23,60 +23,49 @@ import { fieldErrors } from '../lib/field-errors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppSourceLink],
   template: `
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-1">Simple Signup</h1>
-        <p class="text-sm text-blue-600 mb-6">Basic Form</p>
+    <div class="page-container">
+      <div class="form-card">
+        <h1 class="form-heading">Simple Signup</h1>
+        <p class="form-topic mb-6">Basic Form</p>
 
         <!--
           novalidate: ブラウザのネイティブバリデーションを無効化し、
           Signal Forms のバリデーションを使用する
         -->
         <form novalidate (submit)="onSubmit($event)">
-          <app-form-field class="mb-4" id="email" label="Email" [errorMessages]="emailErrors()">
+          <app-form-field class="mb-4" label="Email" [errorMessages]="emailErrors()">
             <!--
               [formField]: Signal Forms の FormField ディレクティブ。
               input要素とフィールドツリーを双方向バインドする。
               signupForm.email はフィールドツリーへの参照（関数として呼び出すとFieldStateを取得）
             -->
             <input
-              id="email"
               type="email"
               [formField]="signupForm.email"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="signupForm.email().touched() && signupForm.email().invalid()"
+              class="form-input"
+              [class.invalid]="signupForm.email().touched() && signupForm.email().invalid()"
             />
           </app-form-field>
 
-          <app-form-field
-            class="mb-4"
-            id="password"
-            label="Password"
-            [errorMessages]="passwordErrors()"
-          >
+          <app-form-field class="mb-4" label="Password" [errorMessages]="passwordErrors()">
             <input
-              id="password"
               type="password"
               [formField]="signupForm.password"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="
-                signupForm.password().touched() && signupForm.password().invalid()
-              "
+              class="form-input"
+              [class.invalid]="signupForm.password().touched() && signupForm.password().invalid()"
             />
           </app-form-field>
 
           <app-form-field
             class="mb-6"
-            id="confirmPassword"
             label="Confirm Password"
             [errorMessages]="confirmPasswordErrors()"
           >
             <input
-              id="confirmPassword"
               type="password"
               [formField]="signupForm.confirmPassword"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="
+              class="form-input"
+              [class.invalid]="
                 signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()
               "
             />
@@ -86,7 +75,7 @@ import { fieldErrors } from '../lib/field-errors';
         </form>
 
         @if (submitted()) {
-          <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">Sign up successful!</div>
+          <div class="form-success">Sign up successful!</div>
         }
 
         <app-source-link class="mt-6" path="examples/simple-signup.ts" />

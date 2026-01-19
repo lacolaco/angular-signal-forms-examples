@@ -151,11 +151,11 @@ export class StarRating implements FormValueControl<number> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppSourceLink, StarRating],
   template: `
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-1">Book Review</h1>
-        <p class="text-sm text-blue-600 mb-2">Custom Control</p>
-        <p class="text-gray-600 mb-6">「Signal Forms 入門」の評価をお願いします</p>
+    <div class="page-container">
+      <div class="form-card">
+        <h1 class="form-heading">Book Review</h1>
+        <p class="form-topic">Custom Control</p>
+        <p class="form-description">「Signal Forms 入門」の評価をお願いします</p>
 
         <form novalidate (submit)="onSubmit($event)">
           <!-- 星評価 -->
@@ -177,20 +177,12 @@ export class StarRating implements FormValueControl<number> {
           </div>
 
           <!-- コメント -->
-          <app-form-field
-            class="mb-6"
-            id="comment"
-            label="Comment"
-            [errorMessages]="commentErrors()"
-          >
+          <app-form-field class="mb-6" label="Comment" [errorMessages]="commentErrors()">
             <textarea
-              id="comment"
               [formField]="reviewForm.comment"
               rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              [class.border-red-500]="
-                reviewForm.comment().touched() && reviewForm.comment().invalid()
-              "
+              class="form-textarea"
+              [class.invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
               placeholder="この本についてのコメントを入力してください"
             ></textarea>
             <p class="mt-1 text-xs text-gray-500">
@@ -202,7 +194,7 @@ export class StarRating implements FormValueControl<number> {
         </form>
 
         @if (submittedValue(); as submitted) {
-          <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
+          <div class="form-success">
             Thank you for your review! (Rating: {{ submitted.rating }} stars)
           </div>
         }

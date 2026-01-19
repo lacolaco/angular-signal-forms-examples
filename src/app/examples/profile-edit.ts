@@ -37,10 +37,10 @@ interface ProfileData {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppSourceLink],
   template: `
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-1">Profile Edit</h1>
-        <p class="text-sm text-blue-600 mb-2">Async Validation</p>
+    <div class="page-container">
+      <div class="form-card">
+        <h1 class="form-heading">Profile Edit</h1>
+        <p class="form-topic">Async Validation</p>
         <p class="text-gray-600 mb-4">Update your profile information</p>
         <p class="text-xs text-gray-500 mb-6">
           Demo: Usernames <code class="bg-gray-100 px-1 rounded">admin</code>,
@@ -52,19 +52,13 @@ interface ProfileData {
 
         <form novalidate (submit)="onSubmit($event)">
           <!-- Username -->
-          <app-form-field
-            class="mb-4"
-            id="username"
-            label="Username"
-            [errorMessages]="usernameErrors()"
-          >
+          <app-form-field class="mb-4" label="Username" [errorMessages]="usernameErrors()">
             <div class="relative">
               <input
-                id="username"
                 type="text"
                 [formField]="profileForm.username"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                [class.border-red-500]="
+                class="form-input"
+                [class.invalid]="
                   profileForm.username().touched() && profileForm.username().invalid()
                 "
                 placeholder="e.g., john_doe123"
@@ -86,18 +80,12 @@ interface ProfileData {
           </app-form-field>
 
           <!-- Display Name -->
-          <app-form-field
-            class="mb-4"
-            id="displayName"
-            label="Display Name"
-            [errorMessages]="displayNameErrors()"
-          >
+          <app-form-field class="mb-4" label="Display Name" [errorMessages]="displayNameErrors()">
             <input
-              id="displayName"
               type="text"
               [formField]="profileForm.displayName"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              [class.border-red-500]="
+              class="form-input"
+              [class.invalid]="
                 profileForm.displayName().touched() && profileForm.displayName().invalid()
               "
               placeholder="e.g., John Doe"
@@ -105,13 +93,12 @@ interface ProfileData {
           </app-form-field>
 
           <!-- Bio -->
-          <app-form-field class="mb-6" id="bio" label="Bio" [errorMessages]="bioErrors()">
+          <app-form-field class="mb-6" label="Bio" [errorMessages]="bioErrors()">
             <textarea
-              id="bio"
               [formField]="profileForm.bio"
               rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              [class.border-red-500]="profileForm.bio().touched() && profileForm.bio().invalid()"
+              class="form-textarea"
+              [class.invalid]="profileForm.bio().touched() && profileForm.bio().invalid()"
               placeholder="Tell us about yourself..."
             ></textarea>
             <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio().value().length }} / 200</p>
@@ -121,9 +108,7 @@ interface ProfileData {
         </form>
 
         @if (submittedValue(); as submitted) {
-          <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
-            Profile saved! Welcome, {{ submitted.displayName }}!
-          </div>
+          <div class="form-success">Profile saved! Welcome, {{ submitted.displayName }}!</div>
         }
 
         <app-source-link class="mt-6" path="examples/profile-edit.ts" />

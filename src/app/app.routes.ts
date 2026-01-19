@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/profile-edit').then((m) => m.ProfileEdit),
   },
   {
+    path: 'pizza-order',
+    loadComponent: () => import('./examples/pizza-order').then((m) => m.PizzaOrder),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',

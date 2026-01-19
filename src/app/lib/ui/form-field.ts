@@ -13,8 +13,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
  *
  * ## 使い方
  * ```html
- * <app-form-field id="email" label="Email" [errorMessages]="errors">
- *   <input id="email" type="email" [formField]="form.email" />
+ * <app-form-field label="Email" [errorMessages]="errors">
+ *   <input type="email" [formField]="form.email" class="form-input" />
  * </app-form-field>
  * ```
  */
@@ -25,10 +25,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     class: 'block',
   },
   template: `
-    <label [for]="id()" class="block text-sm font-medium text-gray-700 mb-1">
-      {{ label() }}
+    <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+    <label class="block">
+      <span class="block text-sm font-medium text-gray-700 mb-1">{{ label() }}</span>
+      <ng-content />
     </label>
-    <ng-content />
     @if (errorMessages().length > 0) {
       <ul class="mt-1 text-sm text-red-600">
         @for (message of errorMessages(); track message) {
@@ -39,8 +40,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   `,
 })
 export class AppFormField {
-  /** ラベルに関連付けるinput要素のID */
-  readonly id = input.required<string>();
   /** ラベルテキスト */
   readonly label = input.required<string>();
   /** 表示するエラーメッセージの配列 */

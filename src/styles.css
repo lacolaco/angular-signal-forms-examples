@@ -1,3 +1,95 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* フォーム要素の共通スタイル */
+@utility form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-blue-500);
+    border-color: transparent;
+  }
+  &.invalid {
+    border-color: var(--color-red-500);
+  }
+}
+
+@utility form-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-blue-500);
+    border-color: transparent;
+  }
+  &.invalid {
+    border-color: var(--color-red-500);
+  }
+}
+
+@utility form-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  resize: none;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-blue-500);
+    border-color: transparent;
+  }
+  &.invalid {
+    border-color: var(--color-red-500);
+  }
+}
+
+/* ページコンテナ */
+@utility page-container {
+  min-height: 100vh;
+  background-color: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+@utility form-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@utility form-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-gray-800);
+  margin-bottom: 0.25rem;
+}
+
+@utility form-topic {
+  font-size: 0.875rem;
+  color: var(--color-blue-600);
+  margin-bottom: 0.5rem;
+}
+
+@utility form-description {
+  color: var(--color-gray-600);
+  margin-bottom: 1.5rem;
+}
+
+@utility form-success {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--color-green-100);
+  color: var(--color-green-700);
+  border-radius: 0.375rem;
+}
