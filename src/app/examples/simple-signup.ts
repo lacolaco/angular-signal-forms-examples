@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { form, FormField, required, email, validate, submit } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
-import { AppSourceLink } from '../lib/ui/source-link';
+import { AppExampleCard } from '../lib/ui/example-card';
 import { fieldErrors } from '../lib/field-errors';
 
 /**
@@ -21,66 +21,64 @@ import { fieldErrors } from '../lib/field-errors';
 @Component({
   selector: 'app-simple-signup',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppSourceLink],
+  imports: [FormField, AppFormField, AppButton, AppExampleCard],
   template: `
-    <div class="page-container">
-      <div class="form-card">
-        <h1 class="form-heading">Simple Signup</h1>
-        <p class="form-topic mb-6">Basic Form</p>
+    <app-example-card
+      title="Simple Signup"
+      topic="Basic Form"
+      description="Signal Forms の基本的な使い方"
+      sourcePath="examples/simple-signup.ts"
+    >
+      <!--
+        novalidate: ブラウザのネイティブバリデーションを無効化し、
+        Signal Forms のバリデーションを使用する
+      -->
+      <form novalidate (submit)="onSubmit($event)">
+        <app-form-field class="mb-4" label="Email" [errorMessages]="emailErrors()">
+          <!--
+            [formField]: Signal Forms の FormField ディレクティブ。
+            input要素とフィールドツリーを双方向バインドする。
+            signupForm.email はフィールドツリーへの参照（関数として呼び出すとFieldStateを取得）
+          -->
+          <input
+            type="email"
+            [formField]="signupForm.email"
+            class="form-input"
+            [class.invalid]="signupForm.email().touched() && signupForm.email().invalid()"
+          />
+        </app-form-field>
 
-        <!--
-          novalidate: ブラウザのネイティブバリデーションを無効化し、
-          Signal Forms のバリデーションを使用する
-        -->
-        <form novalidate (submit)="onSubmit($event)">
-          <app-form-field class="mb-4" label="Email" [errorMessages]="emailErrors()">
-            <!--
-              [formField]: Signal Forms の FormField ディレクティブ。
-              input要素とフィールドツリーを双方向バインドする。
-              signupForm.email はフィールドツリーへの参照（関数として呼び出すとFieldStateを取得）
-            -->
-            <input
-              type="email"
-              [formField]="signupForm.email"
-              class="form-input"
-              [class.invalid]="signupForm.email().touched() && signupForm.email().invalid()"
-            />
-          </app-form-field>
+        <app-form-field class="mb-4" label="Password" [errorMessages]="passwordErrors()">
+          <input
+            type="password"
+            [formField]="signupForm.password"
+            class="form-input"
+            [class.invalid]="signupForm.password().touched() && signupForm.password().invalid()"
+          />
+        </app-form-field>
 
-          <app-form-field class="mb-4" label="Password" [errorMessages]="passwordErrors()">
-            <input
-              type="password"
-              [formField]="signupForm.password"
-              class="form-input"
-              [class.invalid]="signupForm.password().touched() && signupForm.password().invalid()"
-            />
-          </app-form-field>
+        <app-form-field
+          class="mb-6"
+          label="Confirm Password"
+          [errorMessages]="confirmPasswordErrors()"
+        >
+          <input
+            type="password"
+            [formField]="signupForm.confirmPassword"
+            class="form-input"
+            [class.invalid]="
+              signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()
+            "
+          />
+        </app-form-field>
 
-          <app-form-field
-            class="mb-6"
-            label="Confirm Password"
-            [errorMessages]="confirmPasswordErrors()"
-          >
-            <input
-              type="password"
-              [formField]="signupForm.confirmPassword"
-              class="form-input"
-              [class.invalid]="
-                signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()
-              "
-            />
-          </app-form-field>
+        <app-button type="submit"> Sign Up </app-button>
+      </form>
 
-          <app-button type="submit"> Sign Up </app-button>
-        </form>
-
-        @if (submitted()) {
-          <div class="form-success">Sign up successful!</div>
-        }
-
-        <app-source-link class="mt-6" path="examples/simple-signup.ts" />
-      </div>
-    </div>
+      @if (submitted()) {
+        <div class="form-success">Sign up successful!</div>
+      }
+    </app-example-card>
   `,
 })
 export class SimpleSignup {
