@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  linkedSignal,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { form, FormField, FormValueControl, required, submit } from '@angular/forms/signals';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
@@ -13,15 +22,47 @@ interface CheckoutData {
 }
 
 /**
+ * "MM/YY" 形式の文字列から月を抽出
+ */
+function parseMonth(expiryDate: string): string {
+  return expiryDate.includes('/') ? expiryDate.split('/')[0] : '';
+}
+
+/**
+ * "MM/YY" 形式の文字列から年を抽出
+ */
+function parseYear(expiryDate: string): string {
+  return expiryDate.includes('/') ? expiryDate.split('/')[1] : '';
+}
+
+/**
+ * 月と年から "MM/YY" 形式の文字列を生成
+ */
+function formatExpiryDate(month: string, year: string): string {
+  return `${month}/${year}`;
+}
+
+/**
  * ExpiryDateInput Component
  *
  * Signal Forms のカスタムフォームコントロール実装例。
  * 月と年を別々の入力フィールドで受け取り、"MM/YY" 形式の文字列に変換する。
  *
  * ## 学習ポイント
- * - FormValueControl インターフェースの実装
- * - model() によるフォームとの双方向バインディング
- * - UI と モデルの分離: 複数入力 → 単一値への変換
+ *
+ * ### FormValueControl インターフェース
+ * - `model()` シグナルを `value` プロパティとして公開するだけで実装完了
+ * - [formField] ディレクティブが自動的にバインディングを行う
+ *
+ * ### UI とモデルの分離
+ * - UI: 月(MM)と年(YY)の2つの入力フィールド
+ * - モデル: "MM/YY" 形式の単一文字列
+ * - linkedSignal() で外部からの値変更を内部状態に同期（effect不要）
+ *
+ * ### カスタムコントロールのフォーカス制御
+ * - focus() メソッドを実装すると focusBoundControl() から呼び出される
+ * - viewChild() でテンプレート参照を取得し、フォーカス先を指定
+ * - 複数入力がある場合、どの要素にフォーカスするか制御可能
  */
 @Component({
   selector: 'app-expiry-date-input',
@@ -30,7 +71,13 @@ interface CheckoutData {
     class: 'inline-flex items-center gap-1',
   },
   template: `
+    <!--
+      #monthInput: テンプレート参照変数
+      viewChild('monthInput') でコンポーネントから参照を取得し、
+      focus() メソッドでこの要素にフォーカスを移動する
+    -->
     <input
+      #monthInput
       type="text"
       maxlength="2"
       inputmode="numeric"
@@ -55,31 +102,31 @@ export class ExpiryDateInput implements FormValueControl<string> {
   /** フォームにバインドされる値（"MM/YY" 形式） */
   readonly value = model('');
 
-  /** 内部状態: 月（MM） */
-  protected readonly month = signal('');
+  /**
+   * 月入力フィールドへの参照
+   *
+   * viewChild.required() でテンプレート参照変数 #monthInput を取得。
+   * テンプレートに必ず存在するため required を使用し、non-nullable にする。
+   * focus() メソッドでこの要素にフォーカスを移動するために使用。
+   */
+  private readonly monthInput = viewChild.required<ElementRef<HTMLInputElement>>('monthInput');
 
-  /** 内部状態: 年（YY） */
-  protected readonly year = signal('');
+  /**
+   * 内部状態: 月（MM）
+   *
+   * linkedSignal() を使用し、value の変更に連動して初期化される。
+   * ユーザー入力時は set() で直接更新可能。
+   * effect() を使わずに双方向の同期を実現。
+   */
+  protected readonly month = linkedSignal(() => parseMonth(this.value()));
 
-  constructor() {
-    // value → month/year に分解
-    effect(() => {
-      const v = this.value();
-      if (v.includes('/')) {
-        const [m, y] = v.split('/');
-        // 内部状態と異なる場合のみ更新（無限ループ防止）
-        if (m !== this.month()) {
-          this.month.set(m);
-        }
-        if (y !== this.year()) {
-          this.year.set(y);
-        }
-      } else if (v === '') {
-        this.month.set('');
-        this.year.set('');
-      }
-    });
-  }
+  /**
+   * 内部状態: 年（YY）
+   *
+   * linkedSignal() を使用し、value の変更に連動して初期化される。
+   * ユーザー入力時は set() で直接更新可能。
+   */
+  protected readonly year = linkedSignal(() => parseYear(this.value()));
 
   /**
    * 月入力時のハンドラ
@@ -105,7 +152,21 @@ export class ExpiryDateInput implements FormValueControl<string> {
    * month/year → "MM/YY" に変換して value に反映
    */
   private updateValue(): void {
-    this.value.set(`${this.month()}/${this.year()}`);
+    this.value.set(formatExpiryDate(this.month(), this.year()));
+  }
+
+  /**
+   * カスタムコントロールのフォーカスメソッド
+   *
+   * Signal Forms の focusBoundControl() は、カスタムコントロールに
+   * focus() メソッドが定義されていれば自動的にそれを呼び出す。
+   * これにより、複数の内部入力要素がある場合でも、
+   * どの要素にフォーカスするかを制御できる。
+   *
+   * このコンポーネントでは月入力(MM)にフォーカスを移動する。
+   */
+  focus(): void {
+    this.monthInput().nativeElement.focus();
   }
 }
 
@@ -116,9 +177,14 @@ export class ExpiryDateInput implements FormValueControl<string> {
  * 有効期限は UI 上で月と年を分けて入力するが、フォームモデル上は "MM/YY" の単一フィールドとして管理。
  *
  * ## 学習ポイント
- * - FormValueControl: カスタムコントロールインターフェースの実装
- * - model(): フォームとの双方向バインディング
- * - UI と モデルの分離: 複数入力 → 単一値への変換
+ *
+ * ### カスタムコントロールの統合
+ * - [formField] ディレクティブでカスタムコントロールをフォームにバインド
+ * - 通常の input と同様に focusBoundControl() でフォーカス制御可能
+ *
+ * ### バリデーションエラー時のフォーカス制御
+ * - focusBoundControl() はカスタムコントロールの focus() メソッドを呼び出す
+ * - これにより、エラー時に適切な入力要素にフォーカスを移動できる
  */
 @Component({
   selector: 'app-checkout',
@@ -146,7 +212,16 @@ export class ExpiryDateInput implements FormValueControl<string> {
           />
         </app-form-field>
 
-        <!-- 有効期限 -->
+        <!--
+          有効期限: カスタムコントロールの使用例
+
+          [formField] でカスタムコントロールをフォームにバインド。
+          ExpiryDateInput は FormValueControl<string> を実装しているため、
+          通常の input と同様に扱える。
+
+          focusBoundControl() を呼び出すと、ExpiryDateInput.focus() が
+          呼び出され、月入力(MM)にフォーカスが移動する。
+        -->
         <div class="mb-4">
           <span class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</span>
           <app-expiry-date-input [formField]="checkoutForm.expiryDate" />
@@ -241,10 +316,7 @@ export class Checkout {
     if (this.checkoutForm.cardNumber().invalid()) {
       this.checkoutForm.cardNumber().focusBoundControl();
     } else if (this.checkoutForm.expiryDate().invalid()) {
-      const monthInput = document.querySelector('app-expiry-date-input input');
-      if (monthInput instanceof HTMLElement) {
-        monthInput.focus();
-      }
+      this.checkoutForm.expiryDate().focusBoundControl();
     } else if (this.checkoutForm.securityCode().invalid()) {
       this.checkoutForm.securityCode().focusBoundControl();
     } else if (this.checkoutForm.cardholderName().invalid()) {

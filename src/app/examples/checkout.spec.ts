@@ -132,6 +132,16 @@ describe('Checkout', () => {
       expect(screen.getByText(/expiry date is required/i)).toBeInTheDocument();
     });
 
+    it('should focus month input via focusBoundControl when expiryDate is invalid', async () => {
+      await render(Checkout);
+
+      await userEvent.type(getCardNumberInput(), '4111111111111111');
+      await userEvent.click(getPayButton());
+
+      // focusBoundControl() 経由で ExpiryDateInput.focus() が呼ばれ、月入力にフォーカス
+      expect(document.activeElement).toBe(getMonthInput());
+    });
+
     it('should show error when securityCode is empty', async () => {
       await render(Checkout);
 
