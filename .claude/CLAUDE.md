@@ -31,6 +31,7 @@ Before creating a PR, verify:
 - Prefer type inference when the type is obvious
 - Avoid the `any` type; use `unknown` when type is uncertain
 - Define shared structures as `interface` and reuse them. Never duplicate type definitions.
+- Extract domain logic (parsing, formatting, validation) as pure functions for testability and reuse
 
 ## Angular Best Practices
 
@@ -58,6 +59,7 @@ Before creating a PR, verify:
 - Do NOT use `ngClass`, use `class` bindings instead
 - Do NOT use `ngStyle`, use `style` bindings instead
 - When using external templates/styles, use paths relative to the component TS file.
+- Use `viewChild.required()` for template references that are guaranteed to exist (non-nullable)
 
 ## State Management
 
@@ -65,6 +67,7 @@ Before creating a PR, verify:
 - Use `computed()` for derived state
 - Keep state transformations pure and predictable
 - Do NOT use `mutate` on signals, use `update` or `set` instead
+- Use `linkedSignal()` when internal state needs to sync with external signal but remain writable (avoids effect() + signal() pattern)
 
 ## Templates
 
@@ -90,6 +93,8 @@ Before creating a PR, verify:
   await render(Component, { bindings: [twoWayBinding('value', value)] });
   ```
 - Do NOT use harness components, `componentInstance`, or `componentProperties` for model testing
+- For focus behavior, write integration tests verifying `focusBoundControl()` moves focus correctly
+- Do NOT rely solely on unit tests for focus behavior; always verify in browser
 
 ## Form Patterns
 
@@ -102,6 +107,12 @@ Before creating a PR, verify:
 - Restrict options via conditional rendering (`@if`) on option elements
 - Remove unavailable options from UI instead of showing validation errors
 - Keep select element even with single option; avoid disabled/readonly complexity
+
+### Custom Control Focus
+
+- Custom controls implementing `FormValueControl` must define a `focus()` method for `focusBoundControl()` to work
+- Use `viewChild.required()` to reference the focusable input element
+- `focusBoundControl()` automatically calls the custom control's `focus()` method
 
 ## Sample Implementation Principles
 
