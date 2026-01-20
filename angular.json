@@ -70,7 +70,12 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "browsers": ["chromiumheadless"],
+            "setupFiles": ["src/vitest.setup.ts"],
+            "watch": false
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
