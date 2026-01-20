@@ -11,6 +11,7 @@ const navItems = [
   { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
   { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
   { path: '/event-registration', label: 'Event Registration', topic: 'Array Form' },
+  { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
 ] as const;
 
 @Component({
