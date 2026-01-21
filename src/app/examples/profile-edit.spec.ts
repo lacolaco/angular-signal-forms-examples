@@ -1,13 +1,7 @@
-import '@testing-library/jest-dom/vitest';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { provideHttpClient } from '@angular/common/http';
-import { server } from '../../mocks/server';
 import { ProfileEdit } from './profile-edit';
-
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 describe('ProfileEdit', () => {
   const renderComponent = () =>
