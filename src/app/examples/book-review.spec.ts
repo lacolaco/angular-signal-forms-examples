@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/vitest';
 import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { signal, twoWayBinding } from '@angular/core';
