@@ -12,6 +12,7 @@ const navItems = [
   { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
   { path: '/event-registration', label: 'Event Registration', topic: 'Array Form' },
   { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
+  { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
 ] as const;
 
 @Component({

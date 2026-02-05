@@ -26,6 +26,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/checkout').then((m) => m.Checkout),
   },
   {
+    path: 'location-select',
+    loadComponent: () => import('./examples/location-select').then((m) => m.LocationSelect),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
