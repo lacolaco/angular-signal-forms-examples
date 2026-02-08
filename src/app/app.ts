@@ -13,6 +13,7 @@ const navItems = [
   { path: '/event-registration', label: 'Event Registration', topic: 'Array Form' },
   { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
   { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
+  { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
 ] as const;
 
 @Component({

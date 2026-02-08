@@ -30,6 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/location-select').then((m) => m.LocationSelect),
   },
   {
+    path: 'city-search',
+    loadComponent: () => import('./examples/city-search').then((m) => m.CitySearch),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
