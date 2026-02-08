@@ -43,8 +43,8 @@ interface OrderData {
           <input
             type="text"
             [formField]="orderForm.customerName"
-            class="form-input"
-            [class.invalid]="
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="
               orderForm.customerName().touched() && orderForm.customerName().invalid()
             "
             placeholder="お名前"
@@ -67,8 +67,8 @@ interface OrderData {
             <input
               type="text"
               [formField]="orderForm.deliveryAddress"
-              class="form-input"
-              [class.invalid]="
+              class="form-input aria-invalid:border-red-500"
+              [aria-invalid]="
                 orderForm.deliveryAddress().touched() && orderForm.deliveryAddress().invalid()
               "
               placeholder="配達先住所"
@@ -80,8 +80,8 @@ interface OrderData {
           <select
             data-testid="paymentMethod"
             [formField]="orderForm.paymentMethod"
-            class="form-select"
-            [class.invalid]="
+            class="form-select aria-invalid:border-red-500"
+            [aria-invalid]="
               orderForm.paymentMethod().touched() && orderForm.paymentMethod().invalid()
             "
           >

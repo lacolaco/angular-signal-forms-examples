@@ -57,8 +57,8 @@ interface ProfileData {
             <input
               type="text"
               [formField]="profileForm.username"
-              class="form-input"
-              [class.invalid]="profileForm.username().touched() && profileForm.username().invalid()"
+              class="form-input aria-invalid:border-red-500"
+              [aria-invalid]="profileForm.username().touched() && profileForm.username().invalid()"
               placeholder="e.g., john_doe123"
             />
             @if (profileForm.username().pending()) {
@@ -81,8 +81,8 @@ interface ProfileData {
           <input
             type="text"
             [formField]="profileForm.displayName"
-            class="form-input"
-            [class.invalid]="
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="
               profileForm.displayName().touched() && profileForm.displayName().invalid()
             "
             placeholder="e.g., John Doe"
@@ -93,8 +93,8 @@ interface ProfileData {
           <textarea
             [formField]="profileForm.bio"
             rows="4"
-            class="form-textarea"
-            [class.invalid]="profileForm.bio().touched() && profileForm.bio().invalid()"
+            class="form-textarea aria-invalid:border-red-500"
+            [aria-invalid]="profileForm.bio().touched() && profileForm.bio().invalid()"
             placeholder="Tell us about yourself..."
           ></textarea>
           <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio().value().length }} / 200</p>
