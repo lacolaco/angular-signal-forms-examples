@@ -32,6 +32,7 @@ ng test     # Vitest でテスト実行
 | 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select.md) |
 | 8 | City Search | Autocomplete | `debounce()` + `httpResource()` でインクリメンタルサーチ | [解説](src/app/examples/city-search.md) |
 | 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload.md) |
+| 10 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings.md) |
 
 ### 推奨学習順序
 
@@ -60,6 +61,8 @@ ng test     # Vitest でテスト実行
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |
+| `reset()` | フォーム値と状態のリセット | Settings |
+| `dirty()` | 変更検知シグナル | Settings |
 | `FormValueControl<T>` | カスタムコントロールインターフェース | Book Review, Checkout, Avatar Upload |
 
 ## プロジェクト構造
