@@ -2,9 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   ElementRef,
   model,
+  resource,
   signal,
   viewChild,
 } from '@angular/core';
@@ -55,9 +55,9 @@ function formatFileSize(bytes: number): string {
       class="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
       (click)="openFilePicker()"
     >
-      @if (previewUrl()) {
+      @if (previewUrl.value()) {
         <img
-          [src]="previewUrl()"
+          [src]="previewUrl.value()"
           alt="Preview"
           class="mx-auto mb-2 max-h-32 rounded-lg object-cover"
         />
@@ -106,29 +106,26 @@ export class ImageUploadInput implements FormValueControl<File | null> {
   /**
    * プレビュー画像の Data URL
    *
-   * FileReader で File を読み込み、Data URL に変換。
-   * effect() で value の変更を監視し、自動的にプレビューを更新。
+   * resource() で value シグナルの変更を追跡し、
+   * FileReader で File を Data URL に非同期変換する。
+   * value が変わるたびに自動的にプレビューを再生成。
    */
-  protected readonly previewUrl = signal<string | null>(null);
+  protected readonly previewUrl = resource({
+    params: () => this.value(),
+    loader: async ({ params: file }) => {
+      if (!file || !file.type.startsWith('image/')) {
+        return null;
+      }
+      return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+    },
+  });
 
   /** ファイルサイズ表示用ヘルパー（テンプレートから参照） */
   protected readonly formatFileSize = formatFileSize;
-
-  constructor() {
-    // value の変更時にプレビューを更新
-    effect(() => {
-      const file = this.value();
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.previewUrl.set(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        this.previewUrl.set(null);
-      }
-    });
-  }
 
   /**
    * ファイル選択ハンドラ
