@@ -204,8 +204,8 @@ export class ExpiryDateInput implements FormValueControl<string> {
             type="text"
             inputmode="numeric"
             [formField]="checkoutForm.cardNumber"
-            class="form-input"
-            [class.invalid]="
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="
               checkoutForm.cardNumber().touched() && checkoutForm.cardNumber().invalid()
             "
             placeholder="1234 5678 9012 3456"
@@ -240,8 +240,8 @@ export class ExpiryDateInput implements FormValueControl<string> {
             type="text"
             inputmode="numeric"
             [formField]="checkoutForm.securityCode"
-            class="form-input w-20"
-            [class.invalid]="
+            class="form-input w-20 aria-invalid:border-red-500"
+            [aria-invalid]="
               checkoutForm.securityCode().touched() && checkoutForm.securityCode().invalid()
             "
             placeholder="123"
@@ -257,8 +257,8 @@ export class ExpiryDateInput implements FormValueControl<string> {
           <input
             type="text"
             [formField]="checkoutForm.cardholderName"
-            class="form-input"
-            [class.invalid]="
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="
               checkoutForm.cardholderName().touched() && checkoutForm.cardholderName().invalid()
             "
             placeholder="TARO YAMADA"

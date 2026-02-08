@@ -181,8 +181,8 @@ export class StarRating implements FormValueControl<number> {
           <textarea
             [formField]="reviewForm.comment"
             rows="4"
-            class="form-textarea"
-            [class.invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
+            class="form-textarea aria-invalid:border-red-500"
+            [aria-invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
             placeholder="この本についてのコメントを入力してください"
           ></textarea>
           <p class="mt-1 text-xs text-gray-500">{{ reviewForm.comment().value().length }} / 500</p>

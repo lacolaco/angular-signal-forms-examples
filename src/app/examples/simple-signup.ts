@@ -43,8 +43,8 @@ import { fieldErrors } from '../lib/field-errors';
           <input
             type="email"
             [formField]="signupForm.email"
-            class="form-input"
-            [class.invalid]="signupForm.email().touched() && signupForm.email().invalid()"
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="signupForm.email().touched() && signupForm.email().invalid()"
           />
         </app-form-field>
 
@@ -52,8 +52,8 @@ import { fieldErrors } from '../lib/field-errors';
           <input
             type="password"
             [formField]="signupForm.password"
-            class="form-input"
-            [class.invalid]="signupForm.password().touched() && signupForm.password().invalid()"
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="signupForm.password().touched() && signupForm.password().invalid()"
           />
         </app-form-field>
 
@@ -65,8 +65,8 @@ import { fieldErrors } from '../lib/field-errors';
           <input
             type="password"
             [formField]="signupForm.confirmPassword"
-            class="form-input"
-            [class.invalid]="
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="
               signupForm.confirmPassword().touched() && signupForm.confirmPassword().invalid()
             "
           />

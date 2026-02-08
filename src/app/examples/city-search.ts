@@ -38,8 +38,8 @@ import { fieldErrors } from '../lib/field-errors';
             <input
               type="text"
               [formField]="searchForm.city"
-              class="form-input"
-              [class.invalid]="searchForm.city().touched() && searchForm.city().invalid()"
+              class="form-input aria-invalid:border-red-500"
+              [aria-invalid]="searchForm.city().touched() && searchForm.city().invalid()"
               autocomplete="off"
               (focus)="onFocus()"
               (blur)="onBlur()"

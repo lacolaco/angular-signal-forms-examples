@@ -100,8 +100,8 @@ const LOCATION_DATA: Region[] = [
         <app-form-field class="mb-4" label="Region" [errorMessages]="regionErrors()">
           <select
             [formField]="locationForm.region"
-            class="form-input"
-            [class.invalid]="locationForm.region().touched() && locationForm.region().invalid()"
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="locationForm.region().touched() && locationForm.region().invalid()"
             (change)="onRegionChange()"
           >
             <option value="">-- Select Region --</option>
@@ -118,8 +118,8 @@ const LOCATION_DATA: Region[] = [
           -->
           <select
             [formField]="locationForm.country"
-            class="form-input"
-            [class.invalid]="locationForm.country().touched() && locationForm.country().invalid()"
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="locationForm.country().touched() && locationForm.country().invalid()"
             (change)="onCountryChange()"
           >
             <option value="">-- Select Country --</option>
@@ -132,8 +132,8 @@ const LOCATION_DATA: Region[] = [
         <app-form-field class="mb-6" label="City" [errorMessages]="cityErrors()">
           <select
             [formField]="locationForm.city"
-            class="form-input"
-            [class.invalid]="locationForm.city().touched() && locationForm.city().invalid()"
+            class="form-input aria-invalid:border-red-500"
+            [aria-invalid]="locationForm.city().touched() && locationForm.city().invalid()"
           >
             <option value="">-- Select City --</option>
             @for (c of availableCities(); track c.id) {

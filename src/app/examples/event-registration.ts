@@ -40,8 +40,8 @@ interface EventRegistrationData {
               <input
                 type="text"
                 [formField]="field"
-                class="form-input flex-1"
-                [class.invalid]="field().touched() && field().invalid()"
+                class="form-input flex-1 aria-invalid:border-red-500"
+                [aria-invalid]="field().touched() && field().invalid()"
                 placeholder="参加者名"
               />
               @if (registrationModel().participants.length > 1) {
