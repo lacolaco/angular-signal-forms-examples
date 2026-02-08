@@ -109,5 +109,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/event-registration.ts)
-- [テスト](../src/app/examples/event-registration.spec.ts)
+- [ソースコード](./event-registration.ts)
+- [テスト](./event-registration.spec.ts)

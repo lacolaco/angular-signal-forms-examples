@@ -100,5 +100,5 @@ if (this.checkoutForm.expiryDate().invalid()) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/checkout.ts)
-- [テスト](../src/app/examples/checkout.spec.ts)
+- [ソースコード](./checkout.ts)
+- [テスト](./checkout.spec.ts)

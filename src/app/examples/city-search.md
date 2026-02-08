@@ -104,5 +104,5 @@ onSubmit(event: Event): void {
 
 ## コード
 
-- [ソースコード](../src/app/examples/city-search.ts)
-- [テスト](../src/app/examples/city-search.spec.ts)
+- [ソースコード](./city-search.ts)
+- [テスト](./city-search.spec.ts)

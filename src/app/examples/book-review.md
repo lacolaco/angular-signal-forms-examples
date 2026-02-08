@@ -101,5 +101,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/book-review.ts)
-- [テスト](../src/app/examples/book-review.spec.ts)
+- [ソースコード](./book-review.ts)
+- [テスト](./book-review.spec.ts)

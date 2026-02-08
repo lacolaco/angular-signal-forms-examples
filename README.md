@@ -23,15 +23,15 @@ ng test     # Vitest でテスト実行
 
 | # | Example | Topic | 学習ポイント | 詳細 |
 |---|---------|-------|-------------|------|
-| 1 | Simple Signup | Basic Form | `form()`, `validate()`, `required()`, `submit()` の基本パターン | [解説](examples/simple-signup.md) |
-| 2 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](examples/book-review.md) |
-| 3 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](examples/profile-edit.md) |
-| 4 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](examples/pizza-order.md) |
-| 5 | Event Registration | Array Form | `applyEach()` で参加者リストの動的追加・削除 | [解説](examples/event-registration.md) |
-| 6 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](examples/checkout.md) |
-| 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](examples/location-select.md) |
-| 8 | City Search | Autocomplete | `debounce()` + `httpResource()` でインクリメンタルサーチ | [解説](examples/city-search.md) |
-| 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](examples/avatar-upload.md) |
+| 1 | Simple Signup | Basic Form | `form()`, `validate()`, `required()`, `submit()` の基本パターン | [解説](src/app/examples/simple-signup.md) |
+| 2 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](src/app/examples/book-review.md) |
+| 3 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](src/app/examples/profile-edit.md) |
+| 4 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](src/app/examples/pizza-order.md) |
+| 5 | Event Registration | Array Form | `applyEach()` で参加者リストの動的追加・削除 | [解説](src/app/examples/event-registration.md) |
+| 6 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout.md) |
+| 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select.md) |
+| 8 | City Search | Autocomplete | `debounce()` + `httpResource()` でインクリメンタルサーチ | [解説](src/app/examples/city-search.md) |
+| 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload.md) |
 
 ### 推奨学習順序
 

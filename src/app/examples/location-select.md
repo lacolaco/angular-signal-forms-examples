@@ -115,5 +115,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/location-select.ts)
-- [テスト](../src/app/examples/location-select.spec.ts)
+- [ソースコード](./location-select.ts)
+- [テスト](./location-select.spec.ts)

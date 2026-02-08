@@ -141,5 +141,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/avatar-upload.ts)
-- [テスト](../src/app/examples/avatar-upload.spec.ts)
+- [ソースコード](./avatar-upload.ts)
+- [テスト](./avatar-upload.spec.ts)

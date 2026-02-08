@@ -112,5 +112,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/simple-signup.ts)
-- [テスト](../src/app/examples/simple-signup.spec.ts)
+- [ソースコード](./simple-signup.ts)
+- [テスト](./simple-signup.spec.ts)

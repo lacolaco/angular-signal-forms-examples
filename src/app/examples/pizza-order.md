@@ -97,5 +97,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/pizza-order.ts)
-- [テスト](../src/app/examples/pizza-order.spec.ts)
+- [ソースコード](./pizza-order.ts)
+- [テスト](./pizza-order.spec.ts)

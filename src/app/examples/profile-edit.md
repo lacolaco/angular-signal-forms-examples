@@ -120,5 +120,5 @@ onSubmit(event: Event) {
 
 ## コード
 
-- [ソースコード](../src/app/examples/profile-edit.ts)
-- [テスト](../src/app/examples/profile-edit.spec.ts)
+- [ソースコード](./profile-edit.ts)
+- [テスト](./profile-edit.spec.ts)
