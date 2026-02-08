@@ -14,6 +14,7 @@ const navItems = [
   { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
   { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
   { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
+  { path: '/settings', label: 'Settings', topic: 'Form Reset' },
 ] as const;
 
 @Component({
