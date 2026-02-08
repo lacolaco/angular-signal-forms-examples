@@ -38,6 +38,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/avatar-upload').then((m) => m.AvatarUpload),
   },
   {
+    path: 'settings',
+    loadComponent: () => import('./examples/settings').then((m) => m.Settings),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',
