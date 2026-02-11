@@ -30,7 +30,7 @@ ng test     # Vitest でテスト実行
 | 5 | Event Registration | Array Form | `applyEach()` で参加者リストの動的追加・削除 | [解説](src/app/examples/event-registration.md) |
 | 6 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout.md) |
 | 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select.md) |
-| 8 | City Search | Autocomplete | `debounce()` + `httpResource()` でインクリメンタルサーチ | [解説](src/app/examples/city-search.md) |
+| 8 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search.md) |
 | 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload.md) |
 | 10 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings.md) |
 
@@ -57,7 +57,7 @@ ng test     # Vitest でテスト実行
 | `applyWhen()` | 条件付きスキーマ適用 | Pizza Order |
 | `hidden()` | 条件付きフィールド非表示 | Pizza Order |
 | `applyEach()` | 配列要素への共通バリデーション | Event Registration |
-| `debounce()` | スキーマレベルの入力遅延 | City Search |
+| `debounce()` | スキーマレベルの入力遅延 | ― |
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |

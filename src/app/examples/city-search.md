@@ -2,14 +2,15 @@
 
 ## 概要
 
-都市名のオートコンプリート検索を実装するサンプル。Signal Forms の `debounce()` と Angular の `httpResource()` を組み合わせ、入力に応じた候補をリアクティブに取得・表示する。
+都市名のオートコンプリート検索を実装するサンプル。`@angular/aria` の Combobox ディレクティブと `httpResource()` を組み合わせ、WAI-ARIA 準拠のアクセシブルなオートコンプリートを提供する。
 
 ## 学習ポイント
 
-- `debounce()` によるスキーマレベルの入力遅延制御
+- `@angular/aria` の Combobox/Listbox ディレクティブによるアクセシブルなオートコンプリート
+- キーボード操作（Arrow Up/Down, Enter, Escape）の自動提供
 - `httpResource()` によるシグナルベースの HTTP リクエスト自動発行
 - `httpResource` に `undefined` を返してリクエストをスキップするパターン
-- 前のリクエストの自動キャンセル（switchMap 相当）
+- Signal Forms との統合パターン（`[formField]` を使わないケース）
 
 ## フォーム構造
 
@@ -17,89 +18,89 @@
 | ---------- | -------- | ---------------------------- |
 | `city`     | `string` | `required` (City is required) |
 
-スキーマレベルの設定: `debounce(schema.city, 300)` (300ms)
-
 ## 実装の要点
 
-### フォーム定義
+### @angular/aria による Combobox パターン
 
-`required()` と `debounce()` をスキーマ関数内で同じフィールドに設定する。`debounce()` により、モデルの更新が 300ms 遅延する。
+`@angular/aria` の Combobox ディレクティブは WAI-ARIA Combobox パターンを実装する。キーボード操作と ARIA 属性が自動提供される。
+
+```html
+<div ngCombobox [filterMode]="'manual'">
+  <input ngComboboxInput [(value)]="cityInputValue" />
+  <ng-template ngComboboxPopupContainer>
+    <ul ngListbox [(values)]="selectedCities">
+      @for (city of suggestionItems(); track city) {
+        <li ngOption [value]="city" [label]="city">{{ city }}</li>
+      }
+    </ul>
+  </ng-template>
+</div>
+```
+
+**キーボード操作**（自動提供）:
+- Arrow Down/Up: 候補間の移動
+- Enter: 候補の選択
+- Escape: ポップアップを閉じる
+
+`filterMode="manual"` はサーバーサイドフィルタリング（httpResource）用。クライアントサイドフィルタリングには `auto-select` を使う。
+
+### Signal Forms との統合
+
+`ngComboboxInput` は `[(value)]` model signal で入力値を管理するため、Signal Forms の `[formField]` と同じ input に適用できない。代わりに effect で同期する。
 
 ```typescript
-readonly searchModel = signal({
-  city: '',
-});
+readonly cityInputValue = signal('');    // combobox が管理
+readonly selectedCities = signal<string[]>([]); // listbox が管理
 
-readonly searchForm = form(this.searchModel, (schema) => {
-  required(schema.city, { message: 'City is required' });
-  // スキーマレベルの debounce: モデル更新を 300ms 遅延
-  debounce(schema.city, 300);
-});
+constructor() {
+  // 入力値を 300ms debounce して form model に反映
+  effect(() => {
+    const city = this.cityInputValue();
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => {
+      if (untracked(() => this.searchModel().city) !== city) {
+        this.searchModel.update((v) => ({ ...v, city }));
+      }
+    }, 300);
+  });
+
+  // 選択値を即時 form model・input に反映し、combobox を閉じる
+  effect(() => {
+    const selected = this.selectedCities();
+    if (selected.length > 0) {
+      const city = selected[0];
+      untracked(() => {
+        this.searchModel.update((v) => ({ ...v, city }));
+        this.cityInputValue.set(city);
+        this.combobox()?.close();
+      });
+    }
+  });
+}
 ```
 
 ### httpResource による候補取得
 
-`httpResource()` はシグナルの変更を自動追跡し、値が変わるたびに HTTP リクエストを発行する。前のリクエストは自動でキャンセルされる（switchMap 相当）。`undefined` を返すとリクエスト自体をスキップできる。
+`httpResource()` はシグナルの変更を自動追跡し、値が変わるたびに HTTP リクエストを発行する。前のリクエストは自動でキャンセルされる（switchMap 相当）。
 
 ```typescript
 readonly suggestions = httpResource<string[]>(() => {
   const q = this.searchModel().city;
-  // 2文字未満は undefined を返してリクエストをスキップ
-  if (q.length < 2) {
-    return undefined;
-  }
+  if (q.length < 2) return undefined;
   return `/api/cities?q=${encodeURIComponent(q)}`;
 });
 ```
 
-`debounce()` と `httpResource()` の連携:
-
-1. ユーザーがキー入力
-2. `debounce(300)` により 300ms 後に `searchModel` が更新
-3. `httpResource` が `searchModel().city` の変更を検知し、リクエストを発行
-4. 前のリクエストがまだ完了していなければ自動キャンセル
-
-### テンプレート
-
-`httpResource` の状態シグナル (`hasValue()`, `value()`, `isLoading()`) を使ってUIを出し分ける。
-
-```html
-<!-- 候補リストの表示: hasValue() と value().length でガード -->
-@if (showSuggestions() && suggestions.hasValue() && suggestions.value().length > 0) {
-  <ul role="listbox">
-    @for (city of suggestions.value(); track city) {
-      <li
-        role="option"
-        [attr.aria-selected]="searchModel().city === city"
-        (mousedown)="selectCity(city)"
-      >
-        {{ city }}
-      </li>
-    }
-  </ul>
-}
-
-<!-- ローディング表示 -->
-@if (suggestions.isLoading()) {
-  <span>検索中...</span>
-}
-```
-
-候補選択時は `mousedown` イベントを使用する。`click` だと先に `blur` が発火して候補リストが非表示になるため。
-
-### 送信処理
+候補リストは、入力値と完全一致する1件のみの場合は表示しない:
 
 ```typescript
-onSubmit(event: Event): void {
-  event.preventDefault();
-  submit(this.searchForm, async () => {
-    this.submittedCity.set(this.searchModel().city);
-  });
-
-  if (this.searchForm.city().invalid()) {
-    this.searchForm.city().focusBoundControl();
-  }
-}
+readonly suggestionItems = computed(() => {
+  if (!this.suggestions.hasValue()) return [];
+  const items = this.suggestions.value();
+  const input = this.cityInputValue();
+  if (items.length === 1 && items[0] === input) return [];
+  return items;
+});
 ```
 
 ## コード
