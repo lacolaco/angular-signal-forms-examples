@@ -95,6 +95,75 @@ describe('CitySearch', () => {
     });
   });
 
+  describe('Keyboard navigation', () => {
+    it('should select a suggestion with Arrow Down and Enter', async () => {
+      await renderComponent();
+
+      const input = getSearchInput();
+      await userEvent.click(input);
+      await userEvent.type(input, 'To');
+
+      await waitFor(
+        () => {
+          expect(screen.getByRole('option', { name: /Tokyo/i })).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
+
+      // Arrow Down で最初の候補に移動し、Enter で選択
+      await userEvent.keyboard('{ArrowDown}{Enter}');
+
+      await waitFor(() => {
+        expect(getSearchInput()).toHaveValue('Tokyo');
+      });
+    });
+
+    it('should navigate between suggestions with Arrow keys', async () => {
+      await renderComponent();
+
+      const input = getSearchInput();
+      await userEvent.click(input);
+      await userEvent.type(input, 'To');
+
+      await waitFor(
+        () => {
+          expect(screen.getByRole('option', { name: /Tokyo/i })).toBeInTheDocument();
+          expect(screen.getByRole('option', { name: /Toronto/i })).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
+
+      // Arrow Down 2回で2番目の候補に移動し、Enter で選択
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}{Enter}');
+
+      await waitFor(() => {
+        expect(getSearchInput()).toHaveValue('Toronto');
+      });
+    });
+
+    it('should close suggestions with Escape', async () => {
+      await renderComponent();
+
+      const input = getSearchInput();
+      await userEvent.click(input);
+      await userEvent.type(input, 'To');
+
+      await waitFor(
+        () => {
+          expect(screen.getByRole('listbox')).toBeInTheDocument();
+          expect(input).toHaveAttribute('aria-expanded', 'true');
+        },
+        { timeout: 2000 },
+      );
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(input).toHaveAttribute('aria-expanded', 'false');
+      });
+    });
+  });
+
   describe('Form submission', () => {
     it('should not submit when input is empty', async () => {
       await renderComponent();

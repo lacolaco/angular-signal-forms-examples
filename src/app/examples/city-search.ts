@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { debounce, form, FormField, required, submit } from '@angular/forms/signals';
+import { form, required, submit } from '@angular/forms/signals';
+import { Combobox, ComboboxInput, ComboboxPopupContainer } from '@angular/aria/combobox';
+import { Listbox, Option } from '@angular/aria/listbox';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
 import { AppExampleCard } from '../lib/ui/example-card';
@@ -11,14 +21,23 @@ import { fieldErrors } from '../lib/field-errors';
  *
  * ## 学習ポイント
  * - httpResource() によるシグナルベースのHTTPリクエスト
- * - debounce() によるフォームスキーマレベルの入力遅延
- * - シグナル変更で自動リクエスト＆前リクエスト自動キャンセル
- * - 補完候補の表示と選択
+ * - @angular/aria の Combobox ディレクティブによるアクセシブルなオートコンプリート
+ * - キーボード操作（Arrow Up/Down, Enter, Escape）の自動提供
+ * - Signal Forms との統合パターン
  */
 @Component({
   selector: 'app-city-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard],
+  imports: [
+    Combobox,
+    ComboboxInput,
+    ComboboxPopupContainer,
+    Listbox,
+    Option,
+    AppFormField,
+    AppButton,
+    AppExampleCard,
+  ],
   template: `
     <app-example-card
       title="City Search"
@@ -34,39 +53,40 @@ import { fieldErrors } from '../lib/field-errors';
 
       <form novalidate (submit)="onSubmit($event)">
         <app-form-field class="mb-4" label="City" [errorMessages]="cityErrors()">
-          <div class="relative">
+          <div class="relative" ngCombobox [filterMode]="'manual'">
             <input
+              ngComboboxInput
+              [(value)]="cityInputValue"
               type="text"
-              [formField]="searchForm.city"
-              class="form-input aria-invalid:border-red-500"
-              [aria-invalid]="searchForm.city().touched() && searchForm.city().invalid()"
+              class="form-input"
               autocomplete="off"
-              (focus)="onFocus()"
-              (blur)="onBlur()"
             />
 
             <!--
-              httpResource の結果をリアクティブに表示。
-              searchModel().city が変わるたびに自動でリクエストが発行され、
-              前のリクエストは自動キャンセルされる（switchMap相当）。
+              ngComboboxPopupContainer: combobox の expanded 状態に応じてポップアップを表示。
+              Listbox は ComboboxPopup をホストディレクティブとして持つため、
+              明示的な ngComboboxPopup は不要。
             -->
-            @if (showSuggestions() && suggestions.hasValue() && suggestions.value().length > 0) {
-              <ul
-                role="listbox"
-                class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
-              >
-                @for (city of suggestions.value(); track city) {
-                  <li
-                    role="option"
-                    [attr.aria-selected]="searchModel().city === city"
-                    class="px-4 py-2 cursor-pointer hover:bg-blue-50"
-                    (mousedown)="selectCity(city)"
-                  >
-                    {{ city }}
-                  </li>
-                }
-              </ul>
-            }
+            <ng-template ngComboboxPopupContainer>
+              @if (suggestionItems().length > 0) {
+                <ul
+                  ngListbox
+                  [(values)]="selectedCities"
+                  class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+                >
+                  @for (city of suggestionItems(); track city) {
+                    <li
+                      ngOption
+                      [value]="city"
+                      [label]="city"
+                      class="px-4 py-2 cursor-pointer hover:bg-blue-50 data-[active=true]:bg-blue-100"
+                    >
+                      {{ city }}
+                    </li>
+                  }
+                </ul>
+              }
+            </ng-template>
 
             @if (suggestions.isLoading()) {
               <div class="absolute right-3 top-1/2 -translate-y-1/2">
@@ -91,53 +111,82 @@ export class CitySearch {
   /** 送信済みの都市名 */
   protected readonly submittedCity = signal<string | null>(null);
 
-  /** 候補リストの表示状態 */
-  protected readonly showSuggestions = signal(false);
+  /** combobox input の値（@angular/aria が管理） */
+  readonly cityInputValue = signal('');
+
+  /** listbox の選択値 */
+  readonly selectedCities = signal<string[]>([]);
 
   /** フォームモデル */
-  readonly searchModel = signal({
-    city: '',
-  });
+  readonly searchModel = signal({ city: '' });
 
-  /** フォーム定義 */
+  /**
+   * フォーム定義
+   *
+   * debounce は [formField] を使わないため effect 内で実装。
+   */
   readonly searchForm = form(this.searchModel, (schema) => {
     required(schema.city, { message: 'City is required' });
-    debounce(schema.city, 300);
   });
 
   /** エラーメッセージ */
   readonly cityErrors = computed(() => fieldErrors(this.searchForm.city()));
 
+  /** 候補リスト（入力値と完全一致する1件のみの場合は非表示） */
+  readonly suggestionItems = computed(() => {
+    if (!this.suggestions.hasValue()) return [];
+    const items = this.suggestions.value();
+    const input = this.cityInputValue();
+    if (items.length === 1 && items[0] === input) return [];
+    return items;
+  });
+
   /**
    * httpResource による補完候補の取得
    *
    * searchModel().city を直接読み取り、変更のたびに自動リクエスト。
-   * 前のリクエストは自動キャンセルされるため debounce 不要。
+   * 前のリクエストは自動キャンセルされる（switchMap相当）。
    * 2文字未満は undefined を返してリクエストをスキップ。
    */
   readonly suggestions = httpResource<string[]>(() => {
     const q = this.searchModel().city;
-    if (q.length < 2) {
-      return undefined;
-    }
+    if (q.length < 2) return undefined;
     return `/api/cities?q=${encodeURIComponent(q)}`;
   });
 
-  protected onFocus(): void {
-    this.showSuggestions.set(true);
-  }
+  /** input への参照（フォーカス制御用） */
+  private readonly comboboxInput = viewChild(ComboboxInput);
 
-  protected onBlur(): void {
-    // blur後すぐに閉じると候補クリックが効かないため少し遅延
-    setTimeout(() => {
-      this.showSuggestions.set(false);
-    }, 200);
-  }
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /** 候補選択時 */
-  protected selectCity(city: string): void {
-    this.searchModel.update((v) => ({ ...v, city }));
-    this.showSuggestions.set(false);
+  /** combobox への参照（プログラム的な開閉用） */
+  private readonly combobox = viewChild(Combobox);
+
+  constructor() {
+    // 入力値を 300ms debounce して form model に反映
+    effect(() => {
+      const city = this.cityInputValue();
+      if (this.debounceTimer) clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        // 同じ値なら更新しない（選択後の重複更新を防止）
+        if (untracked(() => this.searchModel().city) !== city) {
+          this.searchModel.update((v) => ({ ...v, city }));
+        }
+      }, 300);
+    });
+
+    // 選択値を即時 form model・input に反映し、combobox を閉じる
+    effect(() => {
+      const selected = this.selectedCities();
+      if (selected.length > 0) {
+        const city = selected[0];
+        untracked(() => {
+          this.searchModel.update((v) => ({ ...v, city }));
+          this.cityInputValue.set(city);
+          this.combobox()?.close();
+        });
+      }
+    });
   }
 
   /** フォーム送信 */
@@ -148,7 +197,7 @@ export class CitySearch {
     });
 
     if (this.searchForm.city().invalid()) {
-      this.searchForm.city().focusBoundControl();
+      this.comboboxInput()?.element.focus();
     }
   }
 }
