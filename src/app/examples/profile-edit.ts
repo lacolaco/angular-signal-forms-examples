@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import {
+  debounce,
   form,
   FormField,
   required,
@@ -28,6 +29,7 @@ interface ProfileData {
  *
  * ## 学習ポイント
  * - validateHttp() による HTTP ベースの非同期バリデーション
+ * - debounce() によるモデル更新の遅延（不要なHTTPリクエストの抑制）
  * - pending() 状態の表示
  * - 同期バリデーションと非同期バリデーションの組み合わせ
  * - pattern() による正規表現バリデーション
@@ -135,6 +137,9 @@ export class ProfileEdit {
     pattern(schema.username, /^[a-zA-Z0-9_]+$/, {
       message: 'Username can only contain alphanumeric characters and underscores',
     });
+
+    // 入力遅延: キー入力ごとのリクエストを抑制
+    debounce(schema.username, 300);
 
     // ユーザー名の重複チェック（非同期バリデーション）
     // validateHttp は同期バリデーションがすべてパスした後にのみ実行される

@@ -57,7 +57,7 @@ ng test     # Vitest でテスト実行
 | `applyWhen()` | 条件付きスキーマ適用 | Pizza Order |
 | `hidden()` | 条件付きフィールド非表示 | Pizza Order |
 | `applyEach()` | 配列要素への共通バリデーション | Event Registration |
-| `debounce()` | スキーマレベルの入力遅延 | ― |
+| `debounce()` | スキーマレベルの入力遅延 | Profile Edit |
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |

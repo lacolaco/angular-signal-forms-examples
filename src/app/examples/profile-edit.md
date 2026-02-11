@@ -7,6 +7,7 @@
 ## 学習ポイント
 
 - `validateHttp()` による HTTP ベースの非同期バリデーション
+- `debounce()` によるモデル更新の遅延（不要なHTTPリクエストの抑制）
 - `pending()` シグナルによるバリデーション中状態の表示
 - 同期バリデーションと非同期バリデーションの組み合わせ
 - `pattern()` による正規表現バリデーション
@@ -16,7 +17,7 @@
 
 | フィールド | 型 | バリデーション |
 |---|---|---|
-| `username` | `string` | `required`, `minLength(3)`, `maxLength(20)`, `pattern(/^[a-zA-Z0-9_]+$/)`, `validateHttp`（重複チェック） |
+| `username` | `string` | `required`, `minLength(3)`, `maxLength(20)`, `pattern(/^[a-zA-Z0-9_]+$/)`, `debounce(300)`, `validateHttp`（重複チェック） |
 | `displayName` | `string` | `required`, `maxLength(50)` |
 | `bio` | `string` | `maxLength(200)` |
 

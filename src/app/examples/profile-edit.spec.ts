@@ -94,11 +94,11 @@ describe('ProfileEdit', () => {
       await waitFor(
         () => {
           expect(screen.queryByText(/checking/i)).not.toBeInTheDocument();
+          expect(screen.getByText(/newuser123 is available/i)).toBeInTheDocument();
         },
         { timeout: 2000 },
       );
 
-      expect(screen.getByText(/newuser123 is available/i)).toBeInTheDocument();
       expect(screen.queryByText(/this username is already taken/i)).not.toBeInTheDocument();
     });
 
