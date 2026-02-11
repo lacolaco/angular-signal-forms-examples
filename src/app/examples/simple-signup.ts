@@ -26,7 +26,7 @@ import { fieldErrors } from '../lib/field-errors';
     <app-example-card
       title="Simple Signup"
       topic="Basic Form"
-      description="Signal Forms の基本的な使い方"
+      description="Basic usage of Signal Forms"
       sourcePath="examples/simple-signup.ts"
     >
       <!--

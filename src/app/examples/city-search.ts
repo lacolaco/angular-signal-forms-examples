@@ -42,11 +42,11 @@ import { fieldErrors } from '../lib/field-errors';
     <app-example-card
       title="City Search"
       topic="Autocomplete"
-      description="httpResourceを使ったオートコンプリート検索"
+      description="Autocomplete search with httpResource"
       sourcePath="examples/city-search.ts"
     >
       <p class="text-xs text-gray-500 mb-6">
-        2文字以上入力すると候補が表示されます。 例:
+        Type 2+ characters to see suggestions. e.g.:
         <code class="bg-gray-100 px-1 rounded">To</code> (Tokyo, Toronto),
         <code class="bg-gray-100 px-1 rounded">Pa</code> (Paris, Prague)
       </p>
@@ -90,7 +90,7 @@ import { fieldErrors } from '../lib/field-errors';
 
             @if (suggestions.isLoading()) {
               <div class="absolute right-3 top-1/2 -translate-y-1/2">
-                <span class="text-gray-400 text-sm">検索中...</span>
+                <span class="text-gray-400 text-sm">Searching...</span>
               </div>
             }
           </div>

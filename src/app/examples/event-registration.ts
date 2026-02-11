@@ -28,7 +28,7 @@ interface EventRegistrationData {
     <app-example-card
       title="Event Registration"
       topic="Array Form"
-      description="参加者を登録してください"
+      description="Register participants"
       sourcePath="examples/event-registration.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
@@ -42,7 +42,7 @@ interface EventRegistrationData {
                 [formField]="field"
                 class="form-input flex-1 aria-invalid:border-red-500"
                 [aria-invalid]="field().touched() && field().invalid()"
-                placeholder="参加者名"
+                placeholder="Participant name"
               />
               @if (registrationModel().participants.length > 1) {
                 <button
@@ -50,7 +50,7 @@ interface EventRegistrationData {
                   class="px-3 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
                   (click)="removeParticipant($index)"
                 >
-                  削除
+                  Remove
                 </button>
               }
             </div>
@@ -67,16 +67,16 @@ interface EventRegistrationData {
             class="mt-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded border border-blue-300"
             (click)="addParticipant()"
           >
-            + 参加者を追加
+            + Add participant
           </button>
         </div>
 
-        <app-button class="mt-6" type="submit">登録</app-button>
+        <app-button class="mt-6" type="submit">Register</app-button>
       </form>
 
       @if (submittedValue(); as submitted) {
         <div class="form-success">
-          登録が完了しました！（{{ submitted.participants.length }}名）
+          Registration complete! ({{ submitted.participants.length }} participants)
         </div>
       }
     </app-example-card>
@@ -98,7 +98,7 @@ export class EventRegistration {
    */
   readonly registrationForm = form(this.registrationModel, (schema) => {
     applyEach(schema.participants, (participant) => {
-      required(participant, { message: '参加者名を入力してください' });
+      required(participant, { message: 'Participant name is required' });
     });
   });
 

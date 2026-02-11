@@ -177,7 +177,7 @@ export class ImageUploadInput implements FormValueControl<File | null> {
     <app-example-card
       title="Avatar Upload"
       topic="Custom Control"
-      description="プロフィール画像を設定してください"
+      description="Set your profile image"
       sourcePath="examples/avatar-upload.ts"
     >
       <form novalidate (submit)="onSubmit($event)">

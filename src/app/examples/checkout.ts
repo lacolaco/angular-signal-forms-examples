@@ -194,7 +194,7 @@ export class ExpiryDateInput implements FormValueControl<string> {
     <app-example-card
       title="Checkout"
       topic="Custom Control"
-      description="カード情報を入力してください"
+      description="Enter your card details"
       sourcePath="examples/checkout.ts"
     >
       <form novalidate (submit)="onSubmit($event)">

@@ -35,7 +35,7 @@ interface OrderData {
     <app-example-card
       title="Pizza Order"
       topic="Conditional Form"
-      description="注文内容を入力してください"
+      description="Enter your order details"
       sourcePath="examples/pizza-order.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
@@ -47,7 +47,7 @@ interface OrderData {
             [aria-invalid]="
               orderForm.customerName().touched() && orderForm.customerName().invalid()
             "
-            placeholder="お名前"
+            placeholder="Your name"
           />
         </app-form-field>
 
@@ -71,7 +71,7 @@ interface OrderData {
               [aria-invalid]="
                 orderForm.deliveryAddress().touched() && orderForm.deliveryAddress().invalid()
               "
-              placeholder="配達先住所"
+              placeholder="Delivery address"
             />
           </app-form-field>
         }
@@ -86,7 +86,7 @@ interface OrderData {
             "
           >
             @if (orderModel().orderType === 'togo') {
-              <option value="">選択してください</option>
+              <option value="">Select payment</option>
               <option value="cash">Cash</option>
             }
             <option value="card">Card</option>
@@ -138,7 +138,7 @@ export class PizzaOrder {
       schema.deliveryAddress,
       ({ valueOf }) => valueOf(schema.orderType) === 'delivery',
       (addressPath) => {
-        required(addressPath, { message: '配達先住所を入力してください' });
+        required(addressPath, { message: 'Delivery address is required' });
       },
     );
 
