@@ -93,7 +93,7 @@ const LOCATION_DATA: Region[] = [
     <app-example-card
       title="Location Select"
       topic="Cascade Select"
-      description="依存ドロップダウン（カスケード選択）のサンプル"
+      description="Dependent dropdown (cascade select) example"
       sourcePath="examples/location-select.ts"
     >
       <form novalidate (submit)="onSubmit($event)">

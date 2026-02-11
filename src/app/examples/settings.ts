@@ -35,7 +35,7 @@ const DEFAULT_SETTINGS: SettingsData = {
     <app-example-card
       title="Settings"
       topic="Form Reset"
-      description="フォームのリセットと初期値の復元"
+      description="Form reset and initial value restoration"
       sourcePath="examples/settings.ts"
     >
       <form novalidate (submit)="onSubmit($event)">

@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { EventRegistration } from './event-registration';
 
 describe('EventRegistration', () => {
-  const getSubmitButton = () => screen.getByRole('button', { name: /登録/i });
-  const getAddButton = () => screen.getByRole('button', { name: /参加者を追加/i });
+  const getSubmitButton = () => screen.getByRole('button', { name: /register/i });
+  const getAddButton = () => screen.getByRole('button', { name: /add participant/i });
   const getParticipantRows = () => screen.getAllByTestId('participant-row');
-  const getParticipantInputs = () => screen.getAllByPlaceholderText('参加者名');
-  const getRemoveButtons = () => screen.queryAllByRole('button', { name: /削除/i });
+  const getParticipantInputs = () => screen.getAllByPlaceholderText('Participant name');
+  const getRemoveButtons = () => screen.queryAllByRole('button', { name: /remove/i });
 
   describe('Initial state', () => {
     it('should show one participant row by default', async () => {
@@ -66,7 +66,7 @@ describe('EventRegistration', () => {
 
       await userEvent.click(getSubmitButton());
 
-      expect(screen.getByText('参加者名を入力してください')).toBeInTheDocument();
+      expect(screen.getByText('Participant name is required')).toBeInTheDocument();
     });
 
     it('should validate all participants independently', async () => {
@@ -74,14 +74,14 @@ describe('EventRegistration', () => {
 
       // 1人目は入力
       const inputs = getParticipantInputs();
-      await userEvent.type(inputs[0], '田中太郎');
+      await userEvent.type(inputs[0], 'John Smith');
 
       // 2人目を追加（空のまま）
       await userEvent.click(getAddButton());
       await userEvent.click(getSubmitButton());
 
       // 2人目のバリデーションエラー
-      expect(screen.getByText('参加者名を入力してください')).toBeInTheDocument();
+      expect(screen.getByText('Participant name is required')).toBeInTheDocument();
     });
   });
 
@@ -90,28 +90,28 @@ describe('EventRegistration', () => {
       await render(EventRegistration);
 
       const input = getParticipantInputs()[0];
-      await userEvent.type(input, '田中太郎');
+      await userEvent.type(input, 'John Smith');
       await userEvent.click(getSubmitButton());
 
-      expect(screen.getByText(/登録が完了しました/i)).toBeInTheDocument();
-      expect(screen.getByText(/1名/)).toBeInTheDocument();
+      expect(screen.getByText(/registration complete/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 participant/)).toBeInTheDocument();
     });
 
     it('should submit successfully with multiple participants', async () => {
       await render(EventRegistration);
 
       // 1人目
-      await userEvent.type(getParticipantInputs()[0], '田中太郎');
+      await userEvent.type(getParticipantInputs()[0], 'John Smith');
 
       // 2人目を追加
       await userEvent.click(getAddButton());
       const inputs = getParticipantInputs();
-      await userEvent.type(inputs[1], '鈴木花子');
+      await userEvent.type(inputs[1], 'Jane Doe');
 
       await userEvent.click(getSubmitButton());
 
-      expect(screen.getByText(/登録が完了しました/i)).toBeInTheDocument();
-      expect(screen.getByText(/2名/)).toBeInTheDocument();
+      expect(screen.getByText(/registration complete/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 participant/)).toBeInTheDocument();
     });
   });
 });

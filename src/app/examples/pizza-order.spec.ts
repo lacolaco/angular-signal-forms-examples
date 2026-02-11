@@ -8,7 +8,7 @@ describe('PizzaOrder', () => {
   const getOrderButton = () => screen.getByRole('button', { name: /order/i });
 
   const fillRequiredFields = async () => {
-    await userEvent.type(screen.getByPlaceholderText('お名前'), '田中太郎');
+    await userEvent.type(screen.getByPlaceholderText('Your name'), 'John Smith');
   };
 
   describe('Conditional visibility', () => {
@@ -17,7 +17,7 @@ describe('PizzaOrder', () => {
 
       // デフォルトは To go
       expect(getOrderTypeSelect()).toHaveValue('togo');
-      expect(screen.queryByPlaceholderText('配達先住所')).not.toBeInTheDocument();
+      expect(screen.queryByPlaceholderText('Delivery address')).not.toBeInTheDocument();
     });
 
     it('should show delivery address when Delivery is selected', async () => {
@@ -25,7 +25,7 @@ describe('PizzaOrder', () => {
 
       await userEvent.selectOptions(getOrderTypeSelect(), 'delivery');
 
-      expect(screen.getByPlaceholderText('配達先住所')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Delivery address')).toBeInTheDocument();
     });
   });
 
@@ -39,7 +39,7 @@ describe('PizzaOrder', () => {
       await userEvent.click(getOrderButton());
 
       // 住所未入力でエラー
-      expect(screen.getByText('配達先住所を入力してください')).toBeInTheDocument();
+      expect(screen.getByText('Delivery address is required')).toBeInTheDocument();
     });
 
     it('should allow submission when To go + no address', async () => {
@@ -95,7 +95,7 @@ describe('PizzaOrder', () => {
 
       await fillRequiredFields();
       await userEvent.selectOptions(getOrderTypeSelect(), 'delivery');
-      await userEvent.type(screen.getByPlaceholderText('配達先住所'), '東京都渋谷区1-2-3');
+      await userEvent.type(screen.getByPlaceholderText('Delivery address'), '123 Main St');
       // paymentMethod は自動で card に設定される
       await userEvent.click(getOrderButton());
 

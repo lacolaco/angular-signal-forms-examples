@@ -154,7 +154,7 @@ export class StarRating implements FormValueControl<number> {
     <app-example-card
       title="Book Review"
       topic="Custom Control"
-      description="「Signal Forms 入門」の評価をお願いします"
+      description="Rate 'Introduction to Signal Forms'"
       sourcePath="examples/book-review.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
@@ -183,7 +183,7 @@ export class StarRating implements FormValueControl<number> {
             rows="4"
             class="form-textarea aria-invalid:border-red-500"
             [aria-invalid]="reviewForm.comment().touched() && reviewForm.comment().invalid()"
-            placeholder="この本についてのコメントを入力してください"
+            placeholder="Write your comment about this book"
           ></textarea>
           <p class="mt-1 text-xs text-gray-500">{{ reviewForm.comment().value().length }} / 500</p>
         </app-form-field>
