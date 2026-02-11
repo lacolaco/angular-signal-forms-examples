@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, signal, untracked, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { form, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxInput, ComboboxPopupContainer } from '@angular/aria/combobox';
@@ -20,7 +28,16 @@ import { fieldErrors } from '../lib/field-errors';
 @Component({
   selector: 'app-city-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Combobox, ComboboxInput, ComboboxPopupContainer, Listbox, Option, AppFormField, AppButton, AppExampleCard],
+  imports: [
+    Combobox,
+    ComboboxInput,
+    ComboboxPopupContainer,
+    Listbox,
+    Option,
+    AppFormField,
+    AppButton,
+    AppExampleCard,
+  ],
   template: `
     <app-example-card
       title="City Search"
