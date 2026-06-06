@@ -36,9 +36,14 @@ readonly userForm = form(this.userModel);
 userForm.profile.firstName;            // : FieldTree<string>
 userForm.settings.theme;               // : FieldTree<'light' | 'dark' | 'auto'>
 
-// パス末尾を呼び出すと FieldState、その value() で現在値を読む:
-userForm.profile.firstName().value();  // : string                 → 'Alice'
+// 末端の value() で現在値を読む:
+userForm.profile.firstName().value();  // : string                   → 'Alice'
 userForm.settings.theme().value();     // : 'light' | 'dark' | 'auto' → 'light'
+
+// 中間ノードの value() はサブツリー全体を返す（同じパス形式で部分木にも到達できる）:
+userForm.profile().value();            // : { firstName: string; lastName: string }
+userForm.settings().value();           // : { theme: ...; notifications: boolean }
+userForm().value();                    // : UserData （ツリー全体）
 ```
 
 テンプレート側でも同じパスをそのまま `[formField]` に渡す。セクションごとに `@let` で別名化すると、`userForm.profile.` の繰り返しを避けられる。
