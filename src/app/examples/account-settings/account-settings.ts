@@ -84,28 +84,8 @@ const profileSchema = schema<Profile>((p) => {
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/account-settings/account-settings.ts">
       <form novalidate (submit)="onSubmit($event)">
-        <fieldset class="border border-gray-200 rounded-lg p-4 pb-5 mb-5">
-          <legend class="text-sm font-semibold text-gray-800 px-2">Profile</legend>
-          <div class="flex items-center justify-between gap-2 mb-4">
-            <div class="flex items-center gap-1.5 min-h-6">
-              @if (userForm.profile().dirty()) {
-                <span
-                  class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800"
-                  role="status"
-                >
-                  Unsaved
-                </span>
-              }
-            </div>
-            <button
-              type="button"
-              class="text-sm text-gray-700 bg-white border border-gray-300 rounded-md px-2.5 py-1 hover:not-disabled:bg-gray-50 focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              [disabled]="!userForm.profile().dirty()"
-              (click)="onResetProfile()"
-            >
-              Reset section
-            </button>
-          </div>
+        <fieldset class="mb-6">
+          <legend class="font-semibold mb-3">Profile</legend>
 
           <app-form-field class="mb-3" label="First name" [errorMessages]="firstNameErrors()">
             <input
@@ -118,7 +98,7 @@ const profileSchema = schema<Profile>((p) => {
             />
           </app-form-field>
 
-          <app-form-field label="Last name" [errorMessages]="lastNameErrors()">
+          <app-form-field class="mb-3" label="Last name" [errorMessages]="lastNameErrors()">
             <input
               type="text"
               [formField]="userForm.profile.lastName"
@@ -128,30 +108,24 @@ const profileSchema = schema<Profile>((p) => {
               "
             />
           </app-form-field>
-        </fieldset>
 
-        <fieldset class="border border-gray-200 rounded-lg p-4 pb-5 mb-5">
-          <legend class="text-sm font-semibold text-gray-800 px-2">Preferences</legend>
-          <div class="flex items-center justify-between gap-2 mb-4">
-            <div class="flex items-center gap-1.5 min-h-6">
-              @if (userForm.settings().dirty()) {
-                <span
-                  class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800"
-                  role="status"
-                >
-                  Unsaved
-                </span>
-              }
-            </div>
+          <div class="flex items-center gap-3 text-sm">
+            @if (userForm.profile().dirty()) {
+              <span class="text-amber-600" role="status">Unsaved</span>
+            }
             <button
               type="button"
-              class="text-sm text-gray-700 bg-white border border-gray-300 rounded-md px-2.5 py-1 hover:not-disabled:bg-gray-50 focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              [disabled]="!userForm.settings().dirty()"
-              (click)="onResetSettings()"
+              class="text-blue-600 disabled:text-gray-400"
+              [disabled]="!userForm.profile().dirty()"
+              (click)="onResetProfile()"
             >
               Reset section
             </button>
           </div>
+        </fieldset>
+
+        <fieldset class="mb-6">
+          <legend class="font-semibold mb-3">Preferences</legend>
 
           <app-form-field class="mb-3" label="Theme">
             <select [formField]="userForm.settings.theme" class="form-input">
@@ -161,14 +135,24 @@ const profileSchema = schema<Profile>((p) => {
             </select>
           </app-form-field>
 
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              [formField]="userForm.settings.notifications"
-              class="form-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span class="text-sm font-medium text-gray-700">Email notifications</span>
+          <label class="flex items-center gap-2 mb-3">
+            <input type="checkbox" [formField]="userForm.settings.notifications" />
+            <span>Email notifications</span>
           </label>
+
+          <div class="flex items-center gap-3 text-sm">
+            @if (userForm.settings().dirty()) {
+              <span class="text-amber-600" role="status">Unsaved</span>
+            }
+            <button
+              type="button"
+              class="text-blue-600 disabled:text-gray-400"
+              [disabled]="!userForm.settings().dirty()"
+              (click)="onResetSettings()"
+            >
+              Reset section
+            </button>
+          </div>
         </fieldset>
 
         <app-button type="submit" [disabled]="!userForm().dirty() || !userForm().valid()">
@@ -231,11 +215,11 @@ export class AccountSettings {
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.userForm, async () => {
-      // 送信時点のスナップショットを保存（live モデルではなく submit 時点の値）
-      this.submittedValue.set({
-        profile: { ...this.userModel().profile },
-        settings: { ...this.userModel().settings },
-      });
+      // 送信時点のスナップショットを保存。reset(snapshot) で値は維持したまま
+      // dirty / touched をクリアし、Unsaved 表示と Save ボタンを clean 状態に戻す。
+      const snapshot = { ...this.userModel() };
+      this.submittedValue.set(snapshot);
+      this.userForm().reset(snapshot);
     });
 
     const fields = [this.userForm.profile.firstName, this.userForm.profile.lastName];

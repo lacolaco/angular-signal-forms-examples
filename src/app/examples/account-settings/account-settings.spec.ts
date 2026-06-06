@@ -200,16 +200,24 @@ describe('AccountSettings', () => {
       expect(screen.queryByText(/account updated/i)).not.toBeInTheDocument();
     });
 
-    it('送信後にセクション Reset を押すと送信メッセージが消える', async () => {
+    it('送信に成功すると dirty がクリアされ Unsaved / Save / Reset section が clean 状態に戻る', async () => {
       await render(AccountSettings);
 
       await userEvent.type(getFirstNameInput(), 'X');
+      await userEvent.selectOptions(getThemeSelect(), 'dark');
+      // 両セクションが dirty
+      expect(within(getProfileSection()).getByText(/unsaved/i)).toBeInTheDocument();
+      expect(within(getPreferencesSection()).getByText(/unsaved/i)).toBeInTheDocument();
+      expect(getSaveButton()).toBeEnabled();
+
       await userEvent.click(getSaveButton());
-      expect(screen.getByText(/account updated/i)).toBeInTheDocument();
 
-      await userEvent.click(getProfileResetButton());
-
-      expect(screen.queryByText(/account updated/i)).not.toBeInTheDocument();
+      // 送信に成功したら snapshot が新しい baseline になり dirty が落ちる
+      expect(within(getProfileSection()).queryByText(/unsaved/i)).not.toBeInTheDocument();
+      expect(within(getPreferencesSection()).queryByText(/unsaved/i)).not.toBeInTheDocument();
+      expect(getSaveButton()).toBeDisabled();
+      expect(getProfileResetButton()).toBeDisabled();
+      expect(getPreferencesResetButton()).toBeDisabled();
     });
   });
 });
