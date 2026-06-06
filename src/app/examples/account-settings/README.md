@@ -2,7 +2,7 @@
 
 ## 概要
 
-`{ profile: {...}, settings: {...} }` のネストオブジェクトをモデルに持つアカウント編集フォーム。Signal Forms がネスト構造をどう表現し、親フィールドが子の状態をどう集約するかを学ぶ。
+`{ profile: {...}, settings: {...} }` のネストオブジェクトをモデルに持つアカウント編集フォーム。Signal Forms がネスト構造をどう表現し、親フィールドが子の状態をどう集約するか、そして保存後の baseline をどう更新するかを学ぶ。
 
 ## 学習ポイント
 
@@ -10,6 +10,7 @@
 - `schema()` + `apply()` による部分スキーマの切り出しと適用
 - グループフィールドでの `valid()` / `dirty()` の集約
 - サブツリー単位の `reset()`
+- 送信時のスナップショット保存と、`linkedSignal` による baseline の自動更新
 - インラインのエラーメッセージ表示
 
 ## フォーム構造
@@ -28,18 +29,26 @@
 モデルがネストされていれば、`form()` が生成する `FieldTree` も同じ階層になる。`userForm.profile.firstName` のように TypeScript の型補完が効いた状態で末端まで辿れる。
 
 ```typescript
-readonly userModel = signal<UserData>({
+const INITIAL_USER: UserData = {
   profile: { firstName: 'Alice', lastName: 'Tanaka' },
   settings: { theme: 'light', notifications: true },
-});
+};
+
+readonly userModel = signal<UserData>({ ...INITIAL_USER });
 
 readonly userForm = form(this.userModel, (s) => {
   apply(s.profile, profileSchema);
 });
 ```
 
+テンプレート側ではセクションごとに `@let` で path を別名化すると、`userForm.profile.foo` の繰り返しを避けられる。
+
 ```html
-<input [formField]="userForm.profile.firstName" />
+<fieldset>
+  @let profile = userForm.profile;
+  <input [formField]="profile.firstName" />
+  <input [formField]="profile.lastName" />
+</fieldset>
 ```
 
 ### 部分スキーマの切り出し: schema() + apply()
@@ -71,18 +80,18 @@ readonly userForm = form(this.userModel, (s) => {
 - ひとつでも子が `dirty` なら親も `dirty`
 
 ```html
-<!-- セクション単位の dirty(): Unsaved 表示と Reset section の活性化 -->
-@if (userForm.profile().dirty()) {
-  <span class="badge" role="status">Unsaved</span>
-}
-<button [disabled]="!userForm.profile().dirty()" (click)="onResetProfile()">
-  Reset section
-</button>
+<fieldset>
+  @let profile = userForm.profile;
+
+  <!-- セクション単位の dirty(): Unsaved 表示と Reset section の活性化 -->
+  @if (profile().dirty()) {
+    <span role="status">Unsaved</span>
+  }
+  <button [disabled]="!profile().dirty()" (click)="onResetProfile()">Reset section</button>
+</fieldset>
 
 <!-- 根の valid() + dirty(): Save ボタンの活性化制御 -->
-<app-button [disabled]="!userForm().dirty() || !userForm().valid()">
-  Save all changes
-</app-button>
+<app-button [disabled]="!userForm().dirty() || !userForm().valid()">Save all changes</app-button>
 ```
 
 フィールドレベルのエラーメッセージは `fieldErrors()` ヘルパー + `app-form-field` で該当フィールド直下にインライン表示する。
@@ -91,26 +100,57 @@ readonly userForm = form(this.userModel, (s) => {
 <app-form-field label="First name" [errorMessages]="firstNameErrors()">
   <input
     type="text"
-    [formField]="userForm.profile.firstName"
-    [aria-invalid]="userForm.profile.firstName().touched() && userForm.profile.firstName().invalid()"
+    [formField]="profile.firstName"
+    [aria-invalid]="profile.firstName().touched() && profile.firstName().invalid()"
   />
 </app-form-field>
 ```
 
 ### サブツリー単位の reset()
 
-`FieldTree` のどのノードでも `.reset(value)` を呼べる。指定パスのサブツリーだけが初期化され、他のサブツリーは影響を受けない。
+`FieldTree` のどのノードでも `.reset(value)` を呼べる。指定パスのサブツリーだけが初期化され、他のサブツリーは影響を受けない。戻り先は「現在の baseline」（後述）を使う。
 
 ```typescript
 onResetProfile() {
-  // profile サブツリー（firstName, lastName）だけ初期化、settings は維持
-  this.userForm.profile().reset({ firstName: 'Alice', lastName: 'Tanaka' });
+  // profile サブツリーだけ baseline に戻す、settings は維持
+  this.userForm.profile().reset({ ...this.currentBaseline().profile });
 }
 
 onResetSettings() {
-  this.userForm.settings().reset({ theme: 'light', notifications: true });
+  this.userForm.settings().reset({ ...this.currentBaseline().settings });
 }
 ```
+
+### 送信時のスナップショット保存と baseline の自動更新
+
+送信が成功したら 2 つのことを行う。
+
+1. **スナップショットを `submittedValue` に格納**: 送信した値の凍結コピー。結果表示はこの snapshot を参照する（live モデルではない）
+2. **`form().reset(snapshot)` で dirty / touched をクリア**: 値は維持したまま「clean 状態」に戻し、Unsaved 表示と Save ボタンを落ち着かせる
+
+```typescript
+onSubmit(event: Event) {
+  event.preventDefault();
+  submit(this.userForm, async () => {
+    const snapshot = { ...this.userModel() };
+    this.submittedValue.set(snapshot);
+    this.userForm().reset(snapshot);
+  });
+}
+```
+
+Reset section の戻り先は「直前の保存値」になってほしい。これを手書きの状態管理で書くと「submit のたびに baseline を更新する」副作用が増えるが、`linkedSignal` で `submittedValue` から派生させると同じ意味を宣言的に表現できる。
+
+```typescript
+readonly submittedValue = signal<UserData | null>(null);
+
+// 未送信なら初期値、送信済みなら最新の送信値が baseline
+readonly currentBaseline = linkedSignal<UserData>(
+  () => this.submittedValue() ?? INITIAL_USER,
+);
+```
+
+これにより「`AliceX` で保存 → 再編集して `AliceXYZ` → Reset section」を行うと、初期値の `Alice` ではなく直前の保存値 `AliceX` に戻る。
 
 ## コード
 
