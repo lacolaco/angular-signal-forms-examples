@@ -46,6 +46,11 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/settings/settings').then((m) => m.Settings),
   },
   {
+    path: 'account-settings',
+    loadComponent: () =>
+      import('./examples/account-settings/account-settings').then((m) => m.AccountSettings),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',

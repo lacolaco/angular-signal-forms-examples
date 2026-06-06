@@ -16,6 +16,7 @@ const navItems = [
   { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
   { path: '/avatar-upload', label: 'Avatar Upload', topic: 'Custom Control' },
   { path: '/settings', label: 'Settings', topic: 'Form Reset' },
+  { path: '/account-settings', label: 'Account Settings', topic: 'Nested Model' },
 ] as const;
 
 @Component({
