@@ -85,38 +85,35 @@ const profileSchema = schema<Profile>((p) => {
     <app-example-page [readme]="readme" sourcePath="examples/account-settings/account-settings.ts">
       <form novalidate (submit)="onSubmit($event)">
         <fieldset class="mb-6">
+          @let profile = userForm.profile;
           <legend class="font-semibold mb-3">Profile</legend>
 
           <app-form-field class="mb-3" label="First name" [errorMessages]="firstNameErrors()">
             <input
               type="text"
-              [formField]="userForm.profile.firstName"
+              [formField]="profile.firstName"
               class="form-input aria-invalid:border-red-500"
-              [aria-invalid]="
-                userForm.profile.firstName().touched() && userForm.profile.firstName().invalid()
-              "
+              [aria-invalid]="profile.firstName().touched() && profile.firstName().invalid()"
             />
           </app-form-field>
 
           <app-form-field class="mb-3" label="Last name" [errorMessages]="lastNameErrors()">
             <input
               type="text"
-              [formField]="userForm.profile.lastName"
+              [formField]="profile.lastName"
               class="form-input aria-invalid:border-red-500"
-              [aria-invalid]="
-                userForm.profile.lastName().touched() && userForm.profile.lastName().invalid()
-              "
+              [aria-invalid]="profile.lastName().touched() && profile.lastName().invalid()"
             />
           </app-form-field>
 
           <div class="flex items-center gap-3 text-sm">
-            @if (userForm.profile().dirty()) {
+            @if (profile().dirty()) {
               <span class="text-amber-600" role="status">Unsaved</span>
             }
             <button
               type="button"
               class="text-blue-600 disabled:text-gray-400"
-              [disabled]="!userForm.profile().dirty()"
+              [disabled]="!profile().dirty()"
               (click)="onResetProfile()"
             >
               Reset section
@@ -125,10 +122,11 @@ const profileSchema = schema<Profile>((p) => {
         </fieldset>
 
         <fieldset class="mb-6">
+          @let settings = userForm.settings;
           <legend class="font-semibold mb-3">Preferences</legend>
 
           <app-form-field class="mb-3" label="Theme">
-            <select [formField]="userForm.settings.theme" class="form-input">
+            <select [formField]="settings.theme" class="form-input">
               <option value="light">Light</option>
               <option value="dark">Dark</option>
               <option value="auto">Auto</option>
@@ -136,18 +134,18 @@ const profileSchema = schema<Profile>((p) => {
           </app-form-field>
 
           <label class="flex items-center gap-2 mb-3">
-            <input type="checkbox" [formField]="userForm.settings.notifications" />
+            <input type="checkbox" [formField]="settings.notifications" />
             <span>Email notifications</span>
           </label>
 
           <div class="flex items-center gap-3 text-sm">
-            @if (userForm.settings().dirty()) {
+            @if (settings().dirty()) {
               <span class="text-amber-600" role="status">Unsaved</span>
             }
             <button
               type="button"
               class="text-blue-600 disabled:text-gray-400"
-              [disabled]="!userForm.settings().dirty()"
+              [disabled]="!settings().dirty()"
               (click)="onResetSettings()"
             >
               Reset section
