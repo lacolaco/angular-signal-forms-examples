@@ -7,6 +7,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
  */
 const navItems = [
   { path: '/simple-signup', label: 'Simple Signup', topic: 'Basic Form' },
+  { path: '/account-settings', label: 'Account Settings', topic: 'Nested Model' },
   { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
   { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
   { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
@@ -16,7 +17,6 @@ const navItems = [
   { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
   { path: '/avatar-upload', label: 'Avatar Upload', topic: 'Custom Control' },
   { path: '/settings', label: 'Settings', topic: 'Form Reset' },
-  { path: '/account-settings', label: 'Account Settings', topic: 'Nested Model' },
 ] as const;
 
 @Component({

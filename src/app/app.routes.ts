@@ -7,6 +7,11 @@ export const routes: Routes = [
       import('./examples/simple-signup/simple-signup').then((m) => m.SimpleSignup),
   },
   {
+    path: 'account-settings',
+    loadComponent: () =>
+      import('./examples/account-settings/account-settings').then((m) => m.AccountSettings),
+  },
+  {
     path: 'book-review',
     loadComponent: () => import('./examples/book-review/book-review').then((m) => m.BookReview),
   },
@@ -44,11 +49,6 @@ export const routes: Routes = [
   {
     path: 'settings',
     loadComponent: () => import('./examples/settings/settings').then((m) => m.Settings),
-  },
-  {
-    path: 'account-settings',
-    loadComponent: () =>
-      import('./examples/account-settings/account-settings').then((m) => m.AccountSettings),
   },
   {
     path: '',

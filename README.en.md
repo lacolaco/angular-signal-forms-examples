@@ -26,24 +26,24 @@ ng test     # Run tests with Vitest
 | # | Example | Topic | Key Concepts | Docs | Demo |
 |---|---------|-------|-------------|------|------|
 | 1 | Simple Signup | Basic Form | Basic pattern with `form()`, `validate()`, `required()`, `submit()` | [Docs](src/app/examples/simple-signup/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
-| 2 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
-| 3 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
-| 4 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
-| 5 | Event Registration | Array Form | Dynamic attendee list with `applyEach()` | [Docs](src/app/examples/event-registration/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
-| 6 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
-| 7 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 8 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
-| 9 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
-| 10 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
-| 11 | Account Settings | Nested Model | Sub-schema reuse with `schema()` + `apply()`, group-level `valid()` / `dirty()` aggregation, per-section `reset()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
+| 2 | Account Settings | Nested Model | Path traversal on a nested model, group-level `valid()` / `dirty()` aggregation, subtree-scoped `reset()`, sub-schema reuse with `schema()` + `apply()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
+| 3 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
+| 4 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
+| 5 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
+| 6 | Event Registration | Array Form | Dynamic attendee list with `applyEach()` | [Docs](src/app/examples/event-registration/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
+| 7 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
+| 8 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
+| 9 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 10 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
+| 11 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 
 ### Recommended Learning Order
 
-1. **Getting Started**: Understand Signal Forms basics with Simple Signup
+1. **Getting Started**: Simple Signup (flat model) → Account Settings (nested model) to understand the basic shape of `form()`
 2. **Validation**: Profile Edit (async), Pizza Order (conditional), Event Registration (array)
 3. **Custom Controls**: Book Review → Checkout → Avatar Upload (progressive complexity)
 4. **External Data**: Location Select, City Search
-5. **Model Shape**: Settings (flat) → Account Settings (nested) to learn group aggregation and sub-schema reuse
+5. **Form State Management**: Settings — `reset()` and `dirty()` at the field level
 
 ## Signal Forms API Cross-Reference
 
