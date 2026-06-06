@@ -8,7 +8,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { form, required, submit } from '@angular/forms/signals';
+import { form, FormField, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { AppFormField } from '../lib/ui/form-field';
@@ -34,6 +34,7 @@ import { fieldErrors } from '../lib/field-errors';
     ComboboxWidget,
     Listbox,
     Option,
+    FormField,
     AppFormField,
     AppButton,
     AppExampleCard,
@@ -57,7 +58,7 @@ import { fieldErrors } from '../lib/field-errors';
             <input
               ngCombobox
               #combobox="ngCombobox"
-              [(value)]="cityInputValue"
+              [formField]="searchForm.city"
               [(expanded)]="isExpanded"
               type="text"
               class="form-input"
@@ -112,9 +113,6 @@ export class CitySearch {
   /** 送信済みの都市名 */
   protected readonly submittedCity = signal<string | null>(null);
 
-  /** combobox input の値 */
-  readonly cityInputValue = signal('');
-
   /** listbox の選択値 */
   readonly selectedCities = signal<string[]>([]);
 
@@ -124,11 +122,7 @@ export class CitySearch {
   /** フォームモデル */
   readonly searchModel = signal({ city: '' });
 
-  /**
-   * フォーム定義
-   *
-   * debounce は [formField] を使わないため effect 内で実装。
-   */
+  /** フォーム定義 */
   readonly searchForm = form(this.searchModel, (schema) => {
     required(schema.city, { message: 'City is required' });
   });
@@ -140,7 +134,7 @@ export class CitySearch {
   readonly suggestionItems = computed(() => {
     if (!this.suggestions.hasValue()) return [];
     const items = this.suggestions.value();
-    const input = this.cityInputValue();
+    const input = this.searchModel().city;
     if (items.length === 1 && items[0] === input) return [];
     return items;
   });
@@ -148,7 +142,7 @@ export class CitySearch {
   /**
    * httpResource による補完候補の取得
    *
-   * searchModel().city を直接読み取り、変更のたびに自動リクエスト。
+   * searchForm.city().value() を読んで変更のたびに自動リクエスト。
    * 前のリクエストは自動キャンセルされる（switchMap相当）。
    * 2文字未満は undefined を返してリクエストをスキップ。
    */
@@ -161,29 +155,13 @@ export class CitySearch {
   /** combobox への参照（フォーカス制御用） */
   private readonly combobox = viewChild(Combobox);
 
-  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
-
   constructor() {
-    // 入力値を 300ms debounce して form model に反映
+    // listbox で選択が確定したら form model に反映して popup を閉じる
     effect(() => {
-      const city = this.cityInputValue();
-      if (this.debounceTimer) clearTimeout(this.debounceTimer);
-      this.debounceTimer = setTimeout(() => {
-        // 同じ値なら更新しない（選択後の重複更新を防止）
-        if (untracked(() => this.searchModel().city) !== city) {
-          this.searchModel.update((v) => ({ ...v, city }));
-        }
-      }, 300);
-    });
-
-    // 選択値を即時 form model・input に反映し、combobox を閉じる
-    effect(() => {
-      const selected = this.selectedCities();
-      if (selected.length === 0) return;
-      const city = selected[0];
+      const selected = this.selectedCities()[0];
+      if (selected === undefined) return;
       untracked(() => {
-        this.searchModel.update((v) => ({ ...v, city }));
-        this.cityInputValue.set(city);
+        this.searchModel.update((v) => ({ ...v, city: selected }));
         this.isExpanded.set(false);
       });
     });
