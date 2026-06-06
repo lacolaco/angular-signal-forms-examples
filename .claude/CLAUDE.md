@@ -116,12 +116,18 @@ Before creating a PR, verify:
 
 ## Sample Implementation Principles
 
-- Include only fields related to the learning point
+- Before writing any code in a new sample, read at least two existing sample READMEs (e.g. `simple-signup`, `book-review`, `settings`) to absorb the established style: brief 概要, plain-bullet 学習ポイント, code-anchored 実装の要点, no editorializing about design choices, no cross-sample comparisons in prose
+- Fix the learning points BEFORE implementation and treat them as the scope contract. Every artifact in the sample — fields, signals, UI elements, handlers, helpers, schema rules, sample README sections — must map to at least one learning point. Anything else is noise and must not be added speculatively
+- This applies to UI affordances too, not only data fields. Status badges (Valid / Invalid / Unsaved), per-section action buttons (Reset section), baseline-tracking helpers (linkedSignal mirrors of submittedValue) are noise unless they directly demonstrate a stated learning point
+- Do not duplicate learning points already covered by other samples. If a concept is taught elsewhere (e.g. `reset()` / `dirty()` are in `settings`), link to that sample instead of re-explaining
+- Sample README is learning content, not an implementation diary. Describe the Signal Forms API behavior; do not justify your design choices or narrate how the implementation evolved
 - For conditional form samples, only include fields involved in the conditional logic
 - Exclude unrelated noise (e.g., pizza menu selection unrelated to conditional branching)
 
 ## Dev Server Verification
 
 - After `ng serve`, always verify via browser screenshot before reporting success
+- Re-verify in the running browser after EVERY user-facing change to a sample (template, styles, exposed signals). A single initial verification does not cover subsequent edits — each edit needs its own check before reporting
+- When a user reports a UI discrepancy (a feature still appearing, a state not clearing, etc.), suspect your own setup first: restart the dev server, remove the `.angular` cache, and verify the bundle reflects the source. Only after that should you consider downstream causes (browser cache, etc.). Do not deflect to the user's environment without checking your own
 - If port is occupied, suspect a server from a different worktree
 - Use `lsof -i :4200` to check process; kill and restart if needed
