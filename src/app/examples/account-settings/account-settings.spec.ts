@@ -200,6 +200,25 @@ describe('AccountSettings', () => {
       expect(screen.queryByText(/account updated/i)).not.toBeInTheDocument();
     });
 
+    it('保存後に再編集して Reset section を押すと「初期値」ではなく「直前の保存値」に戻る', async () => {
+      await render(AccountSettings);
+
+      // 1) AliceX で保存（snapshot が新しい baseline になる）
+      await userEvent.type(getFirstNameInput(), 'X');
+      await userEvent.click(getSaveButton());
+      expect(getFirstNameInput()).toHaveValue('AliceX');
+
+      // 2) さらに編集
+      await userEvent.type(getFirstNameInput(), 'YZ');
+      expect(getFirstNameInput()).toHaveValue('AliceXYZ');
+      expect(within(getProfileSection()).getByText(/unsaved/i)).toBeInTheDocument();
+
+      // 3) Reset section で「初期値 Alice」ではなく「直前の保存値 AliceX」に戻る
+      await userEvent.click(getProfileResetButton());
+      expect(getFirstNameInput()).toHaveValue('AliceX');
+      expect(within(getProfileSection()).queryByText(/unsaved/i)).not.toBeInTheDocument();
+    });
+
     it('送信に成功すると dirty がクリアされ Unsaved / Save / Reset section が clean 状態に戻る', async () => {
       await render(AccountSettings);
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, linkedSignal, signal } from '@angular/core';
 import {
   apply,
   form,
@@ -180,6 +180,22 @@ export class AccountSettings {
   readonly submittedValue = signal<UserData | null>(null);
 
   /**
+   * Reset section の戻り先となる baseline。
+   *
+   * submittedValue が null（未送信）なら初期値、非 null（送信済み）なら送信値。
+   * linkedSignal で submittedValue から自動派生させているため、保存に成功した
+   * 時点で baseline が自動的に「直前の保存値」に切り替わる。
+   */
+  readonly currentBaseline = linkedSignal<UserData>(() => {
+    return (
+      this.submittedValue() ?? {
+        profile: { ...INITIAL_PROFILE },
+        settings: { ...INITIAL_PREFERENCES },
+      }
+    );
+  });
+
+  /**
    * フォームモデル
    *
    * ネストオブジェクトをそのまま signal で持つ。`form()` はこのモデルの
@@ -215,8 +231,10 @@ export class AccountSettings {
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.userForm, async () => {
-      // 送信時点のスナップショットを保存。reset(snapshot) で値は維持したまま
-      // dirty / touched をクリアし、Unsaved 表示と Save ボタンを clean 状態に戻す。
+      // 送信時点のスナップショットを submittedValue に格納すると、currentBaseline
+      // が linkedSignal 経由で snapshot に自動更新される。あわせて
+      // reset(snapshot) を呼び、値は維持したまま dirty / touched をクリアする
+      // （Unsaved 表示と Save ボタンが clean 状態に戻る）。
       const snapshot = { ...this.userModel() };
       this.submittedValue.set(snapshot);
       this.userForm().reset(snapshot);
@@ -228,22 +246,20 @@ export class AccountSettings {
   }
 
   /**
-   * Profile セクションだけを初期値に戻す。
+   * Profile セクションだけを現在の baseline（初期値、または直前の保存値）に戻す。
    *
    * FieldTree はパスごとに `.reset(value)` を持ち、その部分木の値と
    * 状態（touched/dirty）だけをまとめてリセットする。他セクションの
    * 編集はそのまま保持される（ここがネスト構造を扱う最大の利点）。
    */
   onResetProfile() {
-    this.userForm.profile().reset({ ...INITIAL_PROFILE });
-    this.submittedValue.set(null);
+    this.userForm.profile().reset({ ...this.currentBaseline().profile });
   }
 
   /**
-   * Preferences セクションだけを初期値に戻す。
+   * Preferences セクションだけを現在の baseline に戻す。
    */
   onResetSettings() {
-    this.userForm.settings().reset({ ...INITIAL_PREFERENCES });
-    this.submittedValue.set(null);
+    this.userForm.settings().reset({ ...this.currentBaseline().settings });
   }
 }
