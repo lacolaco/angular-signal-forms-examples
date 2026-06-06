@@ -174,13 +174,18 @@ describe('AccountSettings', () => {
   });
 
   describe('Submit', () => {
-    it('valid な状態で送信すると成功メッセージを表示', async () => {
+    it('valid な状態で送信すると submit 時点のスナップショットが表示される', async () => {
       await render(AccountSettings);
 
       await userEvent.type(getFirstNameInput(), 'X');
+      await userEvent.selectOptions(getThemeSelect(), 'dark');
       await userEvent.click(getSaveButton());
 
+      // submittedValue は submit 時点のスナップショット。live モデルではなく
+      // 送信した値そのもの（firstName="AliceX", theme="dark"）が表示される。
       expect(screen.getByText(/account updated/i)).toBeInTheDocument();
+      expect(screen.getByText(/AliceX/)).toBeInTheDocument();
+      expect(screen.getByText(/theme: dark/i)).toBeInTheDocument();
     });
 
     it('First name が空のまま submit を試みても送信されない（dirty かつ invalid なら Save 自体が無効）', async () => {
@@ -189,6 +194,18 @@ describe('AccountSettings', () => {
       await userEvent.clear(getFirstNameInput());
 
       expect(getSaveButton()).toBeDisabled();
+      expect(screen.queryByText(/account updated/i)).not.toBeInTheDocument();
+    });
+
+    it('送信後にセクション Reset を押すと送信メッセージが消える', async () => {
+      await render(AccountSettings);
+
+      await userEvent.type(getFirstNameInput(), 'X');
+      await userEvent.click(getSaveButton());
+      expect(screen.getByText(/account updated/i)).toBeInTheDocument();
+
+      await userEvent.click(getProfileResetButton());
+
       expect(screen.queryByText(/account updated/i)).not.toBeInTheDocument();
     });
   });

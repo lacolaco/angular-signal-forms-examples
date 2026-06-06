@@ -176,15 +176,19 @@ const profileSchema = schema<Profile>((p) => {
         </app-button>
       </form>
 
-      @if (submitted()) {
-        <div class="form-success" role="status">Account updated!</div>
+      @if (submittedValue(); as submitted) {
+        <div class="form-success" role="status">
+          Account updated! ({{ submitted.profile.firstName }} {{ submitted.profile.lastName }},
+          theme: {{ submitted.settings.theme }})
+        </div>
       }
     </app-example-page>
   `,
 })
 export class AccountSettings {
   protected readonly readme = readme;
-  readonly submitted = signal(false);
+  /** 送信時点の値（nullなら未送信） */
+  readonly submittedValue = signal<UserData | null>(null);
 
   /**
    * フォームモデル
@@ -222,7 +226,11 @@ export class AccountSettings {
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.userForm, async () => {
-      this.submitted.set(true);
+      // 送信時点のスナップショットを保存（live モデルではなく submit 時点の値）
+      this.submittedValue.set({
+        profile: { ...this.userModel().profile },
+        settings: { ...this.userModel().settings },
+      });
     });
 
     const fields = [this.userForm.profile.firstName, this.userForm.profile.lastName];
@@ -239,7 +247,7 @@ export class AccountSettings {
    */
   onResetProfile() {
     this.userForm.profile().reset({ ...INITIAL_PROFILE });
-    this.submitted.set(false);
+    this.submittedValue.set(null);
   }
 
   /**
@@ -247,6 +255,6 @@ export class AccountSettings {
    */
   onResetSettings() {
     this.userForm.settings().reset({ ...INITIAL_PREFERENCES });
-    this.submitted.set(false);
+    this.submittedValue.set(null);
   }
 }
