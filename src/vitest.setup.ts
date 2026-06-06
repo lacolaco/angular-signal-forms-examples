@@ -15,6 +15,11 @@ import { worker } from './mocks/browser';
 
 /**
  * 全テスト実行前: MSW worker を起動
+ *
+ * worker.stop() は呼ばない。@angular/build:unit-test は isolate: false が
+ * 既定で、ファイルごとの afterAll で worker.stop() を呼ぶと他ファイルの
+ * テスト実行中に MSW が無効化されて race を起こす。ブラウザコンテキスト
+ * 自体が test run 終了時に破棄されるので明示停止は不要。
  */
 beforeAll(async () => {
   await worker.start();
@@ -24,8 +29,3 @@ beforeAll(async () => {
  * 各テスト後: ハンドラをリセットして副作用を防ぐ
  */
 afterEach(() => worker.resetHandlers());
-
-/**
- * 全テスト終了後: MSW worker を停止
- */
-afterAll(() => worker.stop());
