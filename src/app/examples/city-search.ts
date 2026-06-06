@@ -51,7 +51,7 @@ import { fieldErrors } from '../lib/field-errors';
               ngCombobox
               #combobox="ngCombobox"
               [formField]="searchForm.city"
-              [(expanded)]="isExpanded"
+              [(expanded)]="isComboboxExpanded"
               type="text"
               class="form-input"
               autocomplete="off"
@@ -126,7 +126,7 @@ export class CitySearch {
    * combobox の展開状態。同じく selectedCity を source にした linkedSignal で
    * 選択確定時に false へリセット、それ以外は combobox 側の two-way 書き込みを保持。
    */
-  readonly isExpanded = linkedSignal({
+  readonly isComboboxExpanded = linkedSignal({
     source: this.selectedCity,
     computation: (selected, previous): boolean =>
       selected !== undefined ? false : (previous?.value ?? false),
