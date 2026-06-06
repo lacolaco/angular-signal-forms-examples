@@ -32,10 +32,7 @@ interface UserData {
   settings: Preferences;
 }
 
-/**
- * 初期値（編集前の現在のアカウント状態を模擬）。
- * 未送信時の Reset section はここに戻る（送信後は submittedValue が baseline）。
- */
+/** 初期値（編集前の現在のアカウント状態を模擬） */
 const INITIAL_USER: UserData = {
   profile: { firstName: 'Alice', lastName: 'Tanaka' },
   settings: { theme: 'light', notifications: true },
@@ -60,17 +57,11 @@ const profileSchema = schema<Profile>((p) => {
  *
  * Signal Forms におけるネストオブジェクトモデルの基本パターンを学ぶサンプル。
  * モデルが `{ profile: {...}, settings: {...} }` のネスト構造を持つとき、
- * フォームツリーは `userForm.profile.firstName` のようにパスで直接到達でき、
- * 同時に `userForm.profile().valid()` / `dirty()` のように親フィールドが
- * 子の状態を自動集約する。
+ * フォームツリーも同じ階層になり、`userForm.profile.firstName` のように
+ * パスで直接到達できる。
  *
  * ## 学習ポイント
- * - ネストパス到達: モデル形状と `FieldTree` の階層が 1:1 で対応
- * - グループ valid() の集約: 根の `userForm().valid()` がツリー全体の妥当性を
- *   roll-up し、Save ボタンの活性化制御に直結する
- * - グループ dirty() の集約: セクション単位で変更検知し、Unsaved 表示と
- *   Reset section ボタンの活性化に反映
- * - セクション reset(): 片方のサブツリーだけ初期化、もう片方は維持
+ * - ネストモデルの form() 定義とパス到達
  * - schema() + apply(): 部分スキーマを切り出して特定パスに適用
  */
 @Component({
