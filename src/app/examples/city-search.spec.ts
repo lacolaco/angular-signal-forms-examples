@@ -99,13 +99,11 @@ describe('CitySearch', () => {
   });
 
   describe('Keyboard navigation', () => {
-    // userEvent.keyboard 経由の Enter/ArrowDown は、@angular/aria v22 の
+    // userEvent.keyboard で送る Enter/ArrowDown は Combobox の
     // keyboardEventRelay (afterRenderEffect 内で同期 dispatchEvent) と
-    // @testing-library の safeDetectChanges が衝突して NG0101 を発生させる。
-    // 公式の ComboboxHarness は CDK の TestbedHarnessEnvironment 経由で
-    // sendKeys するためそのラッパーを通らず、CD 衝突を回避できる。
-    // v22 では popup 展開時に listbox の先頭 option が自動 active になるため、
-    // Enter のみで先頭が選択される。
+    // @testing-library/angular の safeDetectChanges が衝突して NG0101 になる。
+    // ComboboxHarness は CDK の TestbedHarnessEnvironment 経由で sendKeys し
+    // testing-library のラッパーを通らないため、その衝突を回避できる。
     it('should select the first suggestion with Enter', async () => {
       const { fixture } = await renderComponent();
       const loader = TestbedHarnessEnvironment.loader(fixture);
@@ -142,9 +140,8 @@ describe('CitySearch', () => {
       );
 
       const host = await combobox.host();
-      // 先頭 Tokyo が auto active。Arrow Down 1 回で Toronto に進める。
       // 複数キーを 1 度に渡すと keyboardEventRelay signal が同一 tick で
-      // 上書きされ、最後の 1 個しか listbox に届かないので、1 key ずつ送る。
+      // 上書きされて最後の 1 個しか listbox に届かないため、1 key ずつ送る。
       await host.sendKeys(TestKey.DOWN_ARROW);
       await host.sendKeys(TestKey.ENTER);
 

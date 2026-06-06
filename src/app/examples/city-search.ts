@@ -58,16 +58,11 @@ import { fieldErrors } from '../lib/field-errors';
               ngCombobox
               #combobox="ngCombobox"
               [(value)]="cityInputValue"
-              (keydown.enter)="onComboboxEnter($event, combobox)"
               type="text"
               class="form-input"
               autocomplete="off"
             />
 
-            <!--
-              ngComboboxPopup: combobox の expanded 状態に応じてポップアップを表示する
-              structural directive。内部の ngComboboxWidget が実際のオプションを保持する。
-            -->
             <ng-template ngComboboxPopup [combobox]="combobox">
               @if (suggestionItems().length > 0) {
                 <ul
@@ -116,7 +111,7 @@ export class CitySearch {
   /** 送信済みの都市名 */
   protected readonly submittedCity = signal<string | null>(null);
 
-  /** combobox input の値（@angular/aria が管理） */
+  /** combobox input の値 */
   readonly cityInputValue = signal('');
 
   /** listbox の選択値 */
@@ -188,17 +183,6 @@ export class CitySearch {
         this.combobox()?.expanded.set(false);
       });
     });
-  }
-
-  /**
-   * Combobox 展開中の Enter は popup 内の選択操作として消化し、
-   * form の submit へ伝播させない（v22 @angular/aria は preventDefault しない）。
-   */
-  onComboboxEnter(event: Event, combobox: Combobox): void {
-    if (combobox.expanded()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
   }
 
   /** フォーム送信 */
