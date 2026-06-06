@@ -9,10 +9,10 @@ import {
   viewChild,
 } from '@angular/core';
 import { form, FormField, FormValueControl, required, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface CheckoutData {
   cardNumber: string;
@@ -195,7 +195,7 @@ export class ExpiryDateInput implements FormValueControl<string> {
       title="Checkout"
       topic="Custom Control"
       description="Enter your card details"
-      sourcePath="examples/checkout.ts"
+      sourcePath="examples/checkout/checkout.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <!-- カード番号 -->

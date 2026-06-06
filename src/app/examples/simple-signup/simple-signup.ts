@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { form, FormField, required, email, validate, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 /**
  * Simple Signup Example
@@ -27,7 +27,7 @@ import { fieldErrors } from '../lib/field-errors';
       title="Simple Signup"
       topic="Basic Form"
       description="Basic usage of Signal Forms"
-      sourcePath="examples/simple-signup.ts"
+      sourcePath="examples/simple-signup/simple-signup.ts"
     >
       <!--
         novalidate: ブラウザのネイティブバリデーションを無効化し、

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
 import { form, FormField, required, applyWhen, hidden, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 type OrderType = 'togo' | 'delivery';
 type PaymentMethod = 'cash' | 'card';
@@ -36,7 +36,7 @@ interface OrderData {
       title="Pizza Order"
       topic="Conditional Form"
       description="Enter your order details"
-      sourcePath="examples/pizza-order.ts"
+      sourcePath="examples/pizza-order/pizza-order.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <app-form-field class="mb-4" label="Customer Name" [errorMessages]="customerNameErrors()">

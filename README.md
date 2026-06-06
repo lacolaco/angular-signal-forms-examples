@@ -25,16 +25,16 @@ ng test     # Vitest でテスト実行
 
 | # | Example | Topic | 学習ポイント | 詳細 | Demo |
 |---|---------|-------|-------------|------|------|
-| 1 | Simple Signup | Basic Form | `form()`, `validate()`, `required()`, `submit()` の基本パターン | [解説](src/app/examples/simple-signup.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
-| 2 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](src/app/examples/book-review.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
-| 3 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](src/app/examples/profile-edit.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
-| 4 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](src/app/examples/pizza-order.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
-| 5 | Event Registration | Array Form | `applyEach()` で参加者リストの動的追加・削除 | [解説](src/app/examples/event-registration.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
-| 6 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
-| 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 8 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
-| 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
-| 10 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
+| 1 | Simple Signup | Basic Form | `form()`, `validate()`, `required()`, `submit()` の基本パターン | [解説](src/app/examples/simple-signup/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
+| 2 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
+| 3 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
+| 4 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
+| 5 | Event Registration | Array Form | `applyEach()` で参加者リストの動的追加・削除 | [解説](src/app/examples/event-registration/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
+| 6 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
+| 7 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
+| 8 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
+| 10 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 
 ### 推奨学習順序
 
@@ -73,12 +73,15 @@ ng test     # Vitest でテスト実行
 src/app/
 ├── app.ts              # ルートコンポーネント（ナビゲーション）
 ├── app.routes.ts       # ルーティング定義（lazy loading）
-├── examples/           # 各 Example の実装
-│   ├── simple-signup.ts
-│   ├── simple-signup.spec.ts
-│   ├── book-review.ts
-│   ├── ...
-│   └── avatar-upload.ts
+├── examples/           # 各 Example の実装（feature-based）
+│   ├── simple-signup/
+│   │   ├── simple-signup.ts
+│   │   ├── simple-signup.spec.ts
+│   │   └── README.md   # 解説
+│   ├── book-review/
+│   │   └── ...
+│   └── avatar-upload/
+│       └── ...
 ├── lib/
 │   ├── ui/             # 共有 UI コンポーネント
 │   │   ├── button.ts

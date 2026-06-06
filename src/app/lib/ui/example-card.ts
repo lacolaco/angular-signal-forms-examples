@@ -13,7 +13,7 @@ import { AppSourceLink } from './source-link';
  *   title="Pizza Order"
  *   topic="Conditional Form"
  *   description="注文内容を入力してください"
- *   sourcePath="examples/pizza-order.ts"
+ *   sourcePath="examples/pizza-order/pizza-order.ts"
  * >
  *   <form>...</form>
  * </app-example-card>

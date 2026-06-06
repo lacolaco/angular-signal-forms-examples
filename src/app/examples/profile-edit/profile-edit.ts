@@ -10,10 +10,10 @@ import {
   validateHttp,
   submit,
 } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface ProfileData {
   username: string;
@@ -43,7 +43,7 @@ interface ProfileData {
       title="Profile Edit"
       topic="Async Validation"
       description="Update your profile information"
-      sourcePath="examples/profile-edit.ts"
+      sourcePath="examples/profile-edit/profile-edit.ts"
     >
       <p class="text-xs text-gray-500 mb-6">
         Demo: Usernames <code class="bg-gray-100 px-1 rounded">admin</code>,

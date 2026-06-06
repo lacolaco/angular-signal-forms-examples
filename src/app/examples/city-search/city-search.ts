@@ -3,10 +3,10 @@ import { httpResource } from '@angular/common/http';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 /**
  * 都市検索オートコンプリートのサンプル
@@ -36,7 +36,7 @@ import { fieldErrors } from '../lib/field-errors';
       title="City Search"
       topic="Autocomplete"
       description="Autocomplete search with httpResource"
-      sourcePath="examples/city-search.ts"
+      sourcePath="examples/city-search/city-search.ts"
     >
       <p class="text-xs text-gray-500 mb-6">
         Type 2+ characters to see suggestions. e.g.:

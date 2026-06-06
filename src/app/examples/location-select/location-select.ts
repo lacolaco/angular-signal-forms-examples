@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 /**
  * 地域データの型定義
@@ -94,7 +94,7 @@ const LOCATION_DATA: Region[] = [
       title="Location Select"
       topic="Cascade Select"
       description="Dependent dropdown (cascade select) example"
-      sourcePath="examples/location-select.ts"
+      sourcePath="examples/location-select/location-select.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <app-form-field class="mb-4" label="Region" [errorMessages]="regionErrors()">

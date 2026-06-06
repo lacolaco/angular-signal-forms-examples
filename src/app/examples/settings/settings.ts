@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
 
 interface SettingsData {
   language: string;
@@ -36,7 +36,7 @@ const DEFAULT_SETTINGS: SettingsData = {
       title="Settings"
       topic="Form Reset"
       description="Form reset and initial value restoration"
-      sourcePath="examples/settings.ts"
+      sourcePath="examples/settings/settings.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <div

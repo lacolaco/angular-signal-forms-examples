@@ -9,9 +9,9 @@ import {
   viewChild,
 } from '@angular/core';
 import { form, FormField, FormValueControl, validate, submit } from '@angular/forms/signals';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 /**
  * ファイルサイズを人間が読める形式に変換
@@ -178,7 +178,7 @@ export class ImageUploadInput implements FormValueControl<File | null> {
       title="Avatar Upload"
       topic="Custom Control"
       description="Set your profile image"
-      sourcePath="examples/avatar-upload.ts"
+      sourcePath="examples/avatar-upload/avatar-upload.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <div class="mb-6">

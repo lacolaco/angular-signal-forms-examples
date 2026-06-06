@@ -8,10 +8,10 @@ import {
   validate,
   submit,
 } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface ReviewData {
   rating: number;
@@ -155,7 +155,7 @@ export class StarRating implements FormValueControl<number> {
       title="Book Review"
       topic="Custom Control"
       description="Rate 'Introduction to Signal Forms'"
-      sourcePath="examples/book-review.ts"
+      sourcePath="examples/book-review/book-review.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <!-- 星評価 -->

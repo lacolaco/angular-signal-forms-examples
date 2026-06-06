@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { form, FormField, required, applyEach, submit } from '@angular/forms/signals';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppButton } from '../../lib/ui/button';
+import { AppExampleCard } from '../../lib/ui/example-card';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface EventRegistrationData {
   participants: string[];
@@ -29,7 +29,7 @@ interface EventRegistrationData {
       title="Event Registration"
       topic="Array Form"
       description="Register participants"
-      sourcePath="examples/event-registration.ts"
+      sourcePath="examples/event-registration/event-registration.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
         <div>
