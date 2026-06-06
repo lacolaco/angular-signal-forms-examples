@@ -58,6 +58,7 @@ import { fieldErrors } from '../lib/field-errors';
               ngCombobox
               #combobox="ngCombobox"
               [(value)]="cityInputValue"
+              [(expanded)]="isExpanded"
               type="text"
               class="form-input"
               autocomplete="off"
@@ -116,6 +117,9 @@ export class CitySearch {
 
   /** listbox の選択値 */
   readonly selectedCities = signal<string[]>([]);
+
+  /** combobox の展開状態 */
+  readonly isExpanded = signal(false);
 
   /** フォームモデル */
   readonly searchModel = signal({ city: '' });
@@ -180,7 +184,7 @@ export class CitySearch {
       untracked(() => {
         this.searchModel.update((v) => ({ ...v, city }));
         this.cityInputValue.set(city);
-        this.combobox()?.expanded.set(false);
+        this.isExpanded.set(false);
       });
     });
   }
