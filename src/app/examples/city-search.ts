@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  linkedSignal,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, linkedSignal, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
@@ -120,9 +113,9 @@ export class CitySearch {
    * 選択時に city を確定値で上書きしつつ、ユーザー入力（[formField] 経由）
    * での書き換えはそのまま保持する。
    */
-  readonly searchModel = linkedSignal<string | undefined, { city: string }>({
+  readonly searchModel = linkedSignal({
     source: () => this.selectedCities()[0],
-    computation: (selected, previous) =>
+    computation: (selected, previous): { city: string } =>
       selected !== undefined ? { city: selected } : (previous?.value ?? { city: '' }),
   });
 
@@ -130,9 +123,9 @@ export class CitySearch {
    * combobox の展開状態。同じく listbox の選択を source にした linkedSignal で
    * 選択確定時に false へリセット、それ以外は combobox 側の two-way 書き込みを保持。
    */
-  readonly isExpanded = linkedSignal<string | undefined, boolean>({
+  readonly isExpanded = linkedSignal({
     source: () => this.selectedCities()[0],
-    computation: (selected, previous) =>
+    computation: (selected, previous): boolean =>
       selected !== undefined ? false : (previous?.value ?? false),
   });
 
@@ -160,9 +153,6 @@ export class CitySearch {
     return `/api/cities?q=${encodeURIComponent(q)}`;
   });
 
-  /** combobox への参照（無効入力時の focus 移動用） */
-  private readonly combobox = viewChild(Combobox);
-
   /** フォーム送信 */
   onSubmit(event: Event): void {
     event.preventDefault();
@@ -171,7 +161,7 @@ export class CitySearch {
     });
 
     if (this.searchForm.city().invalid()) {
-      this.combobox()?.element.focus();
+      this.searchForm.city().focusBoundControl();
     }
   }
 }
