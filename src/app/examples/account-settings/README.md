@@ -8,9 +8,6 @@
 
 - ネストモデルの `form()` 定義とパス到達 (`userForm.profile.firstName`)
 - `schema()` + `apply()` による部分スキーマの切り出しと適用
-- グループフィールドでの `valid()` / `dirty()` の集約
-- サブツリー単位の `reset()`
-- インラインのエラーメッセージ表示
 
 ## フォーム構造
 
@@ -36,10 +33,12 @@ readonly userModel = signal({
 readonly userForm = form(this.userModel);
 
 // モデル形状と FieldTree の階層は 1:1 で対応する:
-//   userForm.profile.firstName     : FieldTree<string>
-//   userForm.profile.lastName      : FieldTree<string>
-//   userForm.settings.theme        : FieldTree<'light' | 'dark' | 'auto'>
-//   userForm.settings.notifications: FieldTree<boolean>
+userForm.profile.firstName;            // : FieldTree<string>
+userForm.settings.theme;               // : FieldTree<'light' | 'dark' | 'auto'>
+
+// パス末尾を呼び出すと FieldState、その value() で現在値を読む:
+userForm.profile.firstName().value();  // : string                 → 'Alice'
+userForm.settings.theme().value();     // : 'light' | 'dark' | 'auto' → 'light'
 ```
 
 テンプレート側でも同じパスをそのまま `[formField]` に渡す。セクションごとに `@let` で別名化すると、`userForm.profile.` の繰り返しを避けられる。
@@ -72,55 +71,6 @@ readonly userForm = form(this.userModel, (s) => {
 ```
 
 同じ `Profile` 型を持つ別フォーム（例: 共著者一覧の各要素）でも `profileSchema` をそのまま再利用できる。
-
-### グループフィールドの valid() / dirty()
-
-親フィールド (`userForm.profile()`, `userForm.settings()`, 根の `userForm()`) は子フィールドの状態を集約する。
-
-- ひとつでも子が `invalid` なら親も `invalid`
-- ひとつでも子が `dirty` なら親も `dirty`
-
-```html
-<fieldset>
-  @let profile = userForm.profile;
-
-  <!-- セクション単位の dirty(): Unsaved 表示と Reset section の活性化 -->
-  @if (profile().dirty()) {
-    <span role="status">Unsaved</span>
-  }
-  <button [disabled]="!profile().dirty()" (click)="onResetProfile()">Reset section</button>
-</fieldset>
-
-<!-- 根の valid() + dirty(): Save ボタンの活性化制御 -->
-<app-button [disabled]="!userForm().dirty() || !userForm().valid()">Save all changes</app-button>
-```
-
-フィールドレベルのエラーメッセージは `fieldErrors()` ヘルパー + `app-form-field` で該当フィールド直下にインライン表示する。
-
-```html
-<app-form-field label="First name" [errorMessages]="firstNameErrors()">
-  <input
-    type="text"
-    [formField]="profile.firstName"
-    [aria-invalid]="profile.firstName().touched() && profile.firstName().invalid()"
-  />
-</app-form-field>
-```
-
-### サブツリー単位の reset()
-
-`FieldTree` のどのノードでも `.reset(value)` を呼べる。指定パスのサブツリーだけが値と状態（touched / dirty）がリセットされ、他のサブツリーは影響を受けない。
-
-```typescript
-onResetProfile() {
-  // profile サブツリーだけ初期化、settings は維持
-  this.userForm.profile().reset({ firstName: 'Alice', lastName: 'Tanaka' });
-}
-
-onResetSettings() {
-  this.userForm.settings().reset({ theme: 'light', notifications: true });
-}
-```
 
 ## コード
 

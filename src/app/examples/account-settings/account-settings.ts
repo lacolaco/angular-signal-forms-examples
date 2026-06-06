@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, linkedSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import {
   apply,
   form,
@@ -93,7 +93,7 @@ const profileSchema = schema<Profile>((p) => {
             />
           </app-form-field>
 
-          <app-form-field class="mb-3" label="Last name" [errorMessages]="lastNameErrors()">
+          <app-form-field label="Last name" [errorMessages]="lastNameErrors()">
             <input
               type="text"
               [formField]="profile.lastName"
@@ -101,20 +101,6 @@ const profileSchema = schema<Profile>((p) => {
               [aria-invalid]="profile.lastName().touched() && profile.lastName().invalid()"
             />
           </app-form-field>
-
-          <div class="flex items-center gap-3 text-sm">
-            @if (profile().dirty()) {
-              <span class="text-amber-600" role="status">Unsaved</span>
-            }
-            <button
-              type="button"
-              class="text-blue-600 disabled:text-gray-400"
-              [disabled]="!profile().dirty()"
-              (click)="onResetProfile()"
-            >
-              Reset section
-            </button>
-          </div>
         </fieldset>
 
         <fieldset class="mb-6">
@@ -129,29 +115,13 @@ const profileSchema = schema<Profile>((p) => {
             </select>
           </app-form-field>
 
-          <label class="flex items-center gap-2 mb-3">
+          <label class="flex items-center gap-2">
             <input type="checkbox" [formField]="settings.notifications" />
             <span>Email notifications</span>
           </label>
-
-          <div class="flex items-center gap-3 text-sm">
-            @if (settings().dirty()) {
-              <span class="text-amber-600" role="status">Unsaved</span>
-            }
-            <button
-              type="button"
-              class="text-blue-600 disabled:text-gray-400"
-              [disabled]="!settings().dirty()"
-              (click)="onResetSettings()"
-            >
-              Reset section
-            </button>
-          </div>
         </fieldset>
 
-        <app-button type="submit" [disabled]="!userForm().dirty() || !userForm().valid()">
-          Save all changes
-        </app-button>
+        <app-button type="submit">Save all changes</app-button>
       </form>
 
       @if (submittedValue(); as submitted) {
@@ -172,15 +142,6 @@ export class AccountSettings {
   protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<UserData | null>(null);
-
-  /**
-   * Reset section の戻り先となる baseline。
-   *
-   * submittedValue が null（未送信）なら初期値、非 null（送信済み）なら送信値。
-   * linkedSignal で submittedValue から自動派生させているため、保存に成功した
-   * 時点で baseline が自動的に「直前の保存値」に切り替わる。
-   */
-  readonly currentBaseline = linkedSignal<UserData>(() => this.submittedValue() ?? INITIAL_USER);
 
   /**
    * フォームモデル
@@ -215,35 +176,11 @@ export class AccountSettings {
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.userForm, async () => {
-      // 送信時点のスナップショットを submittedValue に格納すると、currentBaseline
-      // が linkedSignal 経由で snapshot に自動更新される。あわせて
-      // reset(snapshot) を呼び、値は維持したまま dirty / touched をクリアする
-      // （Unsaved 表示と Save ボタンが clean 状態に戻る）。
-      const snapshot = { ...this.userModel() };
-      this.submittedValue.set(snapshot);
-      this.userForm().reset(snapshot);
+      this.submittedValue.set({ ...this.userModel() });
     });
 
     const fields = [this.userForm.profile.firstName, this.userForm.profile.lastName];
     const firstInvalid = fields.find((f) => f().invalid());
     firstInvalid?.().focusBoundControl();
-  }
-
-  /**
-   * Profile セクションだけを現在の baseline（初期値、または直前の保存値）に戻す。
-   *
-   * FieldTree はパスごとに `.reset(value)` を持ち、その部分木の値と
-   * 状態（touched/dirty）だけをまとめてリセットする。他セクションの
-   * 編集はそのまま保持される（ここがネスト構造を扱う最大の利点）。
-   */
-  onResetProfile() {
-    this.userForm.profile().reset({ ...this.currentBaseline().profile });
-  }
-
-  /**
-   * Preferences セクションだけを現在の baseline に戻す。
-   */
-  onResetSettings() {
-    this.userForm.settings().reset({ ...this.currentBaseline().settings });
   }
 }
