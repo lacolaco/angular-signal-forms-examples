@@ -2,11 +2,11 @@
 
 [English](./README.en.md)
 
-Angular 21 の **Signal Forms** (`@angular/forms/signals`) を学ぶための実装例集。
+Angular 22 の **Signal Forms** (`@angular/forms/signals`) を学ぶための実装例集。
 
 ## Signal Forms とは
 
-Angular 21 で導入された実験的なシグナルベースのフォーム管理機能。従来の Reactive Forms / Template-driven Forms とは異なるアプローチでフォームを構築する。
+Angular 22 で導入されたシグナルベースのフォーム管理機能。従来の Reactive Forms / Template-driven Forms とは異なるアプローチでフォームを構築する。
 
 - **シグナルベースの状態管理**: `valid()`, `touched()`, `errors()` がシグナルとして公開される
 - **型安全**: 初期値からフォームの型が自動推論される

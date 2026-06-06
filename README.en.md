@@ -2,11 +2,11 @@
 
 [日本語](./README.md)
 
-A collection of examples for learning **Signal Forms** (`@angular/forms/signals`) in Angular 21.
+A collection of examples for learning **Signal Forms** (`@angular/forms/signals`) in Angular 22.
 
 ## What are Signal Forms?
 
-An experimental signal-based form management feature introduced in Angular 21. It takes a different approach from traditional Reactive Forms and Template-driven Forms.
+A signal-based form management feature introduced in Angular 22. It takes a different approach from traditional Reactive Forms and Template-driven Forms.
 
 - **Signal-based state management**: `valid()`, `touched()`, `errors()` are exposed as signals
 - **Type-safe**: Form types are automatically inferred from initial values
