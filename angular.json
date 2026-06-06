@@ -74,6 +74,7 @@
           "options": {
             "browsers": ["chromiumheadless"],
             "setupFiles": ["src/vitest.setup.ts"],
+            "runnerConfig": true,
             "watch": false
           }
         },

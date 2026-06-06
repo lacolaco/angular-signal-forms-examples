@@ -1,6 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { TestKey } from '@angular/cdk/testing';
+import { ComboboxHarness } from '@angular/aria/combobox/testing';
 import { CitySearch } from './city-search';
 
 describe('CitySearch', () => {
@@ -96,13 +99,12 @@ describe('CitySearch', () => {
   });
 
   describe('Keyboard navigation', () => {
-    it('should select a suggestion with Arrow Down and Enter', async () => {
-      await renderComponent();
+    it('should select the first suggestion with Enter', async () => {
+      const { fixture } = await renderComponent();
+      const loader = TestbedHarnessEnvironment.loader(fixture);
+      const combobox = await loader.getHarness(ComboboxHarness);
 
-      const input = getSearchInput();
-      await userEvent.click(input);
-      await userEvent.type(input, 'To');
-
+      await combobox.setValue('To');
       await waitFor(
         () => {
           expect(screen.getByRole('option', { name: /Tokyo/i })).toBeInTheDocument();
@@ -110,8 +112,8 @@ describe('CitySearch', () => {
         { timeout: 2000 },
       );
 
-      // Arrow Down で最初の候補に移動し、Enter で選択
-      await userEvent.keyboard('{ArrowDown}{Enter}');
+      const host = await combobox.host();
+      await host.sendKeys(TestKey.ENTER);
 
       await waitFor(() => {
         expect(getSearchInput()).toHaveValue('Tokyo');
@@ -119,12 +121,11 @@ describe('CitySearch', () => {
     });
 
     it('should navigate between suggestions with Arrow keys', async () => {
-      await renderComponent();
+      const { fixture } = await renderComponent();
+      const loader = TestbedHarnessEnvironment.loader(fixture);
+      const combobox = await loader.getHarness(ComboboxHarness);
 
-      const input = getSearchInput();
-      await userEvent.click(input);
-      await userEvent.type(input, 'To');
-
+      await combobox.setValue('To');
       await waitFor(
         () => {
           expect(screen.getByRole('option', { name: /Tokyo/i })).toBeInTheDocument();
@@ -133,8 +134,11 @@ describe('CitySearch', () => {
         { timeout: 2000 },
       );
 
-      // Arrow Down 2回で2番目の候補に移動し、Enter で選択
-      await userEvent.keyboard('{ArrowDown}{ArrowDown}{Enter}');
+      const host = await combobox.host();
+      // 複数キーを 1 度に渡すと keyboardEventRelay signal が同一 tick で
+      // 上書きされて最後の 1 個しか listbox に届かないため、1 key ずつ送る。
+      await host.sendKeys(TestKey.DOWN_ARROW);
+      await host.sendKeys(TestKey.ENTER);
 
       await waitFor(() => {
         expect(getSearchInput()).toHaveValue('Toronto');
