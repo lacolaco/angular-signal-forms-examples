@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { form, required, submit } from '@angular/forms/signals';
-import { Combobox, ComboboxInput, ComboboxPopupContainer } from '@angular/aria/combobox';
+import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { AppFormField } from '../lib/ui/form-field';
 import { AppButton } from '../lib/ui/button';
@@ -30,8 +30,8 @@ import { fieldErrors } from '../lib/field-errors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Combobox,
-    ComboboxInput,
-    ComboboxPopupContainer,
+    ComboboxPopup,
+    ComboboxWidget,
     Listbox,
     Option,
     AppFormField,
@@ -53,25 +53,30 @@ import { fieldErrors } from '../lib/field-errors';
 
       <form novalidate (submit)="onSubmit($event)">
         <app-form-field class="mb-4" label="City" [errorMessages]="cityErrors()">
-          <div class="relative" ngCombobox [filterMode]="'manual'">
+          <div class="relative">
             <input
-              ngComboboxInput
+              ngCombobox
+              #combobox="ngCombobox"
               [(value)]="cityInputValue"
+              (keydown.enter)="onComboboxEnter($event, combobox)"
               type="text"
               class="form-input"
               autocomplete="off"
             />
 
             <!--
-              ngComboboxPopupContainer: combobox の expanded 状態に応じてポップアップを表示。
-              Listbox は ComboboxPopup をホストディレクティブとして持つため、
-              明示的な ngComboboxPopup は不要。
+              ngComboboxPopup: combobox の expanded 状態に応じてポップアップを表示する
+              structural directive。内部の ngComboboxWidget が実際のオプションを保持する。
             -->
-            <ng-template ngComboboxPopupContainer>
+            <ng-template ngComboboxPopup [combobox]="combobox">
               @if (suggestionItems().length > 0) {
                 <ul
+                  ngComboboxWidget
                   ngListbox
-                  [(values)]="selectedCities"
+                  #listbox="ngListbox"
+                  selectionMode="explicit"
+                  [(value)]="selectedCities"
+                  [activeDescendant]="listbox.activeDescendant()"
                   class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
                 >
                   @for (city of suggestionItems(); track city) {
@@ -154,13 +159,10 @@ export class CitySearch {
     return `/api/cities?q=${encodeURIComponent(q)}`;
   });
 
-  /** input への参照（フォーカス制御用） */
-  private readonly comboboxInput = viewChild(ComboboxInput);
+  /** combobox への参照（フォーカス制御用） */
+  private readonly combobox = viewChild(Combobox);
 
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
-
-  /** combobox への参照（プログラム的な開閉用） */
-  private readonly combobox = viewChild(Combobox);
 
   constructor() {
     // 入力値を 300ms debounce して form model に反映
@@ -178,15 +180,25 @@ export class CitySearch {
     // 選択値を即時 form model・input に反映し、combobox を閉じる
     effect(() => {
       const selected = this.selectedCities();
-      if (selected.length > 0) {
-        const city = selected[0];
-        untracked(() => {
-          this.searchModel.update((v) => ({ ...v, city }));
-          this.cityInputValue.set(city);
-          this.combobox()?.close();
-        });
-      }
+      if (selected.length === 0) return;
+      const city = selected[0];
+      untracked(() => {
+        this.searchModel.update((v) => ({ ...v, city }));
+        this.cityInputValue.set(city);
+        this.combobox()?.expanded.set(false);
+      });
     });
+  }
+
+  /**
+   * Combobox 展開中の Enter は popup 内の選択操作として消化し、
+   * form の submit へ伝播させない（v22 @angular/aria は preventDefault しない）。
+   */
+  onComboboxEnter(event: Event, combobox: Combobox): void {
+    if (combobox.expanded()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   /** フォーム送信 */
@@ -197,7 +209,7 @@ export class CitySearch {
     });
 
     if (this.searchForm.city().invalid()) {
-      this.comboboxInput()?.element.focus();
+      this.combobox()?.element.focus();
     }
   }
 }
