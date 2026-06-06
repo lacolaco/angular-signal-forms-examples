@@ -80,8 +80,13 @@ Before creating a PR, verify:
 ## Services
 
 - Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
+- Prefer the `@Service()` decorator (from `@angular/core`) over `@Injectable({ providedIn: 'root' })` in v22+. `@Service()` registers in the root `EnvironmentInjector` and is tree-shakable by default
 - Use the `inject()` function instead of constructor injection
+
+## Build System
+
+- The application builder uses esbuild, NOT Vite. Vite-specific import suffixes like `?raw` are NOT supported
+- To import non-JS files as text (e.g. `*.md`), declare them in `angular.json` build options: `"loader": { ".md": "text" }`, and declare the module type in a `.d.ts` (e.g. `declare module '*.md' { const content: string; export default content; }`). The `unit-test` builder inherits build options via `buildTarget`, so do NOT duplicate `loader` under the test target
 
 ## Testing
 
