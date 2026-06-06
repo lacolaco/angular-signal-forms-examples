@@ -59,7 +59,6 @@ import { fieldErrors } from '../lib/field-errors';
               ngCombobox
               #combobox="ngCombobox"
               [formField]="searchForm.city"
-              [(expanded)]="isExpanded"
               type="text"
               class="form-input"
               autocomplete="off"
@@ -116,9 +115,6 @@ export class CitySearch {
   /** listbox の選択値 */
   readonly selectedCities = signal<string[]>([]);
 
-  /** combobox の展開状態 */
-  readonly isExpanded = signal(false);
-
   /** フォームモデル */
   readonly searchModel = signal({ city: '' });
 
@@ -156,13 +152,12 @@ export class CitySearch {
   private readonly combobox = viewChild(Combobox);
 
   constructor() {
-    // listbox で選択が確定したら form model に反映して popup を閉じる
+    // listbox で選択が確定したら form model に反映
     effect(() => {
       const selected = this.selectedCities()[0];
       if (selected === undefined) return;
       untracked(() => {
         this.searchModel.update((v) => ({ ...v, city: selected }));
-        this.isExpanded.set(false);
       });
     });
   }
