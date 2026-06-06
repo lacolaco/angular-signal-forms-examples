@@ -35,6 +35,7 @@ ng test     # Vitest でテスト実行
 | 8 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
 | 9 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 10 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
+| 11 | Account Settings | Nested Model | `schema()` + `apply()` でネスト構造の部分スキーマ化、グループ `valid()` / `dirty()` の集約、セクション単位 `reset()` | [解説](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
 
 ### 推奨学習順序
 
@@ -42,6 +43,7 @@ ng test     # Vitest でテスト実行
 2. **バリデーション応用**: Profile Edit（非同期）、Pizza Order（条件付き）、Event Registration（配列）
 3. **カスタムコントロール**: Book Review → Checkout → Avatar Upload と段階的に
 4. **外部データ連携**: Location Select、City Search
+5. **モデル構造**: Settings（フラット）→ Account Settings（ネスト）でグループ集約と部分スキーマを理解
 
 ## Signal Forms API クロスリファレンス
 
@@ -63,8 +65,11 @@ ng test     # Vitest でテスト実行
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |
-| `reset()` | フォーム値と状態のリセット | Settings |
-| `dirty()` | 変更検知シグナル | Settings |
+| `reset()` | フォーム値と状態のリセット（サブツリーにも適用可） | Settings, Account Settings |
+| `dirty()` | 変更検知シグナル（グループでは子を集約） | Settings, Account Settings |
+| `valid()` | 妥当性シグナル（グループでは子を集約） | 全 Example（Account Settings はグループ集約を題材化） |
+| `schema()` | 再利用可能な部分スキーマの定義 | Account Settings |
+| `apply()` | 既存スキーマを特定パスに適用 | Account Settings |
 | `FormValueControl<T>` | カスタムコントロールインターフェース | Book Review, Checkout, Avatar Upload |
 
 ## プロジェクト構造

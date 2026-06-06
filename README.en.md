@@ -35,6 +35,7 @@ ng test     # Run tests with Vitest
 | 8 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
 | 9 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 10 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
+| 11 | Account Settings | Nested Model | Sub-schema reuse with `schema()` + `apply()`, group-level `valid()` / `dirty()` aggregation, per-section `reset()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
 
 ### Recommended Learning Order
 
@@ -42,6 +43,7 @@ ng test     # Run tests with Vitest
 2. **Validation**: Profile Edit (async), Pizza Order (conditional), Event Registration (array)
 3. **Custom Controls**: Book Review → Checkout → Avatar Upload (progressive complexity)
 4. **External Data**: Location Select, City Search
+5. **Model Shape**: Settings (flat) → Account Settings (nested) to learn group aggregation and sub-schema reuse
 
 ## Signal Forms API Cross-Reference
 
@@ -63,8 +65,11 @@ ng test     # Run tests with Vitest
 | `valueOf()` | Reference other field values | Pizza Order |
 | `pending()` | Async validation in-progress state | Profile Edit |
 | `focusBoundControl()` | Focus control on validation error | All examples |
-| `reset()` | Reset form values and state | Settings |
-| `dirty()` | Change detection signal | Settings |
+| `reset()` | Reset form values and state (works on sub-trees too) | Settings, Account Settings |
+| `dirty()` | Change detection signal (aggregates children on groups) | Settings, Account Settings |
+| `valid()` | Validity signal (aggregates children on groups) | All examples (Account Settings showcases group aggregation) |
+| `schema()` | Define a reusable sub-schema | Account Settings |
+| `apply()` | Attach an existing schema to a path | Account Settings |
 | `FormValueControl<T>` | Custom control interface | Book Review, Checkout, Avatar Upload |
 
 ## Project Structure
