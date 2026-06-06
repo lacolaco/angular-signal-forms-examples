@@ -75,7 +75,7 @@ readonly userForm = form(this.userModel, (s) => {
 });
 ```
 
-同じ `Profile` 型を持つ別フォーム（例: 共著者一覧の各要素）でも `profileSchema` をそのまま再利用できる。
+同じ `Profile` 型を持つ別のパスへも `profileSchema` をそのまま適用できる。
 
 ## コード
 

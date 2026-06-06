@@ -26,7 +26,7 @@ ng test     # Vitest でテスト実行
 | # | Example | Topic | 学習ポイント | 詳細 | Demo |
 |---|---------|-------|-------------|------|------|
 | 1 | Simple Signup | Basic Form | `form()`, `validate()`, `required()`, `submit()` の基本パターン | [解説](src/app/examples/simple-signup/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
-| 2 | Account Settings | Nested Model | ネストモデルのパス到達、グループ `valid()` / `dirty()` の集約、サブツリー単位の `reset()`、`schema()` + `apply()` による部分スキーマ | [解説](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
+| 2 | Account Settings | Nested Model | ネストモデルの `form()` 定義とパス到達、`schema()` + `apply()` による部分スキーマ適用 | [解説](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
 | 3 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
 | 4 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
 | 5 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
@@ -65,9 +65,8 @@ ng test     # Vitest でテスト実行
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |
-| `reset()` | フォーム値と状態のリセット（サブツリーにも適用可） | Settings, Account Settings |
-| `dirty()` | 変更検知シグナル（グループでは子を集約） | Settings, Account Settings |
-| `valid()` | 妥当性シグナル（グループでは子を集約） | 全 Example（Account Settings はグループ集約を題材化） |
+| `reset()` | フォーム値と状態のリセット | Settings |
+| `dirty()` | 変更検知シグナル | Settings |
 | `schema()` | 再利用可能な部分スキーマの定義 | Account Settings |
 | `apply()` | 既存スキーマを特定パスに適用 | Account Settings |
 | `FormValueControl<T>` | カスタムコントロールインターフェース | Book Review, Checkout, Avatar Upload |

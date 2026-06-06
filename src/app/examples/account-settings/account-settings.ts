@@ -42,8 +42,7 @@ const INITIAL_USER: UserData = {
  * Profile サブセクション用の再利用可能なスキーマ。
  *
  * schema<T>(fn) で部分スキーマを切り出し、apply(path, schema) で
- * フォーム上のパスに後付けで適用できる。同じ Profile 構造を持つ別フォーム
- * （例: 共著者一覧の各要素）に再利用しても同じバリデーションが効く。
+ * フォーム上のパスに後付けで適用できる。
  */
 const profileSchema = schema<Profile>((p) => {
   required(p.firstName, { message: 'First name is required' });

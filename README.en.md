@@ -26,7 +26,7 @@ ng test     # Run tests with Vitest
 | # | Example | Topic | Key Concepts | Docs | Demo |
 |---|---------|-------|-------------|------|------|
 | 1 | Simple Signup | Basic Form | Basic pattern with `form()`, `validate()`, `required()`, `submit()` | [Docs](src/app/examples/simple-signup/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
-| 2 | Account Settings | Nested Model | Path traversal on a nested model, group-level `valid()` / `dirty()` aggregation, subtree-scoped `reset()`, sub-schema reuse with `schema()` + `apply()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
+| 2 | Account Settings | Nested Model | `form()` on a nested model with path traversal, sub-schema reuse with `schema()` + `apply()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
 | 3 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
 | 4 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
 | 5 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
@@ -65,9 +65,8 @@ ng test     # Run tests with Vitest
 | `valueOf()` | Reference other field values | Pizza Order |
 | `pending()` | Async validation in-progress state | Profile Edit |
 | `focusBoundControl()` | Focus control on validation error | All examples |
-| `reset()` | Reset form values and state (works on sub-trees too) | Settings, Account Settings |
-| `dirty()` | Change detection signal (aggregates children on groups) | Settings, Account Settings |
-| `valid()` | Validity signal (aggregates children on groups) | All examples (Account Settings showcases group aggregation) |
+| `reset()` | Reset form values and state | Settings |
+| `dirty()` | Change detection signal | Settings |
 | `schema()` | Define a reusable sub-schema | Account Settings |
 | `apply()` | Attach an existing schema to a path | Account Settings |
 | `FormValueControl<T>` | Custom control interface | Book Review, Checkout, Avatar Upload |
