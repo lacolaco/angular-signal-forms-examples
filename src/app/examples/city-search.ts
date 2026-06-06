@@ -108,23 +108,26 @@ export class CitySearch {
   /** listbox の選択値 */
   readonly selectedCities = signal<string[]>([]);
 
+  /** 直近に選択された city（無選択時は undefined）。下の 2 つの linkedSignal の source */
+  private readonly selectedCity = computed(() => this.selectedCities()[0]);
+
   /**
-   * フォームモデル。listbox の選択を source にした linkedSignal で
+   * フォームモデル。selectedCity を source にした linkedSignal で
    * 選択時に city を確定値で上書きしつつ、ユーザー入力（[formField] 経由）
    * での書き換えはそのまま保持する。
    */
   readonly searchModel = linkedSignal({
-    source: () => this.selectedCities()[0],
+    source: this.selectedCity,
     computation: (selected, previous): { city: string } =>
       selected !== undefined ? { city: selected } : (previous?.value ?? { city: '' }),
   });
 
   /**
-   * combobox の展開状態。同じく listbox の選択を source にした linkedSignal で
+   * combobox の展開状態。同じく selectedCity を source にした linkedSignal で
    * 選択確定時に false へリセット、それ以外は combobox 側の two-way 書き込みを保持。
    */
   readonly isExpanded = linkedSignal({
-    source: () => this.selectedCities()[0],
+    source: this.selectedCity,
     computation: (selected, previous): boolean =>
       selected !== undefined ? false : (previous?.value ?? false),
   });
