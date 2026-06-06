@@ -26,22 +26,24 @@
 
 ### ネストモデルとパス到達
 
-モデルがネストされていれば、`form()` が生成する `FieldTree` も同じ階層になる。`userForm.profile.firstName` のように TypeScript の型補完が効いた状態で末端まで辿れる。
+モデルがネストされていれば、`form()` が生成する `FieldTree` も同じ階層になる。末端まで型補完が効いた状態でパスを辿れる。
 
 ```typescript
-const INITIAL_USER: UserData = {
+readonly userModel = signal({
   profile: { firstName: 'Alice', lastName: 'Tanaka' },
-  settings: { theme: 'light', notifications: true },
-};
-
-readonly userModel = signal<UserData>({ ...INITIAL_USER });
-
-readonly userForm = form(this.userModel, (s) => {
-  apply(s.profile, profileSchema);
+  settings: { theme: 'light' as 'light' | 'dark' | 'auto', notifications: true },
 });
+
+readonly userForm = form(this.userModel);
+
+// モデル形状と FieldTree の階層は 1:1 で対応する:
+//   userForm.profile.firstName     : FieldTree<string>
+//   userForm.profile.lastName      : FieldTree<string>
+//   userForm.settings.theme        : FieldTree<'light' | 'dark' | 'auto'>
+//   userForm.settings.notifications: FieldTree<boolean>
 ```
 
-テンプレート側ではセクションごとに `@let` で path を別名化すると、`userForm.profile.foo` の繰り返しを避けられる。
+テンプレート側でも同じパスをそのまま `[formField]` に渡す。セクションごとに `@let` で別名化すると、`userForm.profile.` の繰り返しを避けられる。
 
 ```html
 <fieldset>
