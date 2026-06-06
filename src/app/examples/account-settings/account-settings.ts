@@ -84,17 +84,22 @@ const profileSchema = schema<Profile>((p) => {
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/account-settings/account-settings.ts">
       <form novalidate (submit)="onSubmit($event)">
-        <fieldset class="section">
-          <legend class="section-title">Profile</legend>
-          <div class="section-header">
-            <div class="section-status">
+        <fieldset class="border border-gray-200 rounded-lg p-4 pb-5 mb-5">
+          <legend class="text-sm font-semibold text-gray-800 px-2">Profile</legend>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <div class="flex items-center gap-1.5 min-h-6">
               @if (userForm.profile().dirty()) {
-                <span class="badge badge-dirty" role="status">Unsaved</span>
+                <span
+                  class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800"
+                  role="status"
+                >
+                  Unsaved
+                </span>
               }
             </div>
             <button
               type="button"
-              class="section-reset"
+              class="text-sm text-gray-700 bg-white border border-gray-300 rounded-md px-2.5 py-1 hover:not-disabled:bg-gray-50 focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               [disabled]="!userForm.profile().dirty()"
               (click)="onResetProfile()"
             >
@@ -125,17 +130,22 @@ const profileSchema = schema<Profile>((p) => {
           </app-form-field>
         </fieldset>
 
-        <fieldset class="section">
-          <legend class="section-title">Preferences</legend>
-          <div class="section-header">
-            <div class="section-status">
+        <fieldset class="border border-gray-200 rounded-lg p-4 pb-5 mb-5">
+          <legend class="text-sm font-semibold text-gray-800 px-2">Preferences</legend>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <div class="flex items-center gap-1.5 min-h-6">
               @if (userForm.settings().dirty()) {
-                <span class="badge badge-dirty" role="status">Unsaved</span>
+                <span
+                  class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800"
+                  role="status"
+                >
+                  Unsaved
+                </span>
               }
             </div>
             <button
               type="button"
-              class="section-reset"
+              class="text-sm text-gray-700 bg-white border border-gray-300 rounded-md px-2.5 py-1 hover:not-disabled:bg-gray-50 focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               [disabled]="!userForm.settings().dirty()"
               (click)="onResetSettings()"
             >
@@ -170,61 +180,6 @@ const profileSchema = schema<Profile>((p) => {
         <div class="form-success" role="status">Account updated!</div>
       }
     </app-example-page>
-  `,
-  styles: `
-    .section {
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      padding: 1rem 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .section-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #1f2937;
-      padding: 0 0.5rem;
-    }
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    .section-status {
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-      min-height: 1.5rem;
-    }
-    .badge-dirty {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 500;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      background: #fef3c7;
-      color: #92400e;
-    }
-    .section-reset {
-      font-size: 0.8rem;
-      color: #374151;
-      background: white;
-      border: 1px solid #d1d5db;
-      border-radius: 0.375rem;
-      padding: 0.25rem 0.625rem;
-    }
-    .section-reset:hover:not(:disabled) {
-      background: #f9fafb;
-    }
-    .section-reset:focus {
-      outline: 2px solid #3b82f6;
-      outline-offset: 2px;
-    }
-    .section-reset:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
   `,
 })
 export class AccountSettings {
