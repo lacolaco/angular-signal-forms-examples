@@ -99,11 +99,6 @@ describe('CitySearch', () => {
   });
 
   describe('Keyboard navigation', () => {
-    // userEvent.keyboard で送る Enter/ArrowDown は Combobox の
-    // keyboardEventRelay (afterRenderEffect 内で同期 dispatchEvent) と
-    // @testing-library/angular の safeDetectChanges が衝突して NG0101 になる。
-    // ComboboxHarness は CDK の TestbedHarnessEnvironment 経由で sendKeys し
-    // testing-library のラッパーを通らないため、その衝突を回避できる。
     it('should select the first suggestion with Enter', async () => {
       const { fixture } = await renderComponent();
       const loader = TestbedHarnessEnvironment.loader(fixture);
