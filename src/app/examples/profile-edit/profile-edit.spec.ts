@@ -16,7 +16,7 @@ describe('ProfileEdit', () => {
   it('should render the form with all fields', async () => {
     await renderComponent();
 
-    expect(screen.getByRole('heading', { name: /profile edit/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /profile edit/i })).toBeInTheDocument();
     expect(getUsernameInput()).toBeInTheDocument();
     expect(getDisplayNameInput()).toBeInTheDocument();
     expect(getBioInput()).toBeInTheDocument();

@@ -95,7 +95,7 @@ describe('Checkout', () => {
     it('should render the form', async () => {
       await render(Checkout);
 
-      expect(screen.getByRole('heading', { name: /checkout/i })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { name: /checkout/i })).toBeInTheDocument();
       expect(getCardNumberInput()).toBeInTheDocument();
       expect(getMonthInput()).toBeInTheDocument();
       expect(getYearInput()).toBeInTheDocument();

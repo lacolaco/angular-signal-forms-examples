@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
 
 interface SettingsData {
   language: string;
@@ -30,14 +31,9 @@ const DEFAULT_SETTINGS: SettingsData = {
 @Component({
   selector: 'app-settings',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
-    <app-example-card
-      title="Settings"
-      topic="Form Reset"
-      description="Form reset and initial value restoration"
-      sourcePath="examples/settings.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/settings/settings.ts">
       <form novalidate (submit)="onSubmit($event)">
         <div
           class="mb-4 transition-all duration-200"
@@ -102,7 +98,7 @@ const DEFAULT_SETTINGS: SettingsData = {
       @if (submitted()) {
         <div class="form-success">Settings saved!</div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
   styles: `
     .field-modified {
@@ -114,6 +110,7 @@ const DEFAULT_SETTINGS: SettingsData = {
   `,
 })
 export class Settings {
+  protected readonly readme = readme;
   readonly submitted = signal(false);
 
   /** フォームモデル */

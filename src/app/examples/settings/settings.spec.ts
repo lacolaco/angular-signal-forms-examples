@@ -14,7 +14,7 @@ describe('Settings', () => {
     it('should render the form with default values', async () => {
       await render(Settings);
 
-      expect(screen.getByRole('heading', { name: /settings/i })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { name: /settings/i })).toBeInTheDocument();
       expect(getLanguageSelect()).toHaveValue('ja');
       expect(getEmailNotificationsCheckbox()).toBeChecked();
       expect(getPageSizeSelect()).toHaveValue('25');

@@ -12,6 +12,21 @@
  */
 
 import { worker } from './mocks/browser';
+import { MarkdownRenderer } from './app/lib/markdown';
+
+/**
+ * テスト中は AppExamplePage の README レンダリングを抑止する。
+ * 本物の render は marked + shiki の非同期 init を行い、テスト DOM に
+ * サンプル内コードと同じテキスト（例: "Passwords do not match"）を
+ * 重複出力するため `screen.getByText` 等で誤マッチを起こす。
+ *
+ * 既存 spec の見出しアサーション `getByRole('heading', { name: /xxx/ })` を
+ * 維持するため、README 冒頭の `# Heading` 1 行だけは h1 として残す。
+ */
+MarkdownRenderer.prototype.render = async (raw: string) => {
+  const m = raw.match(/^#\s+(.+)$/m);
+  return m ? `<h1>${m[1]}</h1>` : '';
+};
 
 /**
  * 全テスト実行前: MSW worker を起動

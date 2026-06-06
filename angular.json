@@ -31,7 +31,10 @@
               "src/styles.css"
             ],
             "server": "src/main.server.ts",
-            "outputMode": "static"
+            "outputMode": "static",
+            "loader": {
+              ".md": "text"
+            }
           },
           "configurations": {
             "production": {

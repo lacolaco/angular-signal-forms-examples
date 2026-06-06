@@ -9,10 +9,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { form, FormField, FormValueControl, required, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface CheckoutData {
   cardNumber: string;
@@ -189,14 +190,9 @@ export class ExpiryDateInput implements FormValueControl<string> {
 @Component({
   selector: 'app-checkout',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard, ExpiryDateInput],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage, ExpiryDateInput],
   template: `
-    <app-example-card
-      title="Checkout"
-      topic="Custom Control"
-      description="Enter your card details"
-      sourcePath="examples/checkout.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/checkout/checkout.ts">
       <form novalidate (submit)="onSubmit($event)">
         <!-- カード番号 -->
         <app-form-field class="mb-4" label="Card Number" [errorMessages]="cardNumberErrors()">
@@ -271,10 +267,11 @@ export class ExpiryDateInput implements FormValueControl<string> {
       @if (submittedValue(); as submitted) {
         <div class="form-success">Payment complete! (Expiry: {{ submitted.expiryDate }})</div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class Checkout {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<CheckoutData | null>(null);
 

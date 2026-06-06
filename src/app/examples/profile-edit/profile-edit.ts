@@ -10,10 +10,11 @@ import {
   validateHttp,
   submit,
 } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface ProfileData {
   username: string;
@@ -37,14 +38,9 @@ interface ProfileData {
 @Component({
   selector: 'app-profile-edit',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
-    <app-example-card
-      title="Profile Edit"
-      topic="Async Validation"
-      description="Update your profile information"
-      sourcePath="examples/profile-edit.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/profile-edit/profile-edit.ts">
       <p class="text-xs text-gray-500 mb-6">
         Demo: Usernames <code class="bg-gray-100 px-1 rounded">admin</code>,
         <code class="bg-gray-100 px-1 rounded">user</code>,
@@ -108,10 +104,11 @@ interface ProfileData {
       @if (submittedValue(); as submitted) {
         <div class="form-success">Profile saved! Welcome, {{ submitted.displayName }}!</div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class ProfileEdit {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<ProfileData | null>(null);
 

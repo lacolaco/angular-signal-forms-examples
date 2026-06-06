@@ -3,10 +3,11 @@ import { httpResource } from '@angular/common/http';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
+import { fieldErrors } from '../../lib/field-errors';
 
 /**
  * 都市検索オートコンプリートのサンプル
@@ -29,15 +30,10 @@ import { fieldErrors } from '../lib/field-errors';
     FormField,
     AppFormField,
     AppButton,
-    AppExampleCard,
+    AppExamplePage,
   ],
   template: `
-    <app-example-card
-      title="City Search"
-      topic="Autocomplete"
-      description="Autocomplete search with httpResource"
-      sourcePath="examples/city-search.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/city-search/city-search.ts">
       <p class="text-xs text-gray-500 mb-6">
         Type 2+ characters to see suggestions. e.g.:
         <code class="bg-gray-100 px-1 rounded">To</code> (Tokyo, Toronto),
@@ -98,10 +94,11 @@ import { fieldErrors } from '../lib/field-errors';
           <p>You selected: {{ city }}</p>
         </div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class CitySearch {
+  protected readonly readme = readme;
   /** 送信済みの都市名 */
   protected readonly submittedCity = signal<string | null>(null);
 

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
 import { form, FormField, required, applyWhen, hidden, submit } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
+import { fieldErrors } from '../../lib/field-errors';
 
 type OrderType = 'togo' | 'delivery';
 type PaymentMethod = 'cash' | 'card';
@@ -30,14 +31,9 @@ interface OrderData {
 @Component({
   selector: 'app-pizza-order',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
-    <app-example-card
-      title="Pizza Order"
-      topic="Conditional Form"
-      description="Enter your order details"
-      sourcePath="examples/pizza-order.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/pizza-order/pizza-order.ts">
       <form novalidate (submit)="onSubmit($event)">
         <app-form-field class="mb-4" label="Customer Name" [errorMessages]="customerNameErrors()">
           <input
@@ -104,10 +100,11 @@ interface OrderData {
           {{ submitted.orderType === 'delivery' ? 'Delivery' : 'To go' }}
         </div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class PizzaOrder {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<OrderData | null>(null);
 

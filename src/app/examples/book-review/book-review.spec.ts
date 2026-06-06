@@ -68,7 +68,7 @@ describe('BookReview', () => {
   it('should render the form', async () => {
     await render(BookReview);
 
-    expect(screen.getByRole('heading', { name: /book review/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /book review/i })).toBeInTheDocument();
     expect(screen.getByText(/rating/i)).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit review/i })).toBeInTheDocument();

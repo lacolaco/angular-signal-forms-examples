@@ -8,10 +8,11 @@ import {
   validate,
   submit,
 } from '@angular/forms/signals';
-import { AppFormField } from '../lib/ui/form-field';
-import { AppButton } from '../lib/ui/button';
-import { AppExampleCard } from '../lib/ui/example-card';
-import { fieldErrors } from '../lib/field-errors';
+import { AppFormField } from '../../lib/ui/form-field';
+import { AppButton } from '../../lib/ui/button';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
+import { fieldErrors } from '../../lib/field-errors';
 
 interface ReviewData {
   rating: number;
@@ -149,14 +150,9 @@ export class StarRating implements FormValueControl<number> {
 @Component({
   selector: 'app-book-review',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard, StarRating],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage, StarRating],
   template: `
-    <app-example-card
-      title="Book Review"
-      topic="Custom Control"
-      description="Rate 'Introduction to Signal Forms'"
-      sourcePath="examples/book-review.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/book-review/book-review.ts">
       <form novalidate (submit)="onSubmit($event)">
         <!-- 星評価 -->
         <div class="mb-4">
@@ -196,10 +192,11 @@ export class StarRating implements FormValueControl<number> {
           Thank you for your review! (Rating: {{ submitted.rating }} stars)
         </div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class BookReview {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<ReviewData | null>(null);
 
