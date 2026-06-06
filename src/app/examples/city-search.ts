@@ -2,9 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
+  linkedSignal,
   signal,
-  untracked,
   viewChild,
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
@@ -59,6 +58,7 @@ import { fieldErrors } from '../lib/field-errors';
               ngCombobox
               #combobox="ngCombobox"
               [formField]="searchForm.city"
+              [(expanded)]="isExpanded"
               type="text"
               class="form-input"
               autocomplete="off"
@@ -115,8 +115,26 @@ export class CitySearch {
   /** listbox の選択値 */
   readonly selectedCities = signal<string[]>([]);
 
-  /** フォームモデル */
-  readonly searchModel = signal({ city: '' });
+  /**
+   * フォームモデル。listbox の選択を source にした linkedSignal で
+   * 選択時に city を確定値で上書きしつつ、ユーザー入力（[formField] 経由）
+   * での書き換えはそのまま保持する。
+   */
+  readonly searchModel = linkedSignal<string | undefined, { city: string }>({
+    source: () => this.selectedCities()[0],
+    computation: (selected, previous) =>
+      selected !== undefined ? { city: selected } : (previous?.value ?? { city: '' }),
+  });
+
+  /**
+   * combobox の展開状態。同じく listbox の選択を source にした linkedSignal で
+   * 選択確定時に false へリセット、それ以外は combobox 側の two-way 書き込みを保持。
+   */
+  readonly isExpanded = linkedSignal<string | undefined, boolean>({
+    source: () => this.selectedCities()[0],
+    computation: (selected, previous) =>
+      selected !== undefined ? false : (previous?.value ?? false),
+  });
 
   /** フォーム定義 */
   readonly searchForm = form(this.searchModel, (schema) => {
@@ -126,14 +144,8 @@ export class CitySearch {
   /** エラーメッセージ */
   readonly cityErrors = computed(() => fieldErrors(this.searchForm.city()));
 
-  /** 候補リスト（入力値と完全一致する1件のみの場合は非表示） */
-  readonly suggestionItems = computed(() => {
-    if (!this.suggestions.hasValue()) return [];
-    const items = this.suggestions.value();
-    const input = this.searchModel().city;
-    if (items.length === 1 && items[0] === input) return [];
-    return items;
-  });
+  /** 候補リスト */
+  readonly suggestionItems = computed(() => this.suggestions.value() ?? []);
 
   /**
    * httpResource による補完候補の取得
@@ -148,19 +160,8 @@ export class CitySearch {
     return `/api/cities?q=${encodeURIComponent(q)}`;
   });
 
-  /** combobox への参照（フォーカス制御用） */
+  /** combobox への参照（無効入力時の focus 移動用） */
   private readonly combobox = viewChild(Combobox);
-
-  constructor() {
-    // listbox で選択が確定したら form model に反映
-    effect(() => {
-      const selected = this.selectedCities()[0];
-      if (selected === undefined) return;
-      untracked(() => {
-        this.searchModel.update((v) => ({ ...v, city: selected }));
-      });
-    });
-  }
 
   /** フォーム送信 */
   onSubmit(event: Event): void {
