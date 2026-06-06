@@ -34,15 +34,11 @@ interface UserData {
 
 /**
  * 初期値（編集前の現在のアカウント状態を模擬）。
- * セクション単位の reset() でこの値に復元する。
+ * 未送信時の Reset section はここに戻る（送信後は submittedValue が baseline）。
  */
-const INITIAL_PROFILE: Profile = {
-  firstName: 'Alice',
-  lastName: 'Tanaka',
-};
-const INITIAL_PREFERENCES: Preferences = {
-  theme: 'light',
-  notifications: true,
+const INITIAL_USER: UserData = {
+  profile: { firstName: 'Alice', lastName: 'Tanaka' },
+  settings: { theme: 'light', notifications: true },
 };
 
 /**
@@ -184,14 +180,7 @@ export class AccountSettings {
    * linkedSignal で submittedValue から自動派生させているため、保存に成功した
    * 時点で baseline が自動的に「直前の保存値」に切り替わる。
    */
-  readonly currentBaseline = linkedSignal<UserData>(() => {
-    return (
-      this.submittedValue() ?? {
-        profile: { ...INITIAL_PROFILE },
-        settings: { ...INITIAL_PREFERENCES },
-      }
-    );
-  });
+  readonly currentBaseline = linkedSignal<UserData>(() => this.submittedValue() ?? INITIAL_USER);
 
   /**
    * フォームモデル
@@ -199,10 +188,7 @@ export class AccountSettings {
    * ネストオブジェクトをそのまま signal で持つ。`form()` はこのモデルの
    * 型から `FieldTree` の階層を自動で導出する。
    */
-  readonly userModel = signal<UserData>({
-    profile: { ...INITIAL_PROFILE },
-    settings: { ...INITIAL_PREFERENCES },
-  });
+  readonly userModel = signal<UserData>({ ...INITIAL_USER });
 
   /**
    * フォーム定義
