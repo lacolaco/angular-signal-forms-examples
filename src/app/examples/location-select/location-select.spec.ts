@@ -12,7 +12,7 @@ describe('LocationSelect', () => {
     it('should render the form with three selects', async () => {
       await render(LocationSelect);
 
-      expect(screen.getByRole('heading', { name: /location select/i })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { name: /location select/i })).toBeInTheDocument();
       expect(getRegionSelect()).toBeInTheDocument();
       expect(getCountrySelect()).toBeInTheDocument();
       expect(getCitySelect()).toBeInTheDocument();

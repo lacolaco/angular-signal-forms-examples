@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { form, FormField, required, applyEach, submit } from '@angular/forms/signals';
 import { AppButton } from '../../lib/ui/button';
-import { AppExampleCard } from '../../lib/ui/example-card';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
 import { fieldErrors } from '../../lib/field-errors';
 
 interface EventRegistrationData {
@@ -23,12 +24,10 @@ interface EventRegistrationData {
 @Component({
   selector: 'app-event-registration',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppButton, AppExampleCard],
+  imports: [FormField, AppButton, AppExamplePage],
   template: `
-    <app-example-card
-      title="Event Registration"
-      topic="Array Form"
-      description="Register participants"
+    <app-example-page
+      [readme]="readme"
       sourcePath="examples/event-registration/event-registration.ts"
     >
       <form novalidate (submit)="onSubmit($event)">
@@ -79,10 +78,11 @@ interface EventRegistrationData {
           Registration complete! ({{ submitted.participants.length }} participants)
         </div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class EventRegistration {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<EventRegistrationData | null>(null);
 

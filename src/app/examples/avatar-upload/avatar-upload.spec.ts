@@ -63,7 +63,7 @@ describe('AvatarUpload', () => {
   it('should render the form', async () => {
     await render(AvatarUpload);
 
-    expect(screen.getByRole('heading', { name: /avatar upload/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /avatar upload/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /upload/i })).toBeInTheDocument();
   });
 

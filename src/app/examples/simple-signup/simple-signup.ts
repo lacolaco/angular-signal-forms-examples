@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { form, FormField, required, email, validate, submit } from '@angular/forms/signals';
 import { AppFormField } from '../../lib/ui/form-field';
 import { AppButton } from '../../lib/ui/button';
-import { AppExampleCard } from '../../lib/ui/example-card';
+import { AppExamplePage } from '../../lib/ui/example-page';
 import { fieldErrors } from '../../lib/field-errors';
+import readme from './README.md';
 
 /**
  * Simple Signup Example
@@ -21,14 +22,9 @@ import { fieldErrors } from '../../lib/field-errors';
 @Component({
   selector: 'app-simple-signup',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppFormField, AppButton, AppExampleCard],
+  imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
-    <app-example-card
-      title="Simple Signup"
-      topic="Basic Form"
-      description="Basic usage of Signal Forms"
-      sourcePath="examples/simple-signup/simple-signup.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/simple-signup/simple-signup.ts">
       <!--
         novalidate: ブラウザのネイティブバリデーションを無効化し、
         Signal Forms のバリデーションを使用する
@@ -78,10 +74,11 @@ import { fieldErrors } from '../../lib/field-errors';
       @if (submitted()) {
         <div class="form-success">Sign up successful!</div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class SimpleSignup {
+  protected readonly readme = readme;
   readonly submitted = signal(false);
 
   /**

@@ -19,7 +19,7 @@ describe('SimpleSignup', () => {
     it('should render the form', async () => {
       await render(SimpleSignup);
 
-      expect(screen.getByRole('heading', { name: /simple signup/i })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { name: /simple signup/i })).toBeInTheDocument();
       expect(getEmailInput()).toBeInTheDocument();
       expect(getPasswordInput()).toBeInTheDocument();
       expect(getConfirmPasswordInput()).toBeInTheDocument();

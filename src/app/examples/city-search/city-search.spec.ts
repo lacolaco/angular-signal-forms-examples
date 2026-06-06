@@ -19,7 +19,7 @@ describe('CitySearch', () => {
     it('should render the form', async () => {
       await renderComponent();
 
-      expect(screen.getByRole('heading', { name: /city search/i })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { name: /city search/i })).toBeInTheDocument();
       expect(getSearchInput()).toBeInTheDocument();
       expect(getSubmitButton()).toBeInTheDocument();
     });

@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 import { form, FormField, FormValueControl, validate, submit } from '@angular/forms/signals';
 import { AppButton } from '../../lib/ui/button';
-import { AppExampleCard } from '../../lib/ui/example-card';
+import { AppExamplePage } from '../../lib/ui/example-page';
+import readme from './README.md';
 import { fieldErrors } from '../../lib/field-errors';
 
 /**
@@ -172,14 +173,9 @@ export class ImageUploadInput implements FormValueControl<File | null> {
 @Component({
   selector: 'app-avatar-upload',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormField, AppButton, AppExampleCard, ImageUploadInput],
+  imports: [FormField, AppButton, AppExamplePage, ImageUploadInput],
   template: `
-    <app-example-card
-      title="Avatar Upload"
-      topic="Custom Control"
-      description="Set your profile image"
-      sourcePath="examples/avatar-upload/avatar-upload.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/avatar-upload/avatar-upload.ts">
       <form novalidate (submit)="onSubmit($event)">
         <div class="mb-6">
           <span class="block text-sm font-medium text-gray-700 mb-2">Avatar Image</span>
@@ -205,10 +201,11 @@ export class ImageUploadInput implements FormValueControl<File | null> {
       @if (submittedValue(); as submitted) {
         <div class="form-success">Upload complete! ({{ submitted.avatar.name }})</div>
       }
-    </app-example-card>
+    </app-example-page>
   `,
 })
 export class AvatarUpload {
+  protected readonly readme = readme;
   /** 送信時点の値（nullなら未送信） */
   readonly submittedValue = signal<{ avatar: File } | null>(null);
 

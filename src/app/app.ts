@@ -23,9 +23,9 @@ const navItems = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <div class="flex min-h-screen">
-      <!-- サイドナビゲーション -->
-      <nav class="w-64 bg-gray-800 text-white p-4 shrink-0">
+    <div class="flex h-screen overflow-hidden">
+      <!-- サイドナビゲーション（ビューポート固定、ナビ内スクロール） -->
+      <nav class="w-64 bg-gray-800 text-white p-6 shrink-0 overflow-y-auto">
         <h1 class="text-xl font-bold mb-6">Signal Forms Examples</h1>
         <ul class="space-y-2">
           @for (item of navItems; track item.path) {
@@ -43,8 +43,8 @@ const navItems = [
         </ul>
       </nav>
 
-      <!-- メインコンテンツ -->
-      <main class="flex-1">
+      <!-- メインコンテンツ（main 自体はスクロールせず、README カード内でスクロールする） -->
+      <main class="flex-1 overflow-hidden">
         <router-outlet />
       </main>
     </div>
