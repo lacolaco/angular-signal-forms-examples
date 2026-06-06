@@ -137,9 +137,6 @@ export class CitySearch {
   /** エラーメッセージ */
   readonly cityErrors = computed(() => fieldErrors(this.searchForm.city()));
 
-  /** 候補リスト */
-  readonly suggestionItems = computed(() => this.suggestions.value() ?? []);
-
   /**
    * httpResource による補完候補の取得
    *
@@ -148,16 +145,19 @@ export class CitySearch {
    * 2文字未満は undefined を返してリクエストをスキップ。
    */
   readonly suggestions = httpResource<string[]>(() => {
-    const q = this.searchModel().city;
+    const q = this.searchForm.city().value();
     if (q.length < 2) return undefined;
     return `/api/cities?q=${encodeURIComponent(q)}`;
   });
+
+  /** 候補リスト */
+  readonly suggestionItems = computed(() => this.suggestions.value() ?? []);
 
   /** フォーム送信 */
   onSubmit(event: Event): void {
     event.preventDefault();
     submit(this.searchForm, async () => {
-      this.submittedCity.set(this.searchModel().city);
+      this.submittedCity.set(this.searchForm.city().value());
     });
 
     if (this.searchForm.city().invalid()) {
