@@ -2,7 +2,7 @@
 
 ## 概要
 
-`{ profile: {...}, settings: {...} }` のネストオブジェクトをモデルに持つアカウント編集フォーム。Signal Forms がネスト構造をどう表現し、親フィールドが子の状態をどう集約するか、そして保存後の baseline をどう更新するかを学ぶ。
+`{ profile: {...}, settings: {...} }` のネストオブジェクトをモデルに持つアカウント編集フォーム。Signal Forms がネスト構造をどう表現し、親フィールドが子の状態をどう集約するかを学ぶ。
 
 ## 学習ポイント
 
@@ -10,7 +10,6 @@
 - `schema()` + `apply()` による部分スキーマの切り出しと適用
 - グループフィールドでの `valid()` / `dirty()` の集約
 - サブツリー単位の `reset()`
-- 送信時のスナップショット保存と、`linkedSignal` による baseline の自動更新
 - インラインのエラーメッセージ表示
 
 ## フォーム構造
@@ -110,49 +109,18 @@ readonly userForm = form(this.userModel, (s) => {
 
 ### サブツリー単位の reset()
 
-`FieldTree` のどのノードでも `.reset(value)` を呼べる。指定パスのサブツリーだけが初期化され、他のサブツリーは影響を受けない。戻り先は「現在の baseline」（後述）を使う。
+`FieldTree` のどのノードでも `.reset(value)` を呼べる。指定パスのサブツリーだけが値と状態（touched / dirty）がリセットされ、他のサブツリーは影響を受けない。
 
 ```typescript
 onResetProfile() {
-  // profile サブツリーだけ baseline に戻す、settings は維持
-  this.userForm.profile().reset({ ...this.currentBaseline().profile });
+  // profile サブツリーだけ初期化、settings は維持
+  this.userForm.profile().reset({ firstName: 'Alice', lastName: 'Tanaka' });
 }
 
 onResetSettings() {
-  this.userForm.settings().reset({ ...this.currentBaseline().settings });
+  this.userForm.settings().reset({ theme: 'light', notifications: true });
 }
 ```
-
-### 送信時のスナップショット保存と baseline の自動更新
-
-送信が成功したら 2 つのことを行う。
-
-1. **スナップショットを `submittedValue` に格納**: 送信した値の凍結コピー。結果表示はこの snapshot を参照する（live モデルではない）
-2. **`form().reset(snapshot)` で dirty / touched をクリア**: 値は維持したまま「clean 状態」に戻し、Unsaved 表示と Save ボタンを落ち着かせる
-
-```typescript
-onSubmit(event: Event) {
-  event.preventDefault();
-  submit(this.userForm, async () => {
-    const snapshot = { ...this.userModel() };
-    this.submittedValue.set(snapshot);
-    this.userForm().reset(snapshot);
-  });
-}
-```
-
-Reset section の戻り先は「直前の保存値」になってほしい。これを手書きの状態管理で書くと「submit のたびに baseline を更新する」副作用が増えるが、`linkedSignal` で `submittedValue` から派生させると同じ意味を宣言的に表現できる。
-
-```typescript
-readonly submittedValue = signal<UserData | null>(null);
-
-// 未送信なら初期値、送信済みなら最新の送信値が baseline
-readonly currentBaseline = linkedSignal<UserData>(
-  () => this.submittedValue() ?? INITIAL_USER,
-);
-```
-
-これにより「`AliceX` で保存 → 再編集して `AliceXYZ` → Reset section」を行うと、初期値の `Alice` ではなく直前の保存値 `AliceX` に戻る。
 
 ## コード
 
