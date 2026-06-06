@@ -174,18 +174,21 @@ describe('AccountSettings', () => {
   });
 
   describe('Submit', () => {
-    it('valid な状態で送信すると submit 時点のスナップショットが表示される', async () => {
+    it('valid な状態で送信すると submit 時点のスナップショットが全フィールド表示される', async () => {
       await render(AccountSettings);
 
       await userEvent.type(getFirstNameInput(), 'X');
       await userEvent.selectOptions(getThemeSelect(), 'dark');
+      await userEvent.click(getNotificationsCheckbox()); // ON → OFF
       await userEvent.click(getSaveButton());
 
       // submittedValue は submit 時点のスナップショット。live モデルではなく
-      // 送信した値そのもの（firstName="AliceX", theme="dark"）が表示される。
+      // 送信した 4 フィールドすべてが結果ブロックに表示される。
       expect(screen.getByText(/account updated/i)).toBeInTheDocument();
-      expect(screen.getByText(/AliceX/)).toBeInTheDocument();
+      expect(screen.getByText(/first name: AliceX/i)).toBeInTheDocument();
+      expect(screen.getByText(/last name: Tanaka/i)).toBeInTheDocument();
       expect(screen.getByText(/theme: dark/i)).toBeInTheDocument();
+      expect(screen.getByText(/email notifications: off/i)).toBeInTheDocument();
     });
 
     it('First name が空のまま submit を試みても送信されない（dirty かつ invalid なら Save 自体が無効）', async () => {

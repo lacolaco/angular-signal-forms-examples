@@ -178,8 +178,13 @@ const profileSchema = schema<Profile>((p) => {
 
       @if (submittedValue(); as submitted) {
         <div class="form-success" role="status">
-          Account updated! ({{ submitted.profile.firstName }} {{ submitted.profile.lastName }},
-          theme: {{ submitted.settings.theme }})
+          Account updated!
+          <ul class="mt-2 text-sm list-disc list-inside">
+            <li>First name: {{ submitted.profile.firstName }}</li>
+            <li>Last name: {{ submitted.profile.lastName }}</li>
+            <li>Theme: {{ submitted.settings.theme }}</li>
+            <li>Email notifications: {{ submitted.settings.notifications ? 'on' : 'off' }}</li>
+          </ul>
         </div>
       }
     </app-example-page>
