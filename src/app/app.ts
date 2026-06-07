@@ -8,15 +8,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 const navItems = [
   { path: '/simple-signup', label: 'Simple Signup', topic: 'Basic Form' },
   { path: '/account-settings', label: 'Account Settings', topic: 'Nested Model' },
-  { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
-  { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
-  { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
   { path: '/event-registration', label: 'Event Registration', topic: 'Array Form' },
-  { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
-  { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
-  { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
-  { path: '/avatar-upload', label: 'Avatar Upload', topic: 'Custom Control' },
   { path: '/settings', label: 'Settings', topic: 'Form Reset' },
+  { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
+  { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
+  { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
+  { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
+  { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
+  { path: '/avatar-upload', label: 'Avatar Upload', topic: 'Custom Control' },
+  { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
 ] as const;
 
 @Component({

@@ -27,23 +27,26 @@ ng test     # Run tests with Vitest
 |---|---------|-------|-------------|------|------|
 | 1 | Simple Signup | Basic Form | Basic pattern with `form()`, `validate()`, `required()`, `submit()` | [Docs](src/app/examples/simple-signup/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/simple-signup) |
 | 2 | Account Settings | Nested Model | `form()` on a nested model with path traversal, sub-schema reuse with `schema()` + `apply()` | [Docs](src/app/examples/account-settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/account-settings) |
-| 3 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
-| 4 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
+| 3 | Event Registration | Array Form | Dynamic attendee list with `applyEach()` | [Docs](src/app/examples/event-registration/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
+| 4 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 | 5 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
-| 6 | Event Registration | Array Form | Dynamic attendee list with `applyEach()` | [Docs](src/app/examples/event-registration/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/event-registration) |
-| 7 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
-| 8 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 9 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 6 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
+| 7 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
+| 8 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
+| 9 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
 | 10 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
-| 11 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
+| 11 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
 
 ### Recommended Learning Order
 
-1. **Getting Started**: Simple Signup (flat model) → Account Settings (nested model) to understand the basic shape of `form()`
-2. **Validation**: Profile Edit (async), Pizza Order (conditional), Event Registration (array)
-3. **Custom Controls**: Book Review → Checkout → Avatar Upload (progressive complexity)
-4. **External Data**: Location Select, City Search
-5. **Form State Management**: Settings — `reset()` and `dirty()` at the field level
+Follow the navigation order from top to bottom. Each example builds on the previous one by introducing one new concept.
+
+1. **Model shape**: Simple Signup (flat) → Account Settings (nested) → Event Registration (array)
+2. **State operations**: Settings (`reset()` / `dirty()`)
+3. **Dynamic field linkage**: Pizza Order (conditional) → Location Select (cascade)
+4. **Async validation**: Profile Edit (`validateHttp()` + `pending()`)
+5. **Custom controls**: Book Review (`FormValueControl` introduction) → Checkout (`linkedSignal()` internal sync) → Avatar Upload (non-primitive + `resource()`)
+6. **Integration**: City Search (Combobox + `httpResource()`)
 
 ## Signal Forms API Cross-Reference
 
@@ -52,7 +55,7 @@ ng test     # Run tests with Vitest
 | `form()` | Form definition | All examples |
 | `FormField` | Two-way binding directive | All examples |
 | `submit()` | Form submission (with validation) | All examples |
-| `required()` | Required validator | Simple Signup, Profile Edit, Event Registration, Location Select, City Search |
+| `required()` | Required validator | Simple Signup, Event Registration, Location Select, Profile Edit, City Search |
 | `email()` | Email validator | Simple Signup |
 | `minLength()` / `maxLength()` | Length validators | Profile Edit, Book Review |
 | `pattern()` | Regex validator | Profile Edit |
