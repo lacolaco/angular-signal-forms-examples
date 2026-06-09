@@ -40,7 +40,7 @@ const MAX_STAY_DAYS = 30;
  *
  * 同じロジックを別の field に複数回適用するために validator を関数として
  * 切り出す。引数で振る舞いを差し替えられるため、チェックイン日にも
- * チェックアウト日にも（別メッセージで）再利用できる。
+ * チェックアウト日にも (別メッセージで) 再利用できる。
  */
 function dateAtLeast(minIsoDate: string, message: string): FieldValidator<string> {
   return ({ value }) => {
@@ -81,7 +81,7 @@ function todayIso(): string {
  *
  * 独自バリデータの作り方を学ぶサンプル。Simple Signup が示す
  * 「`validate()` 1 回利用」よりも踏み込み、`validate()` の戻り値 3 形
- * （`undefined` / 単一エラー / エラー配列）、factory パターンによる
+ * (`undefined` / 単一エラー / エラー配列)、factory パターンによる
  * validator の再利用、`validateTree()` で親パスから子 field を
  * ターゲットする cross-field の書き方をまとめて見せる。
  *
@@ -169,8 +169,11 @@ export class HotelSearch {
     min(s.guests, 1, { message: 'Guests must be at least 1' });
 
     // factory パターン: 同じ validator を 2 field で再利用
-    validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降を指定してください'));
-    validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日以降を指定してください'));
+    validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降の日付を指定してください'));
+    validate(
+      s.checkOutDate,
+      dateAtLeast(today, 'チェックアウト日は今日以降の日付を指定してください'),
+    );
 
     // validateTree: 親パスから子 field を `fieldTree` でターゲット
     // 違反が 2 つ同時に起こるケースを表現するため、エラー配列を返す形を採用

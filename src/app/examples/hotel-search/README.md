@@ -34,7 +34,7 @@
 validate(s.checkInDate, ({ value }) => {
   if (!value()) return undefined;
   if (value() < today) {
-    return { kind: 'dateAtLeast', message: 'チェックイン日は今日以降を指定してください' };
+    return { kind: 'dateAtLeast', message: 'チェックイン日は今日以降の日付を指定してください' };
   }
   return undefined;
 });
@@ -59,8 +59,8 @@ function dateAtLeast(minIsoDate: string, message: string): FieldValidator<string
 }
 
 // 同じ factory を 2 つの field で再利用
-validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降を指定してください'));
-validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日以降を指定してください'));
+validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降の日付を指定してください'));
+validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日以降の日付を指定してください'));
 ```
 
 戻り値の型 `FieldValidator<TValue>` を明示すると、`({ value })` の型推論がきいて補完が効く。
