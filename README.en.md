@@ -31,11 +31,12 @@ ng test     # Run tests with Vitest
 | 4 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 | 5 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
 | 6 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 7 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
-| 8 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
-| 9 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
-| 10 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
-| 11 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 7 | Hotel Search | Custom Validator | Three return forms of `validate()`, validator factory, cross-field with `validateTree()` + `fieldTreeOf()` | [Docs](src/app/examples/hotel-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/hotel-search) |
+| 8 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
+| 9 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
+| 10 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
+| 11 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
+| 12 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
 
 ### Recommended Learning Order
 
@@ -44,9 +45,10 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 1. **Model shape**: Simple Signup (flat) → Account Settings (nested) → Event Registration (array)
 2. **State operations**: Settings (`reset()` / `dirty()`)
 3. **Dynamic field linkage**: Pizza Order (conditional) → Location Select (cascade)
-4. **Async validation**: Profile Edit (`validateHttp()` + `pending()`)
-5. **Custom controls**: Book Review (`FormValueControl` introduction) → Checkout (`linkedSignal()` internal sync) → Avatar Upload (non-primitive + `resource()`)
-6. **Integration**: City Search (Combobox + `httpResource()`)
+4. **Custom validators**: Hotel Search (three `validate()` return forms / factory / `validateTree()`)
+5. **Async validation**: Profile Edit (`validateHttp()` + `pending()`)
+6. **Custom controls**: Book Review (`FormValueControl` introduction) → Checkout (`linkedSignal()` internal sync) → Avatar Upload (non-primitive + `resource()`)
+7. **Integration**: City Search (Combobox + `httpResource()`)
 
 ## Signal Forms API Cross-Reference
 
@@ -59,7 +61,10 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 | `email()` | Email validator | Simple Signup |
 | `minLength()` / `maxLength()` | Length validators | Profile Edit, Book Review |
 | `pattern()` | Regex validator | Profile Edit |
-| `validate()` | Custom validator | Simple Signup, Pizza Order, Book Review, Avatar Upload |
+| `validate()` | Custom validator | Simple Signup, Pizza Order, Book Review, Avatar Upload, Hotel Search |
+| `validateTree()` | Custom validator on a subtree (cross-field) | Hotel Search |
+| `FieldValidator<T>` | Type of a validator function (used in factory pattern) | Hotel Search |
+| `fieldTreeOf()` | Convert a SchemaPath to a `ReadonlyFieldTree` inside `validateTree`, to target an error on a child field | Hotel Search |
 | `validateHttp()` | HTTP async validator | Profile Edit |
 | `applyWhen()` | Conditional schema application | Pizza Order |
 | `hidden()` | Conditional field hiding | Pizza Order |
