@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import {
   form,
   FormField,
-  maxLength,
   min,
   required,
   submit,
@@ -17,34 +16,31 @@ import { AppFormField } from '../../lib/ui/form-field';
 import { fieldErrors } from '../../lib/field-errors';
 import readme from './README.md';
 
-/** 出張申請モデル */
-interface TripRequest {
-  /** 出発日 (YYYY-MM-DD) */
-  departureDate: string;
-  /** 帰着日 (YYYY-MM-DD) */
-  returnDate: string;
-  /** 出張目的 */
-  purpose: string;
-  /** 概算予算 (円) */
-  budget: number;
+/** ホテル予約検索クエリ */
+interface HotelSearchQuery {
+  /** チェックイン日 (YYYY-MM-DD) */
+  checkInDate: string;
+  /** チェックアウト日 (YYYY-MM-DD) */
+  checkOutDate: string;
+  /** 宿泊人数 */
+  guests: number;
 }
 
-const INITIAL_TRIP: TripRequest = {
-  departureDate: '',
-  returnDate: '',
-  purpose: '',
-  budget: 0,
+const INITIAL_QUERY: HotelSearchQuery = {
+  checkInDate: '',
+  checkOutDate: '',
+  guests: 1,
 };
 
-/** 申請可能な最大出張日数 */
-const MAX_TRIP_DAYS = 14;
+/** 連続予約可能な最大泊数 */
+const MAX_STAY_DAYS = 30;
 
 /**
  * factory: 引数で「最小日付」を受け取り、`FieldValidator<string>` を返す。
  *
  * 同じロジックを別の field に複数回適用するために validator を関数として
- * 切り出す。引数で振る舞いを差し替えられるため、出発日にも帰着日にも
- * （別メッセージで）再利用できる。
+ * 切り出す。引数で振る舞いを差し替えられるため、チェックイン日にも
+ * チェックアウト日にも（別メッセージで）再利用できる。
  */
 function dateAtLeast(minIsoDate: string, message: string): FieldValidator<string> {
   return ({ value }) => {
@@ -81,7 +77,7 @@ function todayIso(): string {
 }
 
 /**
- * Business Trip Request Example
+ * Hotel Search Example
  *
  * 独自バリデータの作り方を学ぶサンプル。Simple Signup が示す
  * 「`validate()` 1 回利用」よりも踏み込み、`validate()` の戻り値 3 形
@@ -96,123 +92,110 @@ function todayIso(): string {
  *   エラーを特定の子 field にターゲットする
  */
 @Component({
-  selector: 'app-business-trip-request',
+  selector: 'app-hotel-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
-    <app-example-page
-      [readme]="readme"
-      sourcePath="examples/business-trip-request/business-trip-request.ts"
-    >
+    <app-example-page [readme]="readme" sourcePath="examples/hotel-search/hotel-search.ts">
       <form novalidate (submit)="onSubmit($event)">
-        <app-form-field class="mb-4" label="Departure date" [errorMessages]="departureDateErrors()">
+        <app-form-field class="mb-4" label="Check-in date" [errorMessages]="checkInDateErrors()">
           <input
             type="date"
-            [formField]="tripForm.departureDate"
+            [formField]="searchForm.checkInDate"
             class="form-input aria-invalid:border-red-500"
             [aria-invalid]="
-              tripForm.departureDate().touched() && tripForm.departureDate().invalid()
+              searchForm.checkInDate().touched() && searchForm.checkInDate().invalid()
             "
           />
         </app-form-field>
 
-        <app-form-field class="mb-4" label="Return date" [errorMessages]="returnDateErrors()">
+        <app-form-field class="mb-4" label="Check-out date" [errorMessages]="checkOutDateErrors()">
           <input
             type="date"
-            [formField]="tripForm.returnDate"
+            [formField]="searchForm.checkOutDate"
             class="form-input aria-invalid:border-red-500"
-            [aria-invalid]="tripForm.returnDate().touched() && tripForm.returnDate().invalid()"
+            [aria-invalid]="
+              searchForm.checkOutDate().touched() && searchForm.checkOutDate().invalid()
+            "
           />
         </app-form-field>
 
-        <app-form-field class="mb-4" label="Purpose" [errorMessages]="purposeErrors()">
-          <input
-            type="text"
-            [formField]="tripForm.purpose"
-            class="form-input aria-invalid:border-red-500"
-            [aria-invalid]="tripForm.purpose().touched() && tripForm.purpose().invalid()"
-          />
-        </app-form-field>
-
-        <app-form-field class="mb-6" label="Budget (JPY)" [errorMessages]="budgetErrors()">
+        <app-form-field class="mb-6" label="Guests" [errorMessages]="guestsErrors()">
           <input
             type="number"
-            [formField]="tripForm.budget"
+            [formField]="searchForm.guests"
             class="form-input aria-invalid:border-red-500"
-            [aria-invalid]="tripForm.budget().touched() && tripForm.budget().invalid()"
+            [aria-invalid]="searchForm.guests().touched() && searchForm.guests().invalid()"
           />
         </app-form-field>
 
-        <app-button type="submit">Submit request</app-button>
+        <app-button type="submit">Search hotels</app-button>
       </form>
 
-      @if (submittedValue(); as submitted) {
+      @if (submittedQuery(); as query) {
         <div class="form-success" role="status">
-          Request submitted!
+          Search submitted!
           <ul class="mt-2 text-sm list-disc list-inside">
-            <li>Departure: {{ submitted.departureDate }}</li>
-            <li>Return: {{ submitted.returnDate }}</li>
-            <li>Purpose: {{ submitted.purpose }}</li>
-            <li>Budget: {{ submitted.budget }}</li>
+            <li>Check-in: {{ query.checkInDate }}</li>
+            <li>Check-out: {{ query.checkOutDate }}</li>
+            <li>Guests: {{ query.guests }}</li>
           </ul>
         </div>
       }
     </app-example-page>
   `,
 })
-export class BusinessTripRequest {
+export class HotelSearch {
   protected readonly readme = readme;
 
   /** 送信時点のスナップショット (null なら未送信) */
-  readonly submittedValue = signal<TripRequest | null>(null);
+  readonly submittedQuery = signal<HotelSearchQuery | null>(null);
 
   /** フォームモデル */
-  readonly tripModel = signal<TripRequest>({ ...INITIAL_TRIP });
+  readonly queryModel = signal<HotelSearchQuery>({ ...INITIAL_QUERY });
 
   /**
    * フォーム定義
    *
-   * - 必須・長さ・最小値は組み込みバリデータでカバー (脇役)
-   * - 出発日/帰着日には `dateAtLeast(today, message)` factory を共有
+   * - 必須・最小値は組み込みバリデータでカバー (脇役)
+   * - チェックイン日/チェックアウト日には `dateAtLeast(today, message)` factory を共有
    * - 親パス (`s`) に `validateTree()` を 1 つ書き、cross-field を集約
    */
-  readonly tripForm = form(this.tripModel, (s) => {
+  readonly searchForm = form(this.queryModel, (s) => {
     const today = todayIso();
 
-    required(s.departureDate, { message: 'Departure date is required' });
-    required(s.returnDate, { message: 'Return date is required' });
-    required(s.purpose, { message: 'Purpose is required' });
-    maxLength(s.purpose, 200, { message: 'Purpose must be 200 characters or fewer' });
-    min(s.budget, 1, { message: 'Budget must be at least 1' });
+    required(s.checkInDate, { message: 'Check-in date is required' });
+    required(s.checkOutDate, { message: 'Check-out date is required' });
+    min(s.guests, 1, { message: 'Guests must be at least 1' });
 
     // factory パターン: 同じ validator を 2 field で再利用
-    validate(s.departureDate, dateAtLeast(today, '出発日は今日以降を指定してください'));
-    validate(s.returnDate, dateAtLeast(today, '帰着日は今日以降を指定してください'));
+    validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降を指定してください'));
+    validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日以降を指定してください'));
 
     // validateTree: 親パスから子 field を `fieldTree` でターゲット
     // 違反が 2 つ同時に起こるケースを表現するため、エラー配列を返す形を採用
     validateTree(s, ({ value, fieldTreeOf }) => {
       const v = value();
-      if (!v.departureDate || !v.returnDate) {
+      if (!v.checkInDate || !v.checkOutDate) {
         return undefined;
       }
 
       const errors: ValidationError.WithOptionalFieldTree[] = [];
 
-      if (v.departureDate > v.returnDate) {
+      if (v.checkInDate >= v.checkOutDate) {
         errors.push({
           kind: 'invalidDateRange',
-          message: '帰着日は出発日以降にしてください',
-          fieldTree: fieldTreeOf(s.returnDate),
+          message: 'チェックアウト日はチェックイン日より後にしてください',
+          fieldTree: fieldTreeOf(s.checkOutDate),
         });
       }
 
-      const days = daysBetween(v.departureDate, v.returnDate);
-      if (days > MAX_TRIP_DAYS) {
+      const nights = daysBetween(v.checkInDate, v.checkOutDate);
+      if (nights > MAX_STAY_DAYS) {
         errors.push({
-          kind: 'tripTooLong',
-          message: `出張期間は ${MAX_TRIP_DAYS} 日以内にしてください`,
-          fieldTree: fieldTreeOf(s.departureDate),
+          kind: 'stayTooLong',
+          message: `連続予約は ${MAX_STAY_DAYS} 泊までです`,
+          fieldTree: fieldTreeOf(s.checkInDate),
         });
       }
 
@@ -220,22 +203,20 @@ export class BusinessTripRequest {
     });
   });
 
-  readonly departureDateErrors = computed(() => fieldErrors(this.tripForm.departureDate()));
-  readonly returnDateErrors = computed(() => fieldErrors(this.tripForm.returnDate()));
-  readonly purposeErrors = computed(() => fieldErrors(this.tripForm.purpose()));
-  readonly budgetErrors = computed(() => fieldErrors(this.tripForm.budget()));
+  readonly checkInDateErrors = computed(() => fieldErrors(this.searchForm.checkInDate()));
+  readonly checkOutDateErrors = computed(() => fieldErrors(this.searchForm.checkOutDate()));
+  readonly guestsErrors = computed(() => fieldErrors(this.searchForm.guests()));
 
   onSubmit(event: Event) {
     event.preventDefault();
-    submit(this.tripForm, async () => {
-      this.submittedValue.set({ ...this.tripModel() });
+    submit(this.searchForm, async () => {
+      this.submittedQuery.set({ ...this.queryModel() });
     });
 
     const fields = [
-      this.tripForm.departureDate,
-      this.tripForm.returnDate,
-      this.tripForm.purpose,
-      this.tripForm.budget,
+      this.searchForm.checkInDate,
+      this.searchForm.checkOutDate,
+      this.searchForm.guests,
     ];
     const firstInvalid = fields.find((f) => f().invalid());
     firstInvalid?.().focusBoundControl();

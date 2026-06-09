@@ -31,7 +31,7 @@ ng test     # Run tests with Vitest
 | 4 | Settings | Form Reset | Initial value restoration with `reset()`, change detection with `dirty()` | [Docs](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 | 5 | Pizza Order | Conditional Form | Dynamic fields based on delivery method with `applyWhen()`, `hidden()` | [Docs](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
 | 6 | Location Select | Cascade Select | Cascading region/country/city selects with `computed()` | [Docs](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 7 | Business Trip Request | Custom Validator | Three return forms of `validate()`, validator factory, cross-field with `validateTree()` + `fieldTreeOf()` | [Docs](src/app/examples/business-trip-request/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/business-trip-request) |
+| 7 | Hotel Search | Custom Validator | Three return forms of `validate()`, validator factory, cross-field with `validateTree()` + `fieldTreeOf()` | [Docs](src/app/examples/hotel-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/hotel-search) |
 | 8 | Profile Edit | Async Validation | Username duplicate check with `validateHttp()`, `pending()` state | [Docs](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
 | 9 | Book Review | Custom Control | Star rating control with `FormValueControl<number>` | [Docs](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
 | 10 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
@@ -45,7 +45,7 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 1. **Model shape**: Simple Signup (flat) → Account Settings (nested) → Event Registration (array)
 2. **State operations**: Settings (`reset()` / `dirty()`)
 3. **Dynamic field linkage**: Pizza Order (conditional) → Location Select (cascade)
-4. **Custom validators**: Business Trip Request (three `validate()` return forms / factory / `validateTree()`)
+4. **Custom validators**: Hotel Search (three `validate()` return forms / factory / `validateTree()`)
 5. **Async validation**: Profile Edit (`validateHttp()` + `pending()`)
 6. **Custom controls**: Book Review (`FormValueControl` introduction) → Checkout (`linkedSignal()` internal sync) → Avatar Upload (non-primitive + `resource()`)
 7. **Integration**: City Search (Combobox + `httpResource()`)
@@ -61,10 +61,10 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 | `email()` | Email validator | Simple Signup |
 | `minLength()` / `maxLength()` | Length validators | Profile Edit, Book Review |
 | `pattern()` | Regex validator | Profile Edit |
-| `validate()` | Custom validator | Simple Signup, Pizza Order, Book Review, Avatar Upload, Business Trip Request |
-| `validateTree()` | Custom validator on a subtree (cross-field) | Business Trip Request |
-| `FieldValidator<T>` | Type of a validator function (used in factory pattern) | Business Trip Request |
-| `fieldTreeOf()` | Convert a SchemaPath to a `ReadonlyFieldTree` inside `validateTree`, to target an error on a child field | Business Trip Request |
+| `validate()` | Custom validator | Simple Signup, Pizza Order, Book Review, Avatar Upload, Hotel Search |
+| `validateTree()` | Custom validator on a subtree (cross-field) | Hotel Search |
+| `FieldValidator<T>` | Type of a validator function (used in factory pattern) | Hotel Search |
+| `fieldTreeOf()` | Convert a SchemaPath to a `ReadonlyFieldTree` inside `validateTree`, to target an error on a child field | Hotel Search |
 | `validateHttp()` | HTTP async validator | Profile Edit |
 | `applyWhen()` | Conditional schema application | Pizza Order |
 | `hidden()` | Conditional field hiding | Pizza Order |

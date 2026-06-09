@@ -31,7 +31,7 @@ ng test     # Vitest でテスト実行
 | 4 | Settings | Form Reset | `reset()` による初期値復元、`dirty()` による変更検知 | [解説](src/app/examples/settings/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/settings) |
 | 5 | Pizza Order | Conditional Form | `applyWhen()`, `hidden()` で配達方法に応じた動的フィールド | [解説](src/app/examples/pizza-order/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/pizza-order) |
 | 6 | Location Select | Cascade Select | `computed()` で地域→国→都市の連鎖選択肢 | [解説](src/app/examples/location-select/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/location-select) |
-| 7 | Business Trip Request | Custom Validator | `validate()` の戻り値 3 形、validator factory、`validateTree()` + `fieldTreeOf()` で cross-field | [解説](src/app/examples/business-trip-request/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/business-trip-request) |
+| 7 | Hotel Search | Custom Validator | `validate()` の戻り値 3 形、validator factory、`validateTree()` + `fieldTreeOf()` で cross-field | [解説](src/app/examples/hotel-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/hotel-search) |
 | 8 | Profile Edit | Async Validation | `validateHttp()` でユーザー名重複チェック、`pending()` 状態表示 | [解説](src/app/examples/profile-edit/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/profile-edit) |
 | 9 | Book Review | Custom Control | `FormValueControl<number>` で星評価コントロールを実装 | [解説](src/app/examples/book-review/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/book-review) |
 | 10 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
@@ -45,7 +45,7 @@ ng test     # Vitest でテスト実行
 1. **モデル形**: Simple Signup（フラット）→ Account Settings（ネスト）→ Event Registration（配列）
 2. **状態操作**: Settings（`reset()` / `dirty()`）
 3. **フィールド動的連動**: Pizza Order（条件分岐）→ Location Select（カスケード選択肢）
-4. **独自バリデータ**: Business Trip Request（`validate()` 戻り値 3 形 / factory / `validateTree()`）
+4. **独自バリデータ**: Hotel Search（`validate()` 戻り値 3 形 / factory / `validateTree()`）
 5. **非同期検証**: Profile Edit（`validateHttp()` + `pending()`）
 6. **カスタムコントロール**: Book Review（`FormValueControl` 入門）→ Checkout（`linkedSignal()` 内部同期）→ Avatar Upload（非プリミティブ + `resource()`）
 7. **総合**: City Search（Combobox + `httpResource()`）
@@ -61,10 +61,10 @@ ng test     # Vitest でテスト実行
 | `email()` | メールバリデータ | Simple Signup |
 | `minLength()` / `maxLength()` | 文字数バリデータ | Profile Edit, Book Review |
 | `pattern()` | 正規表現バリデータ | Profile Edit |
-| `validate()` | カスタムバリデータ | Simple Signup, Pizza Order, Book Review, Avatar Upload, Business Trip Request |
-| `validateTree()` | サブツリー全体のカスタムバリデータ (cross-field) | Business Trip Request |
-| `FieldValidator<T>` | validator 関数の型 (factory パターンで利用) | Business Trip Request |
-| `fieldTreeOf()` | `validateTree` 内で SchemaPath を `ReadonlyFieldTree` に変換し、エラーを子 field にターゲット | Business Trip Request |
+| `validate()` | カスタムバリデータ | Simple Signup, Pizza Order, Book Review, Avatar Upload, Hotel Search |
+| `validateTree()` | サブツリー全体のカスタムバリデータ (cross-field) | Hotel Search |
+| `FieldValidator<T>` | validator 関数の型 (factory パターンで利用) | Hotel Search |
+| `fieldTreeOf()` | `validateTree` 内で SchemaPath を `ReadonlyFieldTree` に変換し、エラーを子 field にターゲット | Hotel Search |
 | `validateHttp()` | HTTP 非同期バリデータ | Profile Edit |
 | `applyWhen()` | 条件付きスキーマ適用 | Pizza Order |
 | `hidden()` | 条件付きフィールド非表示 | Pizza Order |

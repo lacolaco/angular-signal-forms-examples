@@ -30,11 +30,8 @@ export const routes: Routes = [
       import('./examples/location-select/location-select').then((m) => m.LocationSelect),
   },
   {
-    path: 'business-trip-request',
-    loadComponent: () =>
-      import('./examples/business-trip-request/business-trip-request').then(
-        (m) => m.BusinessTripRequest,
-      ),
+    path: 'hotel-search',
+    loadComponent: () => import('./examples/hotel-search/hotel-search').then((m) => m.HotelSearch),
   },
   {
     path: 'profile-edit',

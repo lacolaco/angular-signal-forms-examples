@@ -1,8 +1,8 @@
-# Business Trip Request
+# Hotel Search
 
 ## 概要
 
-出発日・帰着日・目的・予算を入力する出張申請フォーム。組み込みバリデータでは表現できないルール (今日以降の日付、出発日と帰着日の整合、出張期間の上限) を、独自バリデータの 3 つの書き方 — `validate()` の戻り値 3 形、validator factory、`validateTree()` — で表現する。
+チェックイン日・チェックアウト日・宿泊人数を入力するホテル予約検索フォーム。組み込みバリデータでは表現できないルール (今日以降の日付、チェックイン日とチェックアウト日の整合、連続予約日数の上限) を、独自バリデータの 3 つの書き方 — `validate()` の戻り値 3 形、validator factory、`validateTree()` — で表現する。
 
 ## 学習ポイント
 
@@ -14,11 +14,10 @@
 
 | フィールド | 型 | バリデーション |
 |---|---|---|
-| `departureDate` | `string` (YYYY-MM-DD) | `required`, `dateAtLeast(today, ...)` (factory) |
-| `returnDate` | `string` (YYYY-MM-DD) | `required`, `dateAtLeast(today, ...)` (factory) |
-| `purpose` | `string` | `required`, `maxLength(200)` |
-| `budget` | `number` | `min(1)` |
-| (ツリー) | — | `validateTree()` で 出発日 ≤ 帰着日 / 期間 ≤ 14日 |
+| `checkInDate` | `string` (YYYY-MM-DD) | `required`, `dateAtLeast(today, ...)` (factory) |
+| `checkOutDate` | `string` (YYYY-MM-DD) | `required`, `dateAtLeast(today, ...)` (factory) |
+| `guests` | `number` | `min(1)` |
+| (ツリー) | — | `validateTree()` で チェックイン < チェックアウト / 滞在 ≤ 30 泊 |
 
 ## 実装の要点
 
@@ -32,10 +31,10 @@
 
 ```typescript
 // 単一エラー or undefined のパターン
-validate(s.departureDate, ({ value }) => {
+validate(s.checkInDate, ({ value }) => {
   if (!value()) return undefined;
   if (value() < today) {
-    return { kind: 'dateAtLeast', message: '出発日は今日以降を指定してください' };
+    return { kind: 'dateAtLeast', message: 'チェックイン日は今日以降を指定してください' };
   }
   return undefined;
 });
@@ -60,38 +59,38 @@ function dateAtLeast(minIsoDate: string, message: string): FieldValidator<string
 }
 
 // 同じ factory を 2 つの field で再利用
-validate(s.departureDate, dateAtLeast(today, '出発日は今日以降を指定してください'));
-validate(s.returnDate, dateAtLeast(today, '帰着日は今日以降を指定してください'));
+validate(s.checkInDate, dateAtLeast(today, 'チェックイン日は今日以降を指定してください'));
+validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日以降を指定してください'));
 ```
 
 戻り値の型 `FieldValidator<TValue>` を明示すると、`({ value })` の型推論がきいて補完が効く。
 
 ### `validateTree()`: 親パスで cross-field を宣言
 
-複数フィールドを参照するルール (出発日 ≤ 帰着日、期間 ≤ 14日) は、各 field に書くよりも親パスに 1 つ書いた方が見通しが良い。`validateTree(path, logic)` は path のサブツリーを 1 回の `logic` で検査する。
+複数フィールドを参照するルール (チェックイン < チェックアウト、滞在 ≤ 30 泊) は、各 field に書くよりも親パスに 1 つ書いた方が見通しが良い。`validateTree(path, logic)` は path のサブツリーを 1 回の `logic` で検査する。
 
 エラーは配列で複数返せ、各エラーの `fieldTree` で「どの子 field に表示するか」をターゲットできる。`fieldTreeOf(path)` を使って SchemaPath を `ReadonlyFieldTree` に変換する。
 
 ```typescript
 validateTree(s, ({ value, fieldTreeOf }) => {
   const v = value();
-  if (!v.departureDate || !v.returnDate) return undefined;
+  if (!v.checkInDate || !v.checkOutDate) return undefined;
 
   const errors: ValidationError.WithOptionalFieldTree[] = [];
 
-  if (v.departureDate > v.returnDate) {
+  if (v.checkInDate >= v.checkOutDate) {
     errors.push({
       kind: 'invalidDateRange',
-      message: '帰着日は出発日以降にしてください',
-      fieldTree: fieldTreeOf(s.returnDate), // returnDate にエラーを付ける
+      message: 'チェックアウト日はチェックイン日より後にしてください',
+      fieldTree: fieldTreeOf(s.checkOutDate), // checkOutDate にエラーを付ける
     });
   }
 
-  if (daysBetween(v.departureDate, v.returnDate) > 14) {
+  if (daysBetween(v.checkInDate, v.checkOutDate) > 30) {
     errors.push({
-      kind: 'tripTooLong',
-      message: '出張期間は 14 日以内にしてください',
-      fieldTree: fieldTreeOf(s.departureDate), // departureDate にエラーを付ける
+      kind: 'stayTooLong',
+      message: '連続予約は 30 泊までです',
+      fieldTree: fieldTreeOf(s.checkInDate), // checkInDate にエラーを付ける
     });
   }
 
@@ -110,5 +109,5 @@ validateTree(s, ({ value, fieldTreeOf }) => {
 
 ## コード
 
-- [ソースコード](./business-trip-request.ts)
-- [テスト](./business-trip-request.spec.ts)
+- [ソースコード](./hotel-search.ts)
+- [テスト](./hotel-search.spec.ts)
