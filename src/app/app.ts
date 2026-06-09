@@ -12,6 +12,7 @@ const navItems = [
   { path: '/settings', label: 'Settings', topic: 'Form Reset' },
   { path: '/pizza-order', label: 'Pizza Order', topic: 'Conditional Form' },
   { path: '/location-select', label: 'Location Select', topic: 'Cascade Select' },
+  { path: '/business-trip-request', label: 'Business Trip Request', topic: 'Custom Validator' },
   { path: '/profile-edit', label: 'Profile Edit', topic: 'Async Validation' },
   { path: '/book-review', label: 'Book Review', topic: 'Custom Control' },
   { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
