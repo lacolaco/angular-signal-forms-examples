@@ -69,7 +69,7 @@ validate(s.checkOutDate, dateAtLeast(today, 'チェックアウト日は今日�
 
 複数フィールドを参照するルール (チェックイン < チェックアウト、滞在 ≤ 30 泊) は、各 field に書くよりも親パスに 1 つ書いた方が見通しが良い。`validateTree(path, logic)` は path のサブツリーを 1 回の `logic` で検査する。
 
-エラーは配列で複数返せ、各エラーの `fieldTree` で「どの子 field に表示するか」をターゲットできる。`fieldTreeOf(path)` を使って SchemaPath を `ReadonlyFieldTree` に変換する。
+エラーは配列で複数件返せる。各エラーの `fieldTree` で「どの子 field に表示するか」をターゲットできる。`fieldTreeOf(path)` を使って SchemaPath を `ReadonlyFieldTree` に変換する。
 
 ```typescript
 validateTree(s, ({ value, fieldTreeOf }) => {
