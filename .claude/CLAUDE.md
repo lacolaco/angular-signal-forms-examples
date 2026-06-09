@@ -124,10 +124,22 @@ Before creating a PR, verify:
 - Before writing any code in a new sample, read at least two existing sample READMEs (e.g. `simple-signup`, `book-review`, `settings`) to absorb the established style: brief 概要, plain-bullet 学習ポイント, code-anchored 実装の要点, no editorializing about design choices, no cross-sample comparisons in prose
 - Fix the learning points BEFORE implementation and treat them as the scope contract. Every artifact in the sample — fields, signals, UI elements, handlers, helpers, schema rules, sample README sections — must map to at least one learning point. Anything else is noise and must not be added speculatively
 - This applies to UI affordances too, not only data fields. Status badges (Valid / Invalid / Unsaved), per-section action buttons (Reset section), baseline-tracking helpers (linkedSignal mirrors of submittedValue) are noise unless they directly demonstrate a stated learning point
+- Apply the learning-point-mapping check at the moment you propose the field list to the user, not after implementation. If a field name exists only to make the scenario "natural" (purpose, comment, free-text notes), drop it and pick a shorter scenario instead of carrying speculative fields into the spec / impl / README that you then have to delete
+- When proposing scenarios to the user, include candidates from at least two different domains (business / consumer-facing / numeric-integrity / date-range / etc.) so the proposal does not collapse to the agent's own taste. The user can reject the angle wholesale ("change the framing") and that costs less when alternatives were already on the table
 - Do not duplicate learning points already covered by other samples. If a concept is taught elsewhere (e.g. `reset()` / `dirty()` are in `settings`), link to that sample instead of re-explaining
 - Sample README is learning content, not an implementation diary. Describe the Signal Forms API behavior; do not justify your design choices or narrate how the implementation evolved
 - For conditional form samples, only include fields involved in the conditional logic
 - Exclude unrelated noise (e.g., pizza menu selection unrelated to conditional branching)
+
+## Japanese Content Review
+
+`code-critic` covers implementation / design only and runs in English; it does not catch Japanese-language defects. Before opening a PR for any sample whose user-visible content is in Japanese (validation messages, sample README, JSDoc, spec describe/it labels), do one independent read-through of every Japanese string with these checks:
+
+- Adverb-verb pairing actually parses (e.g. 「複数返せ」 — `複数` is adverbial, `返せ` collides between imperative and capability; rewrite as 「複数件返せる」 or split the sentence)
+- No ambiguity between imperative (〜してください) and capability (〜できる) forms when the intent is description, not instruction
+- Validator messages name the object being constrained (「今日以降の日付を指定してください」, not 「今日以降を指定してください」 — `以降` is a time range, the object is missing)
+- Punctuation is consistent within a file: half-width `()` vs full-width `（）` — pick one (this project uses half-width) and do not mix
+- Register is consistent within an artifact type: validator messages 敬体, JSDoc / README / spec labels 常体. Do not mix within a file
 
 ## Dev Server Verification
 
