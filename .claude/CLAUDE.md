@@ -133,7 +133,7 @@ Before creating a PR, verify:
 
 ## Japanese Content Review
 
-`code-critic` covers implementation / design only and runs in English; it does not catch Japanese-language defects. Before opening a PR for any sample whose user-visible content is in Japanese (validation messages, sample README, JSDoc, spec describe/it labels), do one independent read-through of every Japanese string with these checks:
+ビルトイン `/code-review` covers implementation / design only and runs in English; it does not catch Japanese-language defects. Before opening a PR for any sample whose user-visible content is in Japanese (validation messages, sample README, JSDoc, spec describe/it labels), do one independent read-through of every Japanese string with these checks:
 
 - Adverb-verb pairing actually parses (e.g. 「複数返せ」 — `複数` is adverbial, `返せ` collides between imperative and capability; rewrite as 「複数件返せる」 or split the sentence)
 - No ambiguity between imperative (〜してください) and capability (〜できる) forms when the intent is description, not instruction
