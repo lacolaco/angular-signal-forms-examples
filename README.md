@@ -75,7 +75,7 @@ ng test     # Vitest でテスト実行
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
 | `submitting()` | 送信中状態シグナル | Comment Post |
-| `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |
+| `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | Simple Signup, Account Settings, Event Registration, Settings, Pizza Order, Location Select, Hotel Search, Profile Edit, Book Review, Checkout, Avatar Upload, City Search |
 | `reset()` | フォーム値と状態のリセット | Settings |
 | `dirty()` | 変更検知シグナル | Settings |
 | `schema()` | 再利用可能な部分スキーマの定義 | Account Settings |

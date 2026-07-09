@@ -89,6 +89,7 @@ export class CommentPost {
     {
       submission: {
         action: async (field) => {
+          this.submittedValue.set(null);
           const value = field().value();
           await firstValueFrom(this.http.post('/api/comments', value));
           this.submittedValue.set({ ...value });

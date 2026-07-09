@@ -75,7 +75,7 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 | `valueOf()` | Reference other field values | Pizza Order |
 | `pending()` | Async validation in-progress state | Profile Edit |
 | `submitting()` | Submitting state signal | Comment Post |
-| `focusBoundControl()` | Focus control on validation error | All examples |
+| `focusBoundControl()` | Focus control on validation error | Simple Signup, Account Settings, Event Registration, Settings, Pizza Order, Location Select, Hotel Search, Profile Edit, Book Review, Checkout, Avatar Upload, City Search |
 | `reset()` | Reset form values and state | Settings |
 | `dirty()` | Change detection signal | Settings |
 | `schema()` | Define a reusable sub-schema | Account Settings |

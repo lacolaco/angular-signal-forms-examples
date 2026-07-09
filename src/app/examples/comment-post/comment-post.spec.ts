@@ -79,27 +79,7 @@ describe('CommentPost', () => {
       );
     });
 
-    it('should restore button after submission completes', async () => {
-      await renderComponent();
-
-      await userEvent.type(getNicknameInput(), 'テストユーザー');
-      await userEvent.type(getCommentInput(), 'テストコメント');
-      await userEvent.click(getSubmitButton());
-
-      await waitFor(
-        () => {
-          expect(screen.getByText(/コメントが投稿されました/)).toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-
-      expect(getSubmitButton()).not.toBeDisabled();
-      expect(getSubmitButton()).toHaveTextContent('投稿する');
-    });
-  });
-
-  describe('Successful submission', () => {
-    it('should show success message with submitted values', async () => {
+    it('should restore button and show submitted values after completion', async () => {
       await renderComponent();
 
       await userEvent.type(getNicknameInput(), 'テストユーザー');
@@ -113,6 +93,9 @@ describe('CommentPost', () => {
         },
         { timeout: 3000 },
       );
+
+      expect(getSubmitButton()).not.toBeDisabled();
+      expect(getSubmitButton()).toHaveTextContent('投稿する');
     });
   });
 });
