@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { fieldErrors } from '../../lib/field-errors';
@@ -25,7 +25,6 @@ interface CommentValue {
  */
 @Component({
   selector: 'app-comment-post',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/comment-post/comment-post.ts">
