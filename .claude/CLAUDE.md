@@ -121,6 +121,7 @@ Before creating a PR, verify:
 
 ## Sample Implementation Principles
 
+- Before writing any code in a new sample, check past sample-addition PRs (`gh pr list --state merged`) to identify the full set of files that need updating (root README tables, learning order, API cross-reference, etc.)
 - Before writing any code in a new sample, read at least two existing sample READMEs (e.g. `simple-signup`, `book-review`, `settings`) to absorb the established style: brief 概要, plain-bullet 学習ポイント, code-anchored 実装の要点, no editorializing about design choices, no cross-sample comparisons in prose
 - Fix the learning points BEFORE implementation and treat them as the scope contract. Every artifact in the sample — fields, signals, UI elements, handlers, helpers, schema rules, sample README sections — must map to at least one learning point. Anything else is noise and must not be added speculatively
 - This applies to UI affordances too, not only data fields. Status badges (Valid / Invalid / Unsaved), per-section action buttons (Reset section), baseline-tracking helpers (linkedSignal mirrors of submittedValue) are noise unless they directly demonstrate a stated learning point
