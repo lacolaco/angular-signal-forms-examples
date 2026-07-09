@@ -29,8 +29,7 @@ readonly commentForm = form(this.commentModel, (schema) => {
   required(schema.comment, { message: 'コメントは必須です' });
 });
 
-onSubmit(event: Event) {
-  event.preventDefault();
+onSubmit() {
   submit(this.commentForm, async () => {
     const value = this.commentModel();
     await firstValueFrom(this.http.post('/api/comments', value));

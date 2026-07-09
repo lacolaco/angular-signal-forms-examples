@@ -29,7 +29,7 @@ interface CommentValue {
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/comment-post/comment-post.ts">
-      <form novalidate (submit)="onSubmit($event)">
+      <form novalidate (submit)="onSubmit(); $event.preventDefault()">
         <app-form-field class="mb-4" label="ニックネーム" [errorMessages]="nicknameErrors()">
           <input
             type="text"
@@ -94,8 +94,7 @@ export class CommentPost {
    * submit() に渡した非同期コールバックの実行中、
    * form().submitting() が true になりボタンが無効化される。
    */
-  onSubmit(event: Event) {
-    event.preventDefault();
+  onSubmit() {
     submit(this.commentForm, async () => {
       const value = this.commentModel();
       await firstValueFrom(this.http.post('/api/comments', value));
