@@ -37,6 +37,7 @@ ng test     # Run tests with Vitest
 | 10 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
 | 11 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 12 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 13 | Comment Post | Submitting State | Button disable and label switch with `form().submitting()` | [Docs](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
 
 ### Recommended Learning Order
 
@@ -49,6 +50,7 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 5. **Async validation**: Profile Edit (`validateHttp()` + `pending()`)
 6. **Custom controls**: Book Review (`FormValueControl` introduction) → Checkout (`linkedSignal()` internal sync) → Avatar Upload (non-primitive + `resource()`)
 7. **Integration**: City Search (Combobox + `httpResource()`)
+8. **Submitting state**: Comment Post (`submitting()` for submission UI feedback)
 
 ## Signal Forms API Cross-Reference
 
@@ -72,6 +74,7 @@ Follow the navigation order from top to bottom. Each example builds on the previ
 | `debounce()` | Schema-level input debounce | Profile Edit |
 | `valueOf()` | Reference other field values | Pizza Order |
 | `pending()` | Async validation in-progress state | Profile Edit |
+| `submitting()` | Submitting state signal | Comment Post |
 | `focusBoundControl()` | Focus control on validation error | All examples |
 | `reset()` | Reset form values and state | Settings |
 | `dirty()` | Change detection signal | Settings |
