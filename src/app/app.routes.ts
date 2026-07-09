@@ -55,6 +55,10 @@ export const routes: Routes = [
     loadComponent: () => import('./examples/city-search/city-search').then((m) => m.CitySearch),
   },
   {
+    path: 'comment-post',
+    loadComponent: () => import('./examples/comment-post/comment-post').then((m) => m.CommentPost),
+  },
+  {
     path: '',
     redirectTo: 'simple-signup',
     pathMatch: 'full',

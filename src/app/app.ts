@@ -18,6 +18,7 @@ const navItems = [
   { path: '/checkout', label: 'Checkout', topic: 'Custom Control' },
   { path: '/avatar-upload', label: 'Avatar Upload', topic: 'Custom Control' },
   { path: '/city-search', label: 'City Search', topic: 'Autocomplete' },
+  { path: '/comment-post', label: 'Comment Post', topic: 'Submitting State' },
 ] as const;
 
 @Component({
