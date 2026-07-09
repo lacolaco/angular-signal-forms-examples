@@ -37,6 +37,7 @@ ng test     # Vitest でテスト実行
 | 10 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
 | 11 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 12 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
+| 13 | Comment Post | Submitting State | `submission: { action }` で送信アクション宣言、`form().submitting()` で送信中 UI 制御 | [解説](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
 
 ### 推奨学習順序
 
@@ -49,6 +50,7 @@ ng test     # Vitest でテスト実行
 5. **非同期検証**: Profile Edit（`validateHttp()` + `pending()`）
 6. **カスタムコントロール**: Book Review（`FormValueControl` 入門）→ Checkout（`linkedSignal()` 内部同期）→ Avatar Upload（非プリミティブ + `resource()`）
 7. **総合**: City Search（Combobox + `httpResource()`）
+8. **送信状態**: Comment Post（`submitting()` による送信中 UI フィードバック）
 
 ## Signal Forms API クロスリファレンス
 
@@ -72,7 +74,8 @@ ng test     # Vitest でテスト実行
 | `debounce()` | スキーマレベルの入力遅延 | Profile Edit |
 | `valueOf()` | 他フィールドの値参照 | Pizza Order |
 | `pending()` | 非同期バリデーション進行中状態 | Profile Edit |
-| `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | 全 Example |
+| `submitting()` | 送信中状態シグナル | Comment Post |
+| `focusBoundControl()` | バリデーションエラー時のフォーカス制御 | Simple Signup, Account Settings, Event Registration, Settings, Pizza Order, Location Select, Hotel Search, Profile Edit, Book Review, Checkout, Avatar Upload, City Search |
 | `reset()` | フォーム値と状態のリセット | Settings |
 | `dirty()` | 変更検知シグナル | Settings |
 | `schema()` | 再利用可能な部分スキーマの定義 | Account Settings |

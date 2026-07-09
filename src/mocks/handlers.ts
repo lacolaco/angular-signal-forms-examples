@@ -37,6 +37,11 @@ export const handlers = [
     return HttpResponse.json({ taken });
   }),
 
+  http.post('/api/comments', async () => {
+    await delay(1500);
+    return HttpResponse.json({ success: true });
+  }),
+
   http.get('/api/cities', async ({ request }) => {
     const url = new URL(request.url);
     const q = url.searchParams.get('q') ?? '';
