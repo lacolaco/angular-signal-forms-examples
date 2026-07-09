@@ -8,6 +8,21 @@ import { AppExamplePage } from '../../lib/ui/example-page';
 import { AppFormField } from '../../lib/ui/form-field';
 import readme from './README.md';
 
+interface CommentValue {
+  nickname: string;
+  comment: string;
+}
+
+/**
+ * Comment Post Example
+ *
+ * 非同期フォーム送信中の UI フィードバックを示すコメント投稿フォーム。
+ *
+ * ## 学習ポイント
+ * - form().submitting() シグナルによる送信中状態の取得
+ * - submitting() を使ったボタンの無効化とラベル切り替え
+ * - submit() の非同期アクション内での HTTP リクエスト
+ */
 @Component({
   selector: 'app-comment-post',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,13 +65,21 @@ export class CommentPost {
   protected readonly readme = readme;
   private readonly http = inject(HttpClient);
 
-  readonly submittedValue = signal<{ nickname: string; comment: string } | null>(null);
+  /** 送信済みの値。null は未送信を表す */
+  readonly submittedValue = signal<CommentValue | null>(null);
 
-  readonly commentModel = signal({
+  /** フォームモデル: ニックネームとコメントの2フィールド */
+  readonly commentModel = signal<CommentValue>({
     nickname: '',
     comment: '',
   });
 
+  /**
+   * フォーム定義
+   *
+   * submit() の非同期アクション中、form().submitting() が true になる。
+   * テンプレートでこのシグナルを参照してボタンの状態を制御する。
+   */
   readonly commentForm = form(this.commentModel, (schema) => {
     required(schema.nickname, { message: 'ニックネームは必須です' });
     required(schema.comment, { message: 'コメントは必須です' });
@@ -65,6 +88,12 @@ export class CommentPost {
   readonly nicknameErrors = computed(() => fieldErrors(this.commentForm.nickname()));
   readonly commentErrors = computed(() => fieldErrors(this.commentForm.comment()));
 
+  /**
+   * フォーム送信処理
+   *
+   * submit() に渡した非同期コールバックの実行中、
+   * form().submitting() が true になりボタンが無効化される。
+   */
   onSubmit(event: Event) {
     event.preventDefault();
     submit(this.commentForm, async () => {
@@ -72,9 +101,5 @@ export class CommentPost {
       await firstValueFrom(this.http.post('/api/comments', value));
       this.submittedValue.set({ ...value });
     });
-
-    const fields = [this.commentForm.nickname, this.commentForm.comment];
-    const firstInvalidField = fields.find((field) => field().invalid());
-    firstInvalidField?.().focusBoundControl();
   }
 }

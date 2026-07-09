@@ -58,25 +58,6 @@ describe('CommentPost', () => {
     });
   });
 
-  describe('Focus control', () => {
-    it('should focus nickname input when nickname is invalid', async () => {
-      await renderComponent();
-
-      await userEvent.click(getSubmitButton());
-
-      expect(document.activeElement).toBe(getNicknameInput());
-    });
-
-    it('should focus comment input when only comment is invalid', async () => {
-      await renderComponent();
-
-      await userEvent.type(getNicknameInput(), 'テストユーザー');
-      await userEvent.click(getSubmitButton());
-
-      expect(document.activeElement).toBe(getCommentInput());
-    });
-  });
-
   describe('Submitting state', () => {
     it('should show submitting state during async submission', async () => {
       await renderComponent();
