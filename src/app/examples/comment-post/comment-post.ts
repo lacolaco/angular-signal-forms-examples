@@ -88,8 +88,8 @@ export class CommentPost {
     },
     {
       submission: {
-        action: async () => {
-          const value = this.commentModel();
+        action: async (field) => {
+          const value = field().value();
           await firstValueFrom(this.http.post('/api/comments', value));
           this.submittedValue.set({ ...value });
         },

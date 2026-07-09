@@ -23,6 +23,8 @@
 
 `form()` の第3引数に `submission: { action }` を渡すと、`submit()` 呼び出し時にフォームが valid ならこのアクションが実行される。送信ロジックをフォーム定義と一体で宣言できる。
 
+`action` コールバックの第1引数 `field` はフォームの `FieldTree` で、`field().value()` で送信時点のフォーム値を取得できる。モデルシグナルを直接参照する必要がない。
+
 ```typescript
 readonly commentForm = form(
   this.commentModel,
@@ -32,8 +34,8 @@ readonly commentForm = form(
   },
   {
     submission: {
-      action: async () => {
-        const value = this.commentModel();
+      action: async (field) => {
+        const value = field().value();
         await firstValueFrom(this.http.post('/api/comments', value));
         this.submittedValue.set({ ...value });
       },
