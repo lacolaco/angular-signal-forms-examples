@@ -19,16 +19,16 @@ interface CommentValue {
  * 非同期フォーム送信中の UI フィードバックを示すコメント投稿フォーム。
  *
  * ## 学習ポイント
+ * - form() の submission オプションによる送信アクションの宣言的定義
  * - form().submitting() シグナルによる送信中状態の取得
  * - submitting() を使ったボタンの無効化とラベル切り替え
- * - submit() の非同期アクション内での HTTP リクエスト
  */
 @Component({
   selector: 'app-comment-post',
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/comment-post/comment-post.ts">
-      <form novalidate (submit)="onSubmit(); $event.preventDefault()">
+      <form novalidate (submit)="submit(commentForm); $event.preventDefault()">
         <app-form-field class="mb-4" label="ニックネーム" [errorMessages]="nicknameErrors()">
           <input
             type="text"
@@ -76,28 +76,29 @@ export class CommentPost {
   /**
    * フォーム定義
    *
-   * submit() の非同期アクション中、form().submitting() が true になる。
-   * テンプレートでこのシグナルを参照してボタンの状態を制御する。
+   * submission.action に非同期コールバックを渡すと、
+   * submit() 呼び出し時にフォームが valid ならこのアクションが実行される。
+   * 実行中は form().submitting() が true になる。
    */
-  readonly commentForm = form(this.commentModel, (schema) => {
-    required(schema.nickname, { message: 'ニックネームは必須です' });
-    required(schema.comment, { message: 'コメントは必須です' });
-  });
+  readonly commentForm = form(
+    this.commentModel,
+    (schema) => {
+      required(schema.nickname, { message: 'ニックネームは必須です' });
+      required(schema.comment, { message: 'コメントは必須です' });
+    },
+    {
+      submission: {
+        action: async () => {
+          const value = this.commentModel();
+          await firstValueFrom(this.http.post('/api/comments', value));
+          this.submittedValue.set({ ...value });
+        },
+      },
+    },
+  );
 
   readonly nicknameErrors = computed(() => fieldErrors(this.commentForm.nickname()));
   readonly commentErrors = computed(() => fieldErrors(this.commentForm.comment()));
 
-  /**
-   * フォーム送信処理
-   *
-   * submit() に渡した非同期コールバックの実行中、
-   * form().submitting() が true になりボタンが無効化される。
-   */
-  onSubmit() {
-    submit(this.commentForm, async () => {
-      const value = this.commentModel();
-      await firstValueFrom(this.http.post('/api/comments', value));
-      this.submittedValue.set({ ...value });
-    });
-  }
+  protected readonly submit = submit;
 }

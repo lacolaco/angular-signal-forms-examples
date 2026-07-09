@@ -37,7 +37,7 @@ ng test     # Vitest でテスト実行
 | 10 | Checkout | Custom Control | `FormValueControl<string>` + `linkedSignal()` で有効期限入力 | [解説](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
 | 11 | Avatar Upload | Custom Control | `FormValueControl<File \| null>` + `resource()` で画像プレビュー | [解説](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 12 | City Search | Autocomplete | `@angular/aria` Combobox + `httpResource()` でアクセシブルなオートコンプリート | [解説](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
-| 13 | Comment Post | Submitting State | `form().submitting()` で送信中のボタン無効化・ラベル切り替え | [解説](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
+| 13 | Comment Post | Submitting State | `submission: { action }` で送信アクション宣言、`form().submitting()` で送信中 UI 制御 | [解説](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
 
 ### 推奨学習順序
 

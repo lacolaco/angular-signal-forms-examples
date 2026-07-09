@@ -37,7 +37,7 @@ ng test     # Run tests with Vitest
 | 10 | Checkout | Custom Control | Expiration date input with `FormValueControl<string>` + `linkedSignal()` | [Docs](src/app/examples/checkout/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/checkout) |
 | 11 | Avatar Upload | Custom Control | Image preview with `FormValueControl<File \| null>` + `resource()` | [Docs](src/app/examples/avatar-upload/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/avatar-upload) |
 | 12 | City Search | Autocomplete | Accessible autocomplete with `@angular/aria` Combobox + `httpResource()` | [Docs](src/app/examples/city-search/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/city-search) |
-| 13 | Comment Post | Submitting State | Button disable and label switch with `form().submitting()` | [Docs](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
+| 13 | Comment Post | Submitting State | Declarative submit action with `submission: { action }`, UI control with `form().submitting()` | [Docs](src/app/examples/comment-post/README.md) | [Demo](https://lacolaco.github.io/angular-signal-forms-examples/comment-post) |
 
 ### Recommended Learning Order
 
