@@ -121,7 +121,6 @@ Before creating a PR, verify:
 
 ## Sample Implementation Principles
 
-- Before writing any code in a new sample, check past sample-addition PRs (`gh pr list --state merged`) to identify the full set of files that need updating (root README tables, learning order, API cross-reference, etc.)
 - Before writing any code in a new sample, read at least two existing sample READMEs (e.g. `simple-signup`, `book-review`, `settings`) to absorb the established style: brief 概要, plain-bullet 学習ポイント, code-anchored 実装の要点, no editorializing about design choices, no cross-sample comparisons in prose
 - Fix the learning points BEFORE implementation and treat them as the scope contract. Every artifact in the sample — fields, signals, UI elements, handlers, helpers, schema rules, sample README sections — must map to at least one learning point. Anything else is noise and must not be added speculatively
 - This applies to UI affordances too, not only data fields. Status badges (Valid / Invalid / Unsaved), per-section action buttons (Reset section), baseline-tracking helpers (linkedSignal mirrors of submittedValue) are noise unless they directly demonstrate a stated learning point
@@ -131,6 +130,15 @@ Before creating a PR, verify:
 - Sample README is learning content, not an implementation diary. Describe the Signal Forms API behavior; do not justify your design choices or narrate how the implementation evolved
 - For conditional form samples, only include fields involved in the conditional logic
 - Exclude unrelated noise (e.g., pizza menu selection unrelated to conditional branching)
+- Before starting a new sample, run `gh pr list --state merged` and read at least one recent sample-addition PR to learn the established delivery checklist (files touched, documentation updated). Do not assume you know the full scope from memory
+- When the sample uses a Signal Forms API, read its type definition (`node_modules/@angular/forms/types/`) to understand the full signature — including callback parameters and option objects — before choosing the implementation pattern. An initial Explore agent's findings must be reviewed and applied at implementation time, not forgotten
+- New sample completion checklist (all items required before PR):
+  1. Component + test + README in `examples/<name>/`
+  2. Route in `app.routes.ts`
+  3. Nav item in `app.ts`
+  4. MSW handler (if HTTP is used) in `src/mocks/handlers.ts`
+  5. `README.md` and `README.en.md`: Examples table row, learning order, API cross-reference
+  6. `/code-review` pass (after every substantive code change, not just the initial implementation)
 
 ## Japanese Content Review
 

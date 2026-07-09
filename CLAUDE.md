@@ -1,10 +1,10 @@
 # Signal Forms Examples
 
-Angular 21 の Signal Forms (`@angular/forms/signals`) 実装例プロジェクト。
+Angular 22 の Signal Forms (`@angular/forms/signals`) 実装例プロジェクト。
 
 ## Signal Forms とは
 
-Angular 21 で導入された実験的なシグナルベースのフォーム管理機能：
+Angular 22 で導入されたシグナルベースのフォーム管理機能：
 
 - シグナルベースの状態管理: `valid()`, `touched()`, `errors()` がシグナルとして公開
 - 型安全: 初期値から型が推論される
@@ -13,5 +13,6 @@ Angular 21 で導入された実験的なシグナルベースのフォーム管
 
 ## プロジェクト構造
 
-- 各ユースケースサンプルは `app/examples/{name}.ts` に作成
+- 各ユースケースサンプルは `app/examples/{name}/` ディレクトリに配置（コンポーネント・テスト・README）
 - ルートで分離し、`app.routes.ts` に登録
+- ナビゲーション項目は `app.ts` の `navItems` に登録
