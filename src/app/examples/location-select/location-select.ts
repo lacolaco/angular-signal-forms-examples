@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { AppFormField } from '../../lib/ui/form-field';
 import { AppButton } from '../../lib/ui/button';
@@ -88,7 +88,6 @@ const LOCATION_DATA: Region[] = [
  */
 @Component({
   selector: 'app-location-select',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/location-select/location-select.ts">

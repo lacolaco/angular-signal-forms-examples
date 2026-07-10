@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -67,7 +66,6 @@ function formatExpiryDate(month: string, year: string): string {
  */
 @Component({
   selector: 'app-expiry-date-input',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'inline-flex items-center gap-1',
   },
@@ -189,7 +187,6 @@ export class ExpiryDateInput implements FormValueControl<string> {
  */
 @Component({
   selector: 'app-checkout',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage, ExpiryDateInput],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/checkout/checkout.ts">

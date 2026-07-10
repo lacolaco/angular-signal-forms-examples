@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, linkedSignal, signal } from '@angular/core';
+import { Component, computed, linkedSignal, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
@@ -20,7 +20,6 @@ import { fieldErrors } from '../../lib/field-errors';
  */
 @Component({
   selector: 'app-city-search',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Combobox,
     ComboboxPopup,

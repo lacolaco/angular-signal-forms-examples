@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, model, signal } from '@angular/core';
+import { Component, computed, model, signal } from '@angular/core';
 import {
   form,
   FormField,
@@ -34,7 +34,6 @@ interface ReviewData {
  */
 @Component({
   selector: 'app-star-rating',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'inline-flex items-center gap-1',
     role: 'radiogroup',
@@ -149,7 +148,6 @@ export class StarRating implements FormValueControl<number> {
  */
 @Component({
   selector: 'app-book-review',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage, StarRating],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/book-review/book-review.ts">

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import {
   apply,
   form,
@@ -65,7 +65,6 @@ const profileSchema = schema<Profile>((p) => {
  */
 @Component({
   selector: 'app-account-settings',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/account-settings/account-settings.ts">

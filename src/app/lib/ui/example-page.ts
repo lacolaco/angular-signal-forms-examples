@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  resource,
-} from '@angular/core';
+import { Component, computed, inject, input, resource } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MarkdownRenderer } from '../markdown';
 import { AppSourceLink } from './source-link';
@@ -56,7 +49,6 @@ function makeReadmeHrefResolver(sourcePath: string): (href: string) => string {
  */
 @Component({
   selector: 'app-example-page',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AppSourceLink],
   template: `
     <div class="example-page">

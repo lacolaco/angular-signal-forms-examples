@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { form, FormField, required, applyEach, submit } from '@angular/forms/signals';
 import { AppButton } from '../../lib/ui/button';
 import { AppExamplePage } from '../../lib/ui/example-page';
@@ -23,7 +23,6 @@ interface EventRegistrationData {
  */
 @Component({
   selector: 'app-event-registration',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppButton, AppExamplePage],
   template: `
     <app-example-page

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import {
   form,
   FormField,
@@ -93,7 +93,6 @@ function todayIso(): string {
  */
 @Component({
   selector: 'app-hotel-search',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/hotel-search/hotel-search.ts">

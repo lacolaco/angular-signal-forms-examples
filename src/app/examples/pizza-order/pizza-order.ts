@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { form, FormField, required, applyWhen, hidden, submit } from '@angular/forms/signals';
 import { AppFormField } from '../../lib/ui/form-field';
 import { AppButton } from '../../lib/ui/button';
@@ -30,7 +30,6 @@ interface OrderData {
  */
 @Component({
   selector: 'app-pizza-order',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/pizza-order/pizza-order.ts">

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
 import { AppFormField } from '../../lib/ui/form-field';
 import { AppButton } from '../../lib/ui/button';
@@ -30,7 +30,6 @@ const DEFAULT_SETTINGS: SettingsData = {
  */
 @Component({
   selector: 'app-settings',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/settings/settings.ts">

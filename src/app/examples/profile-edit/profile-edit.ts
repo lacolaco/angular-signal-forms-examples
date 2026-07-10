@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import {
   debounce,
   form,
@@ -37,7 +37,6 @@ interface ProfileData {
  */
 @Component({
   selector: 'app-profile-edit',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/profile-edit/profile-edit.ts">

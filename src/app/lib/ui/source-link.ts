@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 const GITHUB_REPO = 'https://github.com/lacolaco/angular-signal-forms-examples';
 
 @Component({
   selector: 'app-source-link',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a
       [href]="githubUrl()"
