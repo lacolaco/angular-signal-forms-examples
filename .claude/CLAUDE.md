@@ -20,6 +20,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ### Pre-PR Self-Review Checklist (Required)
 
 Before creating a PR, verify:
+- [ ] `/code-review` passed (mandatory for all code changes per `~/works/CLAUDE.md`)
 - [ ] Comments and JSDoc are in Japanese (project language)
 - [ ] Auto-generated files (e.g., mockServiceWorker.js) are added to .gitignore
 - [ ] Commits are split into logical units
