@@ -55,7 +55,7 @@ Before creating a PR, verify:
 - Use `computed()` for derived state
 - Do NOT set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator. It's the default in Angular v22+
 - Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
+- Prefer Signal Forms (`@angular/forms/signals`) for all new forms
 - Do NOT use `ngClass`, use `class` bindings instead
 - Do NOT use `ngStyle`, use `style` bindings instead
 - When using external templates/styles, use paths relative to the component TS file.
