@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { form, FormField, required, email, validate, submit } from '@angular/forms/signals';
 import { AppFormField } from '../../lib/ui/form-field';
 import { AppButton } from '../../lib/ui/button';
@@ -21,7 +21,6 @@ import readme from './README.md';
  */
 @Component({
   selector: 'app-simple-signup',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppFormField, AppButton, AppExamplePage],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/simple-signup/simple-signup.ts">

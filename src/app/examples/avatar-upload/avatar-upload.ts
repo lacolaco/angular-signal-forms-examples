@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ElementRef,
-  model,
-  resource,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, ElementRef, model, resource, signal, viewChild } from '@angular/core';
 import { form, FormField, FormValueControl, validate, submit } from '@angular/forms/signals';
 import { AppButton } from '../../lib/ui/button';
 import { AppExamplePage } from '../../lib/ui/example-page';
@@ -38,7 +29,6 @@ function formatFileSize(bytes: number): string {
  */
 @Component({
   selector: 'app-image-upload-input',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!--
       隠し file input:
@@ -172,7 +162,6 @@ export class ImageUploadInput implements FormValueControl<File | null> {
  */
 @Component({
   selector: 'app-avatar-upload',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormField, AppButton, AppExamplePage, ImageUploadInput],
   template: `
     <app-example-page [readme]="readme" sourcePath="examples/avatar-upload/avatar-upload.ts">
