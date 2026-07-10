@@ -95,7 +95,6 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "changeDetection": "OnPush",
       "displayBlock": true,
       "inlineTemplate": true,
       "inlineStyle": true
