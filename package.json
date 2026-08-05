@@ -32,7 +32,7 @@
     "src/**/*.css": "prettier --write"
   },
   "private": true,
-  "packageManager": "npm@10.9.4",
+  "packageManager": "npm@10.9.9",
   "dependencies": {
     "@angular/aria": "^22.0.0",
     "@angular/common": "^22.0.0",
